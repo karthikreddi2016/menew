@@ -4,29 +4,29 @@ const footerLinks = {
   services: {
     title: "Services",
     links: [
-      { href: "#", label: "Graphic Design" },
-      { href: "#", label: "Video Editing" },
-      { href: "#", label: "Presentations" },
-      { href: "#", label: "Social Media" },
-      { href: "#", label: "Branding" },
+      { href: "#services", label: "Campaign design" },
+      { href: "#services", label: "Motion edits" },
+      { href: "#services", label: "Pitch decks" },
+      { href: "#services", label: "Brand systems" },
+      { href: "#services", label: "Launch kits" },
     ],
   },
   getStarted: {
-    title: "Get Started",
+    title: "Process",
     links: [
-      { href: "#", label: "How It Works" },
-      { href: "#", label: "Pricing" },
-      { href: "#", label: "FAQ" },
+      { href: "#process", label: "How it works" },
+      { href: "#reviews", label: "Client proof" },
+      { href: "#faq", label: "FAQ" },
     ],
   },
   company: {
     title: "Company",
     links: [
-      { href: "#", label: "About Us" },
-      { href: "#", label: "Careers" },
-      { href: "#", label: "Blog" },
+      { href: "#", label: "About" },
+      { href: "#", label: "Studio notes" },
       { href: "#", label: "Contact" },
-      { href: "#", label: "Privacy Policy" },
+      { href: "#", label: "Privacy" },
+      { href: "#", label: "Terms" },
     ],
   },
 };
@@ -81,30 +81,49 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="bg-white border-t border-black/20">
-      <div className="max-w-container mx-auto px-page-x py-20">
-        {/* Logo */}
-        <div className="mb-8">
-          <Link href="/" className="flex items-center">
-            <span className="font-serif text-2xl font-bold text-primary">
-              Menew
-            </span>
-          </Link>
+    <footer className="px-4 pb-6 pt-16 md:px-6 md:pb-8">
+      <div className="surface-panel mx-auto max-w-container rounded-[2rem] px-6 py-10 md:px-10 md:py-14">
+        <div className="mb-10 flex flex-col gap-6 border-b border-black/10 pb-10 md:flex-row md:items-end md:justify-between">
+          <div className="max-w-xl">
+            <p className="fine-label mb-3">Menew studio</p>
+            <Link href="/" className="inline-flex items-center">
+              <span className="font-serif text-3xl font-semibold tracking-tight text-primary">
+                Menew
+              </span>
+            </Link>
+            <p className="mt-4 font-sans text-base leading-relaxed text-black/65">
+              On-demand creative production for teams that need launch-ready work
+              without building a full internal studio.
+            </p>
+          </div>
+
+          <div className="grid max-w-lg grid-cols-2 gap-4 text-sm text-black/70 md:grid-cols-3">
+            <div>
+              <p className="fine-label mb-2">Reply time</p>
+              <p className="font-medium text-[color:var(--foreground)]">Under 2 hours</p>
+            </div>
+            <div>
+              <p className="fine-label mb-2">Delivery cadence</p>
+              <p className="font-medium text-[color:var(--foreground)]">Daily production</p>
+            </div>
+            <div>
+              <p className="fine-label mb-2">Best for</p>
+              <p className="font-medium text-[color:var(--foreground)]">Founders and marketers</p>
+            </div>
+          </div>
         </div>
 
-        {/* Links Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16">
-          {/* Services Column */}
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-4 md:gap-12">
           <div>
-            <h3 className="font-sans text-base text-text-primary opacity-60 mb-5">
+            <h3 className="mb-4 font-inter text-xs font-semibold uppercase tracking-[0.24em] text-black/45">
               {footerLinks.services.title}
             </h3>
-            <ul className="space-y-5">
+            <ul className="space-y-3">
               {footerLinks.services.links.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="font-sans text-base text-text-primary hover:text-primary transition-colors"
+                    className="font-sans text-base text-black/70 transition-colors hover:text-primary"
                   >
                     {link.label}
                   </Link>
@@ -113,17 +132,16 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Get Started Column */}
           <div>
-            <h3 className="font-sans text-base text-text-primary opacity-60 mb-5">
+            <h3 className="mb-4 font-inter text-xs font-semibold uppercase tracking-[0.24em] text-black/45">
               {footerLinks.getStarted.title}
             </h3>
-            <ul className="space-y-5">
+            <ul className="space-y-3">
               {footerLinks.getStarted.links.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="font-sans text-base text-text-primary hover:text-primary transition-colors"
+                    className="font-sans text-base text-black/70 transition-colors hover:text-primary"
                   >
                     {link.label}
                   </Link>
@@ -132,17 +150,16 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Company Column */}
           <div>
-            <h3 className="font-sans text-base text-text-primary opacity-60 mb-5">
+            <h3 className="mb-4 font-inter text-xs font-semibold uppercase tracking-[0.24em] text-black/45">
               {footerLinks.company.title}
             </h3>
-            <ul className="space-y-5">
+            <ul className="space-y-3">
               {footerLinks.company.links.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className="font-sans text-base text-text-primary hover:text-primary transition-colors"
+                    className="font-sans text-base text-black/70 transition-colors hover:text-primary"
                   >
                     {link.label}
                   </Link>
@@ -151,19 +168,17 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Get In Touch Column */}
           <div>
-            <h3 className="font-sans text-base text-text-primary opacity-60 mb-5">
-              Get In Touch
+            <h3 className="mb-4 font-inter text-xs font-semibold uppercase tracking-[0.24em] text-black/45">
+              Stay close
             </h3>
 
-            {/* Social Icons */}
-            <div className="flex flex-wrap gap-5 mb-5">
+            <div className="mb-5 flex flex-wrap gap-3">
               {socialLinks.map((social) => (
                 <Link
                   key={social.name}
                   href={social.href}
-                  className="text-text-primary hover:text-primary transition-colors"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 text-[color:var(--foreground)] transition-colors hover:border-primary hover:text-primary"
                   aria-label={social.name}
                 >
                   {social.icon}
@@ -171,31 +186,15 @@ export function Footer() {
               ))}
             </div>
 
-            {/* Language Selector */}
-            <div className="border border-gray-border-dark rounded-input px-4 py-3 inline-flex items-center gap-3 mb-5">
-              <span className="font-inter text-sm text-text-secondary">
-                English
-              </span>
-              <svg
-                className="w-4 h-4 text-text-secondary"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
+            <div className="rounded-3xl border border-black/10 bg-white/55 p-4">
+              <p className="fine-label mb-2">Email</p>
+              <p className="font-sans text-base text-[color:var(--foreground)]">
+                hello@menew.studio
+              </p>
             </div>
 
-            {/* Copyright */}
-            <p className="font-sans text-base text-text-primary opacity-60">
-              Copyright © 2026-2027 Menew Company
-              <br />
-              All rights reserved.
+            <p className="mt-5 font-sans text-sm leading-relaxed text-black/50">
+              Copyright 2026 Menew. Built for teams shipping fast without lowering the visual bar.
             </p>
           </div>
         </div>

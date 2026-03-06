@@ -1,40 +1,50 @@
-import { Container, SectionTitle } from "@/components/ui";
+import { Container } from "@/components/ui";
 
-const serviceIcons = [
-  { id: 1, name: "Graphic Design", emoji: "🎨" },
-  { id: 2, name: "Video Editing", emoji: "🎬" },
-  { id: 3, name: "Presentations", emoji: "📊" },
-  { id: 4, name: "Social Media", emoji: "📱" },
-  { id: 5, name: "Branding", emoji: "✨" },
-  { id: 6, name: "UI/UX Design", emoji: "💻" },
-  { id: 7, name: "Illustrations", emoji: "🖌️" },
-  { id: 8, name: "Motion Graphics", emoji: "🎥" },
-  { id: 9, name: "Print Design", emoji: "🖨️" },
+const iconPoster = "/images/icon-poster.svg";
+const iconPPT = "/images/icon-ppt.svg";
+const iconVideo = "/images/icon-video.svg";
+const iconBanner = "/images/icon-banner.svg";
+const iconBranding = "/images/icon-branding.svg";
+const iconBrochure = "/images/icon-brochure.svg";
+const iconAds = "/images/icon-ads.svg";
+const iconSocial = "/images/icon-social.svg";
+const iconBizCard = "/images/icon-bizcard.svg";
+
+const services = [
+  { icon: iconPoster, name: "Poster Design" },
+  { icon: iconPPT, name: "PPT Design" },
+  { icon: iconVideo, name: "Video Editing" },
+  { icon: iconBanner, name: "Banner Design" },
+  { icon: iconBranding, name: "Branding Kit" },
+  { icon: iconBrochure, name: "Brochure Design" },
+  { icon: iconAds, name: "Ads/Flex Design" },
+  { icon: iconSocial, name: "Social Media Post Design" },
+  { icon: iconBizCard, name: "Business Card Design" },
 ];
 
 export function CreateTodaySection() {
   return (
-    <section className="py-12 md:py-16">
+    <section className="section-shell">
       <Container>
-        {/* Title with Divider Lines */}
-        <SectionTitle withDivider className="mb-12">
-          What would you like to create today
-        </SectionTitle>
+        <div className="flex items-center gap-4 mb-8">
+          <div className="flex-1 h-px bg-black/15" />
+          <p className="shrink-0 font-serif text-xl text-[color:var(--foreground)] tracking-[-0.01em]">
+            What would you like to create today
+          </p>
+          <div className="flex-1 h-px bg-black/15" />
+        </div>
 
-        {/* Service Icons Grid */}
-        <div className="flex flex-wrap justify-center gap-6 md:gap-8">
-          {serviceIcons.map((service) => (
-            <button
-              key={service.id}
-              className="group flex flex-col items-center gap-2 p-4 rounded-card hover:bg-gray-bg transition-colors"
+        <div className="flex flex-wrap justify-center gap-4">
+          {services.map((service) => (
+            <div
+              key={service.name}
+              className="flex h-[120px] w-[120px] cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-black/10 bg-white/80 p-3 transition-shadow hover:shadow-md"
             >
-              <div className="w-20 h-20 md:w-[120px] md:h-[120px] bg-white border border-gray-border rounded-card flex items-center justify-center text-4xl md:text-5xl group-hover:border-primary group-hover:shadow-md transition-all">
-                {service.emoji}
-              </div>
-              <span className="font-sans text-sm text-text-primary/70 text-center">
+              <img src={service.icon} alt={service.name} className="h-6 w-6 object-contain" />
+              <p className="text-center font-inter text-[13px] font-medium leading-tight text-[color:var(--foreground)]">
                 {service.name}
-              </span>
-            </button>
+              </p>
+            </div>
           ))}
         </div>
       </Container>

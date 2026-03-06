@@ -16,38 +16,49 @@ function Testimonial({
   imagePosition,
 }: TestimonialProps) {
   const content = (
-    <div className="bg-white p-5 flex flex-col h-full">
-      {/* Profile */}
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 bg-gray-bg rounded-full flex items-center justify-center text-lg">
+    <div className="flex h-full flex-col p-6 md:p-7">
+      <div className="mb-6 flex items-center gap-3">
+        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[color:var(--accent-soft)] text-sm font-semibold text-[color:var(--accent)]">
           {name.charAt(0)}
         </div>
         <div>
-          <p className="font-sans font-medium text-sm">{name}</p>
-          <p className="font-sans text-xs text-text-primary/60">{role}</p>
+          <p className="font-sans text-sm font-semibold text-[color:var(--foreground)]">{name}</p>
+          <p className="font-sans text-xs text-black/55">{role}</p>
         </div>
       </div>
 
-      {/* Quote */}
-      <p className="font-sans text-base text-text-primary/80 leading-relaxed flex-1">
-        "{quote}"
+      <p className="flex-1 font-serif text-[1.65rem] leading-[1.45] text-[color:var(--foreground)]">
+        &ldquo;{quote}&rdquo;
       </p>
 
-      {/* Company Logo Placeholder */}
-      <div className="mt-6">
-        <span className="font-sans text-sm text-text-primary/40">{company}</span>
+      <div className="mt-8 flex items-center justify-between gap-4 border-t border-black/10 pt-4">
+        <span className="font-sans text-sm text-black/50">{company}</span>
+        <span className="text-xs uppercase tracking-[0.22em] text-black/35">
+          {imagePosition === "left" ? "Founder" : "Marketing"}
+        </span>
       </div>
     </div>
   );
 
   const imagePlaceholder = (
-    <div className="bg-gradient-to-br from-primary-light to-accent-pink/30 h-full min-h-[240px] flex items-center justify-center">
-      <span className="text-6xl">📷</span>
+    <div className="grid-outline min-h-[260px] bg-[linear-gradient(135deg,rgba(24,64,67,0.14),rgba(217,109,67,0.12))] p-6">
+      <div className="flex h-full flex-col justify-between rounded-[1.5rem] border border-black/10 bg-white/55 p-5">
+        <div className="flex items-center justify-between text-xs uppercase tracking-[0.18em] text-black/40">
+          <span>Client story</span>
+          <span>Proof</span>
+        </div>
+        <div>
+          <p className="font-serif text-4xl text-primary">{company}</p>
+          <p className="mt-3 max-w-xs text-sm leading-6 text-black/60">
+            Teams use Menew when the launch plan is moving faster than internal creative bandwidth.
+          </p>
+        </div>
+      </div>
     </div>
   );
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 rounded-card overflow-hidden border border-gray-border">
+    <div className="surface-panel grid grid-cols-1 overflow-hidden rounded-[1.9rem] md:grid-cols-2">
       {imagePosition === "left" ? (
         <>
           {imagePlaceholder}
@@ -100,13 +111,15 @@ const testimonials = [
 
 export function TestimonialsSection() {
   return (
-    <section className="py-16 md:py-24">
+    <section id="reviews" className="section-shell">
       <Container>
-        <SectionTitle className="mb-12">
-          Our Valuable Users ❤️ Love Us
-        </SectionTitle>
+        <div className="mb-12 max-w-3xl">
+          <p className="section-kicker">Client proof</p>
+          <SectionTitle className="mt-4">
+            Trusted by teams that care about speed and taste.
+          </SectionTitle>
+        </div>
 
-        {/* Testimonials Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {testimonials.map((testimonial, index) => (
             <Testimonial key={index} {...testimonial} />

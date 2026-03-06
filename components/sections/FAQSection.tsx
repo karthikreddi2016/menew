@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Container, SectionTitle } from "@/components/ui";
+import { Container } from "@/components/ui";
 
 interface FAQItemProps {
   question: string;
@@ -12,23 +12,19 @@ interface FAQItemProps {
 
 function FAQItem({ question, answer, isOpen, onToggle }: FAQItemProps) {
   return (
-    <div className="border-b border-gray-border">
+    <div className="border-b border-black/10">
       <button
-        className="w-full flex items-center justify-between py-6 px-3 text-left hover:bg-gray-bg/50 transition-colors"
+        className="flex w-full items-center justify-between px-3 py-6 text-left transition-colors hover:bg-black/[0.02]"
         onClick={onToggle}
       >
-        <span className="font-ibm-plex font-medium text-base text-text-dark pr-4">
+        <span className="pr-4 font-serif text-lg leading-snug text-[color:var(--foreground)] tracking-[-0.01em]">
           {question}
         </span>
-        <span className="flex-shrink-0 text-xl text-text-primary/60">
-          {isOpen ? "−" : "+"}
-        </span>
+        <span className="flex-shrink-0 text-xl text-black/45">{isOpen ? "−" : "+"}</span>
       </button>
       {isOpen && (
         <div className="px-3 pb-6">
-          <p className="font-sans text-base text-text-primary/70 leading-relaxed">
-            {answer}
-          </p>
+          <p className="font-sans text-base leading-7 text-black/65">{answer}</p>
         </div>
       )}
     </div>
@@ -37,29 +33,44 @@ function FAQItem({ question, answer, isOpen, onToggle }: FAQItemProps) {
 
 const faqs = [
   {
-    question: "Why haven't I received job suggestions yet?",
+    question: "What exactly is Menew?",
     answer:
-      "Our system matches designers based on your specific needs and style preferences. If you haven't received suggestions yet, try updating your project details or adjusting your timeline for faster matching.",
+      "Menew is a creative production service that connects you with experienced designers who deliver polished work on demand. No bidding, no back-and-forth — just brief in, design out.",
   },
   {
-    question: "How much does it cost?",
+    question: "Who actually works on my creative order?",
     answer:
-      "Pricing varies based on the type of design work you need. We offer flexible packages starting from $49 for simple designs to custom enterprise solutions. Contact us for a personalized quote.",
+      "Your projects are handled by vetted professional designers and motion artists who specialize in the exact type of work you need — from graphic design and branding to video editing and 3D.",
   },
   {
-    question: "Can I request revisions?",
+    question: "What if I don't know how to write a brief?",
     answer:
-      "Absolutely! All our packages include revision rounds. Standard packages include 2 revision rounds, and premium packages offer unlimited revisions until you're 100% satisfied.",
+      "That's completely fine. Share whatever you have — rough notes, a voice memo, or a mood board all work. Our team will help shape the brief into a clear direction before production starts.",
   },
   {
-    question: "What's the delivery time?",
+    question: "Can I order multiple things at once?",
     answer:
-      "Delivery times vary by project type. Simple graphics can be delivered same-day, while complex branding projects may take 5-7 business days. Rush delivery is available for urgent requests.",
+      "Yes. You can submit multiple requests and we'll handle them in parallel or in priority order based on your timeline and urgency.",
   },
   {
-    question: "How do I get started?",
+    question: "How is pricing predictable?",
     answer:
-      "Getting started is easy! Simply click 'Get Started', describe your project, upload any references you have, and our team will match you with the perfect designer within hours.",
+      "Each service type has a clear, flat rate. No hourly billing surprises, no scope creep charges — you know the cost before work begins.",
+  },
+  {
+    question: "Is this like Fiverr, Upwork, or an agency?",
+    answer:
+      "Neither. Menew isn't a marketplace where you hunt for freelancers, and it's not a slow agency with long discovery phases. It's a managed creative production layer — fast, accountable, and brand-aligned.",
+  },
+  {
+    question: "What makes this reliable for urgent work?",
+    answer:
+      "We keep active creative capacity ready at all times. Most requests start within hours of submission, and same-day turnaround is available for standard deliverables like graphics and social posts.",
+  },
+  {
+    question: "What happens if I'm not happy with the output?",
+    answer:
+      "Revisions are included with every order. If the direction is off, we revisit the brief and redo the work until it's right — no additional charge.",
   },
 ];
 
@@ -67,14 +78,13 @@ export function FAQSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="py-16 md:py-24">
+    <section id="faq" className="section-shell">
       <Container className="max-w-3xl">
-        <SectionTitle className="text-center mb-12">
+        <h2 className="mb-8 font-serif text-[2.5rem] font-medium leading-tight text-[color:var(--foreground)]">
           Frequently asked questions
-        </SectionTitle>
+        </h2>
 
-        {/* FAQ List */}
-        <div className="divide-y divide-gray-border border-t border-gray-border">
+        <div>
           {faqs.map((faq, index) => (
             <FAQItem
               key={index}

@@ -3,18 +3,79 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-rgb: 255, 255, 255;
+  --background: #f6f0e8;
+  --background-strong: #efe3d3;
+  --surface: rgba(255, 250, 242, 0.86);
+  --surface-strong: #fffaf4;
+  --foreground: #1d2433;
+  --muted: #5c6475;
+  --border: rgba(29, 36, 51, 0.12);
+  --border-strong: rgba(29, 36, 51, 0.22);
+  --primary: #184043;
+  --primary-strong: #102d30;
+  --accent: #d96d43;
+  --accent-soft: #f4d8c9;
+  --glow: rgba(217, 109, 67, 0.18);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
+  color: var(--foreground);
+  background:
+    radial-gradient(circle at top left, rgba(217, 109, 67, 0.14), transparent 28%),
+    radial-gradient(circle at top right, rgba(24, 64, 67, 0.1), transparent 24%),
+    linear-gradient(180deg, #fbf6ef 0%, var(--background) 44%, #f8efe4 100%);
+  min-height: 100vh;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  ::selection {
+    background: rgba(217, 109, 67, 0.2);
+  }
+}
+
+@layer components {
+  .section-shell {
+    @apply relative py-16 md:py-24;
+  }
+
+  .surface-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: 0 18px 60px rgba(37, 32, 25, 0.08);
+    backdrop-filter: blur(20px);
+  }
+
+  .fine-label {
+    @apply font-inter text-[11px] font-semibold uppercase tracking-[0.32em];
+    color: var(--muted);
+  }
+
+  .section-kicker {
+    @apply inline-flex items-center rounded-full px-4 py-2 font-inter text-[11px] font-semibold uppercase tracking-[0.24em];
+    background: rgba(255, 250, 242, 0.78);
+    border: 1px solid rgba(29, 36, 51, 0.1);
+    color: var(--primary);
+  }
+
+  .grid-outline {
+    background-image:
+      linear-gradient(to right, rgba(29, 36, 51, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(29, 36, 51, 0.06) 1px, transparent 1px);
+    background-size: 30px 30px;
   }
 }
 
@@ -24,14 +85,14 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: rgba(29, 36, 51, 0.08);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: rgba(24, 64, 67, 0.45);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: rgba(24, 64, 67, 0.7);
 }

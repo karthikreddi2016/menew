@@ -1,95 +1,86 @@
-import { Container, SectionTitle } from "@/components/ui";
-import Image from "next/image";
+import { Container } from "@/components/ui";
 
-interface ServiceCardProps {
-  title: string;
-  description: string;
-  image: string;
-  deliveryTag?: string;
-}
+const imgGraphicDesign = "/images/graphic-design.jpg";
+const imgVideoEditing = "/images/video-editing.jpg";
+const img3DMotion = "/images/3d-motion.jpg";
+const imgBranding = "/images/branding-kit.jpg";
+const imgThumbnail = "/images/thumbnail.jpg";
+const imgPPT = "/images/ppt-design.jpg";
+
+const services = [
+  {
+    image: imgGraphicDesign,
+    title: "Graphic Design",
+    description: "Social posts, banners, brand assets",
+    deliveryTag: "Same Day Delivery",
+  },
+  {
+    image: imgVideoEditing,
+    title: "Video Editing",
+    description: "Reels, ads, YouTube, short-form",
+    deliveryTag: "12–24 hours",
+  },
+  {
+    image: img3DMotion,
+    title: "3D / Motion Design",
+    description: "Product visuals, animations, explainers",
+    deliveryTag: "48–72 hours",
+  },
+  {
+    image: imgBranding,
+    title: "Branding Kit",
+    description: "Logos, brand guidelines",
+    deliveryTag: "48 hours",
+  },
+  {
+    image: imgThumbnail,
+    title: "Thumbnail",
+    description: "YouTube & social media",
+    deliveryTag: "12 hours",
+  },
+  {
+    image: imgPPT,
+    title: "PPT Design",
+    description: "Investor ready pitch decks, presentation slides",
+    deliveryTag: "24 hours",
+  },
+];
 
 function ServiceCard({
+  image,
   title,
   description,
-  image,
   deliveryTag,
-}: ServiceCardProps) {
+}: (typeof services)[number]) {
   return (
-    <div className="bg-white border border-gray-border rounded-card overflow-hidden hover:shadow-lg transition-shadow">
-      {/* Image */}
-      <div className="h-[200px] bg-gray-bg relative">
-        <div className="absolute inset-0 flex items-center justify-center text-6xl">
-          {image}
-        </div>
+    <div className="flex flex-col overflow-hidden rounded-xl border border-black/10 bg-white">
+      <div className="relative h-[200px] w-full overflow-hidden">
+        <img src={image} alt={title} className="h-full w-full object-cover" />
       </div>
-
-      {/* Content */}
-      <div className="p-4">
-        <h3 className="font-serif text-xl capitalize mb-1">{title}</h3>
-        <p className="font-sans text-base text-text-primary/70 mb-3">
-          {description}
+      <div className="flex flex-col gap-1.5 p-4">
+        <p className="font-serif text-xl leading-snug text-[color:var(--foreground)] tracking-[-0.01em]">
+          {title}
         </p>
-        {deliveryTag && (
-          <span className="inline-block bg-accent-orange-light border border-accent-orange text-text-primary/70 text-base px-3 py-1 rounded-tag">
-            {deliveryTag}
-          </span>
-        )}
+        <p className="font-sans text-base text-black/65">{description}</p>
+        <span className="mt-1 inline-flex w-fit items-center rounded border border-[#ffae45] bg-[#ffe6c5] px-2.5 py-1 text-sm text-black/70">
+          {deliveryTag}
+        </span>
       </div>
     </div>
   );
 }
 
-const services = [
-  {
-    title: "Graphic Design",
-    description: "Social posts, banners, brand assets",
-    image: "🎨",
-    deliveryTag: "Same Day Delivery",
-  },
-  {
-    title: "Video Editing",
-    description: "Reels, YouTube videos, ads",
-    image: "🎬",
-    deliveryTag: "2-3 Days Delivery",
-  },
-  {
-    title: "Presentations",
-    description: "Pitch decks, corporate presentations",
-    image: "📊",
-    deliveryTag: "Same Day Delivery",
-  },
-  {
-    title: "UI/UX Design",
-    description: "App screens, website mockups",
-    image: "💻",
-    deliveryTag: "3-5 Days Delivery",
-  },
-  {
-    title: "Branding",
-    description: "Logos, brand guidelines, identity",
-    image: "✨",
-    deliveryTag: "5-7 Days Delivery",
-  },
-  {
-    title: "Illustrations",
-    description: "Custom illustrations, icons",
-    image: "🖌️",
-    deliveryTag: "2-3 Days Delivery",
-  },
-];
-
 export function FeaturesSection() {
   return (
-    <section id="services" className="py-16 md:py-24">
+    <section id="services" className="section-shell">
       <Container>
-        <SectionTitle className="mb-12">
-          The Designs You Need, The Quality You Want
-        </SectionTitle>
+        <h2 className="mb-8 font-serif text-[2rem] leading-snug tracking-[-0.02em] text-[color:var(--foreground)]">
+          You Order, We Deliver!
+        </h2>
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <ServiceCard key={index} {...service} />
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {services.map((service) => (
+            <ServiceCard key={service.title} {...service} />
           ))}
         </div>
       </Container>
