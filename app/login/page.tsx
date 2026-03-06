@@ -9,12 +9,12 @@ export default function LoginPage() {
   const [remember, setRemember] = useState(true);
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen flex-col md:flex-row">
       <AuthLeftPanel />
 
       {/* ── Right: form panel ── */}
-      <div className="flex shrink-0 items-center justify-center bg-white px-[40px] py-16">
-        <div className="flex w-[383px] flex-col gap-12">
+      <div className="flex flex-1 md:flex-none shrink-0 items-center justify-center bg-white px-4 sm:px-[40px] py-10 sm:py-16">
+        <div className="flex w-full max-w-[383px] flex-col gap-12">
 
           {/* Signup / Login toggle — Login is active */}
           <div className="rounded-[8px] bg-[#e7ecff] p-[4px]">
@@ -77,9 +77,8 @@ export default function LoginPage() {
                   className="flex h-6 w-6 shrink-0 items-center justify-center"
                 >
                   <div
-                    className={`flex h-[18px] w-[18px] items-center justify-center rounded-[2px] ${
-                      remember ? "bg-[#2952e1]" : "border-2 border-[#49454f]"
-                    }`}
+                    className={`flex h-[18px] w-[18px] items-center justify-center rounded-[2px] ${remember ? "bg-[#2952e1]" : "border-2 border-[#49454f]"
+                      }`}
                   >
                     {remember && <CheckIcon />}
                   </div>

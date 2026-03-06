@@ -7,7 +7,7 @@ export function HeroSection() {
 
       <Container>
         <div className="mx-auto max-w-3xl text-center">
-          <h1 className="font-serif text-[2.8rem] leading-[1.1] tracking-[-0.03em] text-(--foreground) md:text-[4rem]">
+          <h1 className="font-serif text-[1.75rem] leading-[1.1] tracking-[-0.03em] text-(--foreground) sm:text-[2.8rem] md:text-[4rem]">
             Your{" "}
             <span className="relative inline-block rounded-md bg-[#2952e1]/10 px-2 text-[#2952e1]">
               Creative Ideas

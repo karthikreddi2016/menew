@@ -80,7 +80,7 @@ export function FAQSection() {
   return (
     <section id="faq" className="section-shell">
       <Container className="max-w-3xl">
-        <h2 className="mb-8 font-serif text-[2.5rem] font-medium leading-tight text-(--foreground)">
+        <h2 className="mb-8 font-serif text-[1.75rem] sm:text-[2.5rem] font-medium leading-tight text-(--foreground)">
           Frequently asked questions
         </h2>
 

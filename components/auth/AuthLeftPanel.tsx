@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export function AuthLeftPanel() {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center bg-[#050505] px-8 py-16">
+    <div className="hidden md:flex flex-1 flex-col items-center justify-center bg-[#050505] px-8 py-16">
       {/* Heading */}
       <div className="mb-[60px] flex flex-col items-center gap-[13px] text-center text-white">
         <h1 className="font-serif text-[36px] font-normal leading-[1.2] tracking-[-0.25px]">

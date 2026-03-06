@@ -24,7 +24,7 @@ export default function ComingSoonPage() {
       </div>
 
       {/* ── Navbar ── */}
-      <header className="relative z-10 flex w-full items-center justify-center border-b border-[#545454] bg-black px-[70px] py-4">
+      <header className="relative z-10 flex w-full items-center justify-center border-b border-[#545454] bg-black px-4 sm:px-[70px] py-4">
         <div className="relative h-[39px] w-[150px] overflow-hidden">
           <div
             style={{
@@ -42,7 +42,7 @@ export default function ComingSoonPage() {
       </header>
 
       {/* ── Hero — fills remaining viewport height ── */}
-      <div className="relative z-10 flex w-[790px] max-w-[90vw] flex-1 flex-col items-center justify-center gap-[89px]">
+      <div className="relative z-10 flex w-full max-w-[790px] px-4 sm:px-0 flex-1 flex-col items-center justify-center gap-12 sm:gap-[89px]">
 
         <div className="flex flex-col items-center gap-8 text-center">
 
@@ -55,7 +55,7 @@ export default function ComingSoonPage() {
 
           {/* Headline */}
           <div className="relative">
-            <h1 className="font-serif text-[42px] leading-none tracking-[-0.25px] text-white">
+            <h1 className="font-serif text-[28px] sm:text-[42px] leading-none tracking-[-0.25px] text-white">
               <span className="block">The Era of Hiring Freelancers Ends.</span>
               <span className="block mt-2">
                 <span className="relative inline-block text-[#ff8cc9]">
@@ -82,8 +82,8 @@ export default function ComingSoonPage() {
           </p>
 
           {/* Email + CTA */}
-          <div className="flex items-center gap-3">
-            <div className="flex h-14 w-[367px] items-center rounded-[39px] border border-[#919191] bg-[#161616] px-6">
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+            <div className="flex h-14 w-full sm:w-[367px] items-center rounded-[39px] border border-[#919191] bg-[#161616] px-6">
               <input
                 type="email"
                 value={email}
@@ -94,7 +94,7 @@ export default function ComingSoonPage() {
             </div>
             <button
               type="button"
-              className="whitespace-nowrap rounded-[31px] bg-[#2952e1] px-8 py-4 font-inter font-medium text-[16px] leading-[1.5] tracking-[-0.25px] text-[#eaeefc] transition-colors hover:bg-[#1e42c7]"
+              className="w-full sm:w-auto whitespace-nowrap rounded-[31px] bg-[#2952e1] px-8 py-4 font-inter font-medium text-[16px] leading-[1.5] tracking-[-0.25px] text-[#eaeefc] transition-colors hover:bg-[#1e42c7]"
             >
               Get Started
             </button>
