@@ -59,7 +59,7 @@ export function Navbar() {
         {/* Action buttons */}
         <div className="flex items-center gap-5">
           <Link
-            href="#login"
+            href="/signup"
             className="bg-[#e7ecff] text-[#2952e1] font-inter font-medium text-[16px] tracking-[-0.25px] leading-[1.5] px-8 py-4 rounded-full hover:bg-[#d4dcff] transition-colors whitespace-nowrap"
           >
             Login

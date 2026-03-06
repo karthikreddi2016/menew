@@ -4,9 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { AuthLeftPanel } from "@/components/auth/AuthLeftPanel";
 
-export default function SignupPage() {
+export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [agreed, setAgreed] = useState(true);
+  const [remember, setRemember] = useState(true);
 
   return (
     <div className="flex min-h-screen">
@@ -16,44 +16,34 @@ export default function SignupPage() {
       <div className="flex shrink-0 items-center justify-center bg-white px-[40px] py-16">
         <div className="flex w-[383px] flex-col gap-12">
 
-          {/* Signup / Login toggle */}
+          {/* Signup / Login toggle — Login is active */}
           <div className="rounded-[8px] bg-[#e7ecff] p-[4px]">
             <div className="flex gap-2">
-              <div className="flex h-12 flex-1 items-center justify-center rounded-[8px] bg-white shadow-[0px_2px_8px_0px_rgba(41,82,225,0.15)]">
-                <span className="font-inter font-medium text-[14px] leading-[1.5] tracking-[-0.25px] text-[#2952e1]">
-                  Signup
-                </span>
-              </div>
               <Link
-                href="/login"
+                href="/signup"
                 className="flex h-12 flex-1 items-center justify-center rounded-[8px]"
               >
                 <span className="font-inter font-medium text-[14px] leading-[1.5] tracking-[-0.25px] text-[#11225f]">
-                  Login
+                  Signup
                 </span>
               </Link>
+              <div className="flex h-12 flex-1 items-center justify-center rounded-[8px] bg-white shadow-[0px_2px_8px_0px_rgba(41,82,225,0.15)]">
+                <span className="font-inter font-medium text-[14px] leading-[1.5] tracking-[-0.25px] text-[#2952e1]">
+                  Login
+                </span>
+              </div>
             </div>
           </div>
 
           {/* Fields */}
           <div className="flex flex-col gap-8">
-            <FloatingInput label="Enter Your Name" placeholder="First and last name" type="text" autoComplete="name" />
-            <FloatingInput label="Enter Your Email" placeholder="user@example.com" type="email" autoComplete="email" />
-
-            {/* Phone row */}
-            <div className="flex gap-2 items-stretch">
-              {/* Country code */}
-              <div className="relative flex w-[90px] shrink-0 items-center rounded-[4px] border border-[#79747e]">
-                <span className="pl-4 font-inter text-[16px] text-[#49454f] tracking-[0.5px]">+91</span>
-                <button className="flex h-12 w-12 shrink-0 items-center justify-center">
-                  <ChevronDown />
-                </button>
-              </div>
-              {/* Phone number */}
-              <div className="flex-1">
-                <FloatingInput label="Phone Number" placeholder="Enter your phone number" type="tel" autoComplete="tel" />
-              </div>
-            </div>
+            {/* Email */}
+            <FloatingInput
+              label="Enter Your Email"
+              placeholder="jasonglare@gmail.com"
+              type="email"
+              autoComplete="email"
+            />
 
             {/* Password */}
             <div className="relative flex h-14 items-center rounded-[4px] border border-[#79747e]">
@@ -62,8 +52,9 @@ export default function SignupPage() {
               </span>
               <input
                 type={showPassword ? "text" : "password"}
-                autoComplete="new-password"
-                className="h-full flex-1 bg-transparent font-inter text-[16px] text-[#49454f] outline-none"
+                autoComplete="current-password"
+                placeholder="jasonglare@gmail.com"
+                className="h-full flex-1 bg-transparent font-inter text-[16px] text-[#49454f] placeholder:text-[#49454f] outline-none"
               />
               <button
                 type="button"
@@ -72,42 +63,47 @@ export default function SignupPage() {
               >
                 <EyeIcon open={showPassword} />
               </button>
-              {/* Floating label — offset left to clear the lock icon */}
               <span className="absolute left-[40px] -top-[11px] bg-white px-1 font-inter text-[12px] leading-[1.5] tracking-[-0.25px] text-[#49454f]">
-                Create Password
+                Enter Password
               </span>
             </div>
 
-            {/* Terms */}
-            <div className="flex items-center gap-1">
-              <button
-                type="button"
-                onClick={() => setAgreed((v) => !v)}
-                className="flex h-6 w-6 shrink-0 items-center justify-center"
-              >
-                <div
-                  className={`flex h-[18px] w-[18px] items-center justify-center rounded-[2px] ${
-                    agreed ? "bg-[#2952e1]" : "border-2 border-[#49454f]"
-                  }`}
+            {/* Remember me + Forgot password */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => setRemember((v) => !v)}
+                  className="flex h-6 w-6 shrink-0 items-center justify-center"
                 >
-                  {agreed && <CheckIcon />}
-                </div>
-              </button>
-              <p className="font-inter text-[14px] leading-[22px] text-[#161616]">
-                I accept all the{" "}
-                <Link href="/terms" className="font-medium text-[#2952e1]">
-                  terms and conditions
-                </Link>
-              </p>
+                  <div
+                    className={`flex h-[18px] w-[18px] items-center justify-center rounded-[2px] ${
+                      remember ? "bg-[#2952e1]" : "border-2 border-[#49454f]"
+                    }`}
+                  >
+                    {remember && <CheckIcon />}
+                  </div>
+                </button>
+                <p className="font-inter text-[14px] leading-[22px] text-[#161616]">
+                  Remember me
+                </p>
+              </div>
+
+              <Link
+                href="/forgot-password"
+                className="font-inter font-medium text-[16px] leading-[1.5] tracking-[-0.25px] text-[#2952e1]"
+              >
+                Forgot Passwords
+              </Link>
             </div>
           </div>
 
-          {/* Register CTA */}
+          {/* Login CTA */}
           <button
             type="submit"
             className="w-full rounded-[31px] bg-[#2952e1] py-4 text-center font-inter font-medium text-[16px] leading-[1.5] tracking-[-0.25px] text-white transition-colors hover:bg-[#1e42c7]"
           >
-            Register
+            Login
           </button>
         </div>
       </div>
@@ -115,7 +111,7 @@ export default function SignupPage() {
   );
 }
 
-/* ── Shared input with floating label ── */
+/* ── Shared floating label input ── */
 function FloatingInput({
   label,
   placeholder,
@@ -143,14 +139,6 @@ function FloatingInput({
 }
 
 /* ── Icons ── */
-function ChevronDown() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path d="M7 10l5 5 5-5" stroke="#49454f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
 function LockIcon() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
