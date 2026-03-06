@@ -23,12 +23,12 @@ export default function LoginPage() {
                 href="/signup"
                 className="flex h-12 flex-1 items-center justify-center rounded-[8px]"
               >
-                <span className="font-inter font-medium text-[14px] leading-[1.5] tracking-[-0.25px] text-[#11225f]">
+                <span className="font-inter font-medium text-[14px] leading-normal tracking-[-0.25px] text-[#11225f]">
                   Signup
                 </span>
               </Link>
               <div className="flex h-12 flex-1 items-center justify-center rounded-[8px] bg-white shadow-[0px_2px_8px_0px_rgba(41,82,225,0.15)]">
-                <span className="font-inter font-medium text-[14px] leading-[1.5] tracking-[-0.25px] text-[#2952e1]">
+                <span className="font-inter font-medium text-[14px] leading-normal tracking-[-0.25px] text-[#2952e1]">
                   Login
                 </span>
               </div>
@@ -63,7 +63,7 @@ export default function LoginPage() {
               >
                 <EyeIcon open={showPassword} />
               </button>
-              <span className="absolute left-[40px] -top-[11px] bg-white px-1 font-inter text-[12px] leading-[1.5] tracking-[-0.25px] text-[#49454f]">
+              <span className="absolute left-[40px] -top-[11px] bg-white px-1 font-inter text-[12px] leading-normal tracking-[-0.25px] text-[#49454f]">
                 Enter Password
               </span>
             </div>
@@ -91,7 +91,7 @@ export default function LoginPage() {
 
               <Link
                 href="/forgot-password"
-                className="font-inter font-medium text-[16px] leading-[1.5] tracking-[-0.25px] text-[#2952e1]"
+                className="font-inter font-medium text-[16px] leading-normal tracking-[-0.25px] text-[#2952e1]"
               >
                 Forgot Passwords
               </Link>
@@ -101,7 +101,7 @@ export default function LoginPage() {
           {/* Login CTA */}
           <button
             type="submit"
-            className="w-full rounded-[31px] bg-[#2952e1] py-4 text-center font-inter font-medium text-[16px] leading-[1.5] tracking-[-0.25px] text-white transition-colors hover:bg-[#1e42c7]"
+            className="w-full rounded-[31px] bg-[#2952e1] py-4 text-center font-inter font-medium text-[16px] leading-normal tracking-[-0.25px] text-white transition-colors hover:bg-[#1e42c7]"
           >
             Login
           </button>
@@ -131,7 +131,7 @@ function FloatingInput({
         placeholder={placeholder}
         className="h-full w-full bg-transparent font-inter text-[16px] text-[#49454f] placeholder:text-[#49454f] outline-none"
       />
-      <span className="absolute left-3 -top-[11px] bg-white px-1 font-inter text-[12px] leading-[1.5] tracking-[-0.25px] text-[#49454f]">
+      <span className="absolute left-3 -top-[11px] bg-white px-1 font-inter text-[12px] leading-normal tracking-[-0.25px] text-[#49454f]">
         {label}
       </span>
     </div>

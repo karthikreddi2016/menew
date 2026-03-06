@@ -28,12 +28,12 @@ export function Navbar() {
 
         {/* Nav links */}
         <nav className="hidden md:flex items-center gap-8">
-          <button className="font-inter text-[16px] leading-[1.5] tracking-[-0.25px] text-black hover:text-black/70 transition-colors">
+          <button className="font-inter text-[16px] leading-normal tracking-[-0.25px] text-black hover:text-black/70 transition-colors">
             Services
           </button>
 
           <div className="flex items-center gap-1">
-            <span className="font-inter text-[16px] leading-[1.5] tracking-[-0.25px] text-black">
+            <span className="font-inter text-[16px] leading-normal tracking-[-0.25px] text-black">
               For Enterprise
             </span>
             <span className="bg-[#e865aa] text-[#fff1f8] text-[10px] font-inter rounded-[2px] px-1 py-0.5 leading-none">
@@ -43,14 +43,14 @@ export function Navbar() {
 
           <Link
             href="#contact"
-            className="font-inter text-[16px] leading-[1.5] tracking-[-0.25px] text-black hover:text-black/70 transition-colors"
+            className="font-inter text-[16px] leading-normal tracking-[-0.25px] text-black hover:text-black/70 transition-colors"
           >
             Contact
           </Link>
 
           <Link
             href="#join"
-            className="font-inter text-[16px] leading-[1.5] tracking-[-0.25px] text-black hover:text-black/70 transition-colors"
+            className="font-inter text-[16px] leading-normal tracking-[-0.25px] text-black hover:text-black/70 transition-colors"
           >
             Join the Team
           </Link>
@@ -60,13 +60,13 @@ export function Navbar() {
         <div className="flex items-center gap-5">
           <Link
             href="/signup"
-            className="bg-[#e7ecff] text-[#2952e1] font-inter font-medium text-[16px] tracking-[-0.25px] leading-[1.5] px-8 py-4 rounded-full hover:bg-[#d4dcff] transition-colors whitespace-nowrap"
+            className="bg-[#e7ecff] text-[#2952e1] font-inter font-medium text-[16px] tracking-[-0.25px] leading-normal px-8 py-4 rounded-full hover:bg-[#d4dcff] transition-colors whitespace-nowrap"
           >
             Login
           </Link>
           <Link
             href="#get-started"
-            className="bg-[#2952e1] text-white font-inter font-medium text-[16px] tracking-[-0.25px] leading-[1.5] px-8 py-4 rounded-full hover:bg-[#1e42c7] transition-colors whitespace-nowrap"
+            className="bg-[#2952e1] text-white font-inter font-medium text-[16px] tracking-[-0.25px] leading-normal px-8 py-4 rounded-full hover:bg-[#1e42c7] transition-colors whitespace-nowrap"
           >
             Get Started
           </Link>

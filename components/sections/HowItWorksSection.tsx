@@ -9,13 +9,13 @@ interface StepProps {
 
 function Step({ number, title, description, isLast = false }: StepProps) {
   return (
-    <div className="relative flex flex-col gap-5 rounded-[1.5rem] border border-black/10 bg-white/65 p-5 md:flex-row md:items-start md:p-6">
-      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-primary font-inter text-lg font-semibold text-white">
+    <div className="relative flex flex-col gap-5 rounded-3xl border border-black/10 bg-white/65 p-5 md:flex-row md:items-start md:p-6">
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary font-inter text-lg font-semibold text-white">
         {number}
       </div>
 
       <div className="flex-1">
-        <h3 className="font-serif text-2xl leading-tight text-[color:var(--foreground)]">{title}</h3>
+        <h3 className="font-serif text-2xl leading-tight text-(--foreground)">{title}</h3>
         <p className="mt-2 font-sans text-base leading-7 text-black/65">{description}</p>
       </div>
 
@@ -67,14 +67,14 @@ export function HowItWorksSection() {
             ))}
           </div>
 
-          <div className="surface-panel grid-outline hidden rounded-[2rem] p-6 md:block">
-            <div className="rounded-[1.5rem] border border-black/10 bg-[color:var(--surface-strong)] p-5">
+          <div className="surface-panel grid-outline hidden rounded-4xl p-6 md:block">
+            <div className="rounded-3xl border border-black/10 bg-(--surface-strong) p-5">
               <div className="flex items-center justify-between border-b border-black/10 pb-4">
                 <div>
                   <p className="fine-label">Project board</p>
-                  <p className="mt-2 text-lg font-semibold text-[color:var(--foreground)]">Summer product push</p>
+                  <p className="mt-2 text-lg font-semibold text-(--foreground)">Summer product push</p>
                 </div>
-                <span className="rounded-full bg-[color:var(--accent-soft)] px-3 py-1 text-xs uppercase tracking-[0.18em] text-[color:var(--accent)]">
+                <span className="rounded-full bg-(--accent-soft) px-3 py-1 text-xs uppercase tracking-[0.18em] text-(--accent)">
                   Active
                 </span>
               </div>
@@ -93,7 +93,7 @@ export function HowItWorksSection() {
                   </p>
                 </div>
                 <div className="rounded-2xl bg-primary p-4 text-white">
-                  <p className="fine-label !text-white/55">Status</p>
+                  <p className="fine-label text-white/55!">Status</p>
                   <p className="mt-2 text-sm leading-6 text-white/78">
                     Feedback windows are scheduled upfront, so the project keeps moving instead of waiting in a vague review loop.
                   </p>

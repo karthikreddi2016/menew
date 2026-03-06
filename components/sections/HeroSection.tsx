@@ -3,11 +3,11 @@ import { Button, Container } from "@/components/ui";
 export function HeroSection() {
   return (
     <section className="relative overflow-hidden pb-10 pt-10 md:pb-16 md:pt-14">
-      <div className="absolute inset-x-0 top-20 -z-10 h-[36rem] bg-[radial-gradient(circle_at_top_left,_rgba(217,109,67,0.22),_transparent_32%),radial-gradient(circle_at_70%_20%,_rgba(24,64,67,0.14),_transparent_26%)]" />
+      <div className="absolute inset-x-0 top-20 -z-10 h-144 bg-[radial-gradient(circle_at_top_left,rgba(217,109,67,0.22),transparent_32%),radial-gradient(circle_at_70%_20%,rgba(24,64,67,0.14),transparent_26%)]" />
 
       <Container>
         <div className="mx-auto max-w-3xl text-center">
-          <h1 className="font-serif text-[2.8rem] leading-[1.1] tracking-[-0.03em] text-[color:var(--foreground)] md:text-[4rem]">
+          <h1 className="font-serif text-[2.8rem] leading-[1.1] tracking-[-0.03em] text-(--foreground) md:text-[4rem]">
             Your{" "}
             <span className="relative inline-block rounded-md bg-[#2952e1]/10 px-2 text-[#2952e1]">
               Creative Ideas

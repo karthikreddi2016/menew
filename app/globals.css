@@ -1,34 +1,67 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-:root {
-  --background: #f6f0e8;
-  --background-strong: #efe3d3;
-  --surface: rgba(255, 250, 242, 0.86);
-  --surface-strong: #fffaf4;
-  --foreground: #1d2433;
-  --muted: #5c6475;
-  --border: rgba(29, 36, 51, 0.12);
-  --border-strong: rgba(29, 36, 51, 0.22);
-  --primary: #184043;
-  --primary-strong: #102d30;
-  --accent: #d96d43;
-  --accent-soft: #f4d8c9;
-  --glow: rgba(217, 109, 67, 0.18);
+@theme {
+  --color-primary: #2952E1;
+  --color-primary-light: #EAEFFF;
+  --color-accent-pink: #F793C8;
+  --color-accent-orange: #FFAE45;
+  --color-accent-orange-light: #FFEFDB;
+  --color-gray-bg: #F8F8F8;
+  --color-gray-border: #E4DADA;
+  --color-gray-border-light: #E3E3E3;
+  --color-gray-border-dark: #D9D9D9;
+  --color-text-primary: #000000;
+  --color-text-secondary: #2C2C2C;
+  --color-text-dark: #191919;
+
+  --font-serif: var(--font-source-serif), serif;
+  --font-sans: var(--font-roboto), sans-serif;
+  --font-inter: var(--font-inter), sans-serif;
+  --font-ibm-plex: var(--font-ibm-plex), sans-serif;
+
+  --container: 1300px;
+
+  --radius-button: 31px;
+  --radius-card: 12px;
+  --radius-input: 8px;
+  --radius-tag: 4px;
+
+  --spacing-page-x: 70px;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+@layer utilities {
+  :root {
+    --background: #f6f0e8;
+    --background-strong: #efe3d3;
+    --surface: rgba(255, 250, 242, 0.86);
+    --surface-strong: #fffaf4;
+    --foreground: #1d2433;
+    --muted: #5c6475;
+    --border: rgba(29, 36, 51, 0.12);
+    --border-strong: rgba(29, 36, 51, 0.22);
+    --primary: #184043;
+    --primary-strong: #102d30;
+    --accent: #d96d43;
+    --accent-soft: #f4d8c9;
+    --glow: rgba(217, 109, 67, 0.18);
+  }
 
-body {
-  color: var(--foreground);
-  background:
-    radial-gradient(circle at top left, rgba(217, 109, 67, 0.14), transparent 28%),
-    radial-gradient(circle at top right, rgba(24, 64, 67, 0.1), transparent 24%),
-    linear-gradient(180deg, #fbf6ef 0%, var(--background) 44%, #f8efe4 100%);
-  min-height: 100vh;
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    color: var(--foreground);
+    background:
+      radial-gradient(circle at top left,
+        rgba(217, 109, 67, 0.14),
+        transparent 28%),
+      radial-gradient(circle at top right,
+        rgba(24, 64, 67, 0.1),
+        transparent 24%),
+      linear-gradient(180deg, #fbf6ef 0%, var(--background) 44%, #f8efe4 100%);
+    min-height: 100vh;
+  }
 }
 
 @layer utilities {

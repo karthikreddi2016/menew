@@ -82,7 +82,7 @@ const socialLinks = [
 export function Footer() {
   return (
     <footer className="px-4 pb-6 pt-16 md:px-6 md:pb-8">
-      <div className="surface-panel mx-auto max-w-container rounded-[2rem] px-6 py-10 md:px-10 md:py-14">
+      <div className="surface-panel mx-auto max-w-container rounded-4xl px-6 py-10 md:px-10 md:py-14">
         <div className="mb-10 flex flex-col gap-6 border-b border-black/10 pb-10 md:flex-row md:items-end md:justify-between">
           <div className="max-w-xl">
             <p className="fine-label mb-3">Menew studio</p>
@@ -100,15 +100,15 @@ export function Footer() {
           <div className="grid max-w-lg grid-cols-2 gap-4 text-sm text-black/70 md:grid-cols-3">
             <div>
               <p className="fine-label mb-2">Reply time</p>
-              <p className="font-medium text-[color:var(--foreground)]">Under 2 hours</p>
+              <p className="font-medium text-(--foreground)">Under 2 hours</p>
             </div>
             <div>
               <p className="fine-label mb-2">Delivery cadence</p>
-              <p className="font-medium text-[color:var(--foreground)]">Daily production</p>
+              <p className="font-medium text-(--foreground)">Daily production</p>
             </div>
             <div>
               <p className="fine-label mb-2">Best for</p>
-              <p className="font-medium text-[color:var(--foreground)]">Founders and marketers</p>
+              <p className="font-medium text-(--foreground)">Founders and marketers</p>
             </div>
           </div>
         </div>
@@ -178,7 +178,7 @@ export function Footer() {
                 <Link
                   key={social.name}
                   href={social.href}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 text-[color:var(--foreground)] transition-colors hover:border-primary hover:text-primary"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 text-(--foreground) transition-colors hover:border-primary hover:text-primary"
                   aria-label={social.name}
                 >
                   {social.icon}
@@ -188,7 +188,7 @@ export function Footer() {
 
             <div className="rounded-3xl border border-black/10 bg-white/55 p-4">
               <p className="fine-label mb-2">Email</p>
-              <p className="font-sans text-base text-[color:var(--foreground)]">
+              <p className="font-sans text-base text-(--foreground)">
                 hello@menew.studio
               </p>
             </div>

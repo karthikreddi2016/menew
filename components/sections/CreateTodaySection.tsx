@@ -28,7 +28,7 @@ export function CreateTodaySection() {
       <Container>
         <div className="flex items-center gap-4 mb-8">
           <div className="flex-1 h-px bg-black/15" />
-          <p className="shrink-0 font-serif text-xl text-[color:var(--foreground)] tracking-[-0.01em]">
+          <p className="shrink-0 font-serif text-xl text-(--foreground) tracking-[-0.01em]">
             What would you like to create today
           </p>
           <div className="flex-1 h-px bg-black/15" />
@@ -41,7 +41,7 @@ export function CreateTodaySection() {
               className="flex h-[120px] w-[120px] cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-black/10 bg-white/80 p-3 transition-shadow hover:shadow-md"
             >
               <img src={service.icon} alt={service.name} className="h-6 w-6 object-contain" />
-              <p className="text-center font-inter text-[13px] font-medium leading-tight text-[color:var(--foreground)]">
+              <p className="text-center font-inter text-[13px] font-medium leading-tight text-(--foreground)">
                 {service.name}
               </p>
             </div>

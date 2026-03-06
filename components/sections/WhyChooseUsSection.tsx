@@ -10,7 +10,7 @@ function FeatureCard({ title, description, icon }: FeatureCardProps) {
   return (
     <div className="surface-panel rounded-[1.75rem] p-6 md:p-8">
       <div className="mb-8 flex items-start gap-6">
-        <h3 className="flex-1 font-serif text-[1.9rem] leading-tight text-[color:var(--foreground)]">{title}</h3>
+        <h3 className="flex-1 font-serif text-[1.9rem] leading-tight text-(--foreground)">{title}</h3>
         <span className="inline-flex rounded-full border border-black/10 px-3 py-1.5 text-sm uppercase tracking-[0.18em] text-black/55">
           {icon}
         </span>

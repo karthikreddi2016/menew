@@ -25,7 +25,7 @@ export function SectionTitle({
 
   return (
     <h2
-      className={`font-serif text-[2rem] font-semibold leading-tight text-[color:var(--foreground)] md:text-[3rem] ${className}`}
+      className={`font-serif text-[2rem] font-semibold leading-tight text-(--foreground) md:text-[3rem] ${className}`}
     >
       {children}
     </h2>

@@ -14,13 +14,13 @@ function FAQItem({ question, answer, isOpen, onToggle }: FAQItemProps) {
   return (
     <div className="border-b border-black/10">
       <button
-        className="flex w-full items-center justify-between px-3 py-6 text-left transition-colors hover:bg-black/[0.02]"
+        className="flex w-full items-center justify-between px-3 py-6 text-left transition-colors hover:bg-black/2"
         onClick={onToggle}
       >
-        <span className="pr-4 font-serif text-lg leading-snug text-[color:var(--foreground)] tracking-[-0.01em]">
+        <span className="pr-4 font-serif text-lg leading-snug text-(--foreground) tracking-[-0.01em]">
           {question}
         </span>
-        <span className="flex-shrink-0 text-xl text-black/45">{isOpen ? "−" : "+"}</span>
+        <span className="shrink-0 text-xl text-black/45">{isOpen ? "−" : "+"}</span>
       </button>
       {isOpen && (
         <div className="px-3 pb-6">
@@ -80,7 +80,7 @@ export function FAQSection() {
   return (
     <section id="faq" className="section-shell">
       <Container className="max-w-3xl">
-        <h2 className="mb-8 font-serif text-[2.5rem] font-medium leading-tight text-[color:var(--foreground)]">
+        <h2 className="mb-8 font-serif text-[2.5rem] font-medium leading-tight text-(--foreground)">
           Frequently asked questions
         </h2>
 

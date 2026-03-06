@@ -18,16 +18,16 @@ function Testimonial({
   const content = (
     <div className="flex h-full flex-col p-6 md:p-7">
       <div className="mb-6 flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[color:var(--accent-soft)] text-sm font-semibold text-[color:var(--accent)]">
+        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-(--accent-soft) text-sm font-semibold text-(--accent)">
           {name.charAt(0)}
         </div>
         <div>
-          <p className="font-sans text-sm font-semibold text-[color:var(--foreground)]">{name}</p>
+          <p className="font-sans text-sm font-semibold text-(--foreground)">{name}</p>
           <p className="font-sans text-xs text-black/55">{role}</p>
         </div>
       </div>
 
-      <p className="flex-1 font-serif text-[1.65rem] leading-[1.45] text-[color:var(--foreground)]">
+      <p className="flex-1 font-serif text-[1.65rem] leading-[1.45] text-(--foreground)">
         &ldquo;{quote}&rdquo;
       </p>
 
@@ -42,7 +42,7 @@ function Testimonial({
 
   const imagePlaceholder = (
     <div className="grid-outline min-h-[260px] bg-[linear-gradient(135deg,rgba(24,64,67,0.14),rgba(217,109,67,0.12))] p-6">
-      <div className="flex h-full flex-col justify-between rounded-[1.5rem] border border-black/10 bg-white/55 p-5">
+      <div className="flex h-full flex-col justify-between rounded-3xl border border-black/10 bg-white/55 p-5">
         <div className="flex items-center justify-between text-xs uppercase tracking-[0.18em] text-black/40">
           <span>Client story</span>
           <span>Proof</span>

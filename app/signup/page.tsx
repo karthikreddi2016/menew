@@ -20,7 +20,7 @@ export default function SignupPage() {
           <div className="rounded-[8px] bg-[#e7ecff] p-[4px]">
             <div className="flex gap-2">
               <div className="flex h-12 flex-1 items-center justify-center rounded-[8px] bg-white shadow-[0px_2px_8px_0px_rgba(41,82,225,0.15)]">
-                <span className="font-inter font-medium text-[14px] leading-[1.5] tracking-[-0.25px] text-[#2952e1]">
+                <span className="font-inter font-medium text-[14px] leading-normal tracking-[-0.25px] text-[#2952e1]">
                   Signup
                 </span>
               </div>
@@ -28,7 +28,7 @@ export default function SignupPage() {
                 href="/login"
                 className="flex h-12 flex-1 items-center justify-center rounded-[8px]"
               >
-                <span className="font-inter font-medium text-[14px] leading-[1.5] tracking-[-0.25px] text-[#11225f]">
+                <span className="font-inter font-medium text-[14px] leading-normal tracking-[-0.25px] text-[#11225f]">
                   Login
                 </span>
               </Link>
@@ -73,7 +73,7 @@ export default function SignupPage() {
                 <EyeIcon open={showPassword} />
               </button>
               {/* Floating label — offset left to clear the lock icon */}
-              <span className="absolute left-[40px] -top-[11px] bg-white px-1 font-inter text-[12px] leading-[1.5] tracking-[-0.25px] text-[#49454f]">
+              <span className="absolute left-[40px] -top-[11px] bg-white px-1 font-inter text-[12px] leading-normal tracking-[-0.25px] text-[#49454f]">
                 Create Password
               </span>
             </div>
@@ -105,7 +105,7 @@ export default function SignupPage() {
           {/* Register CTA */}
           <button
             type="submit"
-            className="w-full rounded-[31px] bg-[#2952e1] py-4 text-center font-inter font-medium text-[16px] leading-[1.5] tracking-[-0.25px] text-white transition-colors hover:bg-[#1e42c7]"
+            className="w-full rounded-[31px] bg-[#2952e1] py-4 text-center font-inter font-medium text-[16px] leading-normal tracking-[-0.25px] text-white transition-colors hover:bg-[#1e42c7]"
           >
             Register
           </button>
@@ -135,7 +135,7 @@ function FloatingInput({
         placeholder={placeholder}
         className="h-full w-full bg-transparent font-inter text-[16px] text-[#49454f] placeholder:text-[#49454f] outline-none"
       />
-      <span className="absolute left-3 -top-[11px] bg-white px-1 font-inter text-[12px] leading-[1.5] tracking-[-0.25px] text-[#49454f]">
+      <span className="absolute left-3 -top-[11px] bg-white px-1 font-inter text-[12px] leading-normal tracking-[-0.25px] text-[#49454f]">
         {label}
       </span>
     </div>

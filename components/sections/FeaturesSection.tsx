@@ -58,7 +58,7 @@ function ServiceCard({
         <img src={image} alt={title} className="h-full w-full object-cover" />
       </div>
       <div className="flex flex-col gap-1.5 p-4">
-        <p className="font-serif text-xl leading-snug text-[color:var(--foreground)] tracking-[-0.01em]">
+        <p className="font-serif text-xl leading-snug text-(--foreground) tracking-[-0.01em]">
           {title}
         </p>
         <p className="font-sans text-base text-black/65">{description}</p>
@@ -74,7 +74,7 @@ export function FeaturesSection() {
   return (
     <section id="services" className="section-shell">
       <Container>
-        <h2 className="mb-8 font-serif text-[2rem] leading-snug tracking-[-0.02em] text-[color:var(--foreground)]">
+        <h2 className="mb-8 font-serif text-[2rem] leading-snug tracking-[-0.02em] text-(--foreground)">
           You Order, We Deliver!
         </h2>
 
