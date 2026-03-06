@@ -45,7 +45,7 @@ export function Navbar() {
           </div>
 
           <Link
-            href="#contact"
+            href="/contact"
             className="font-inter text-[16px] leading-normal tracking-[-0.25px] text-black hover:text-black/70 transition-colors"
           >
             Contact
@@ -114,7 +114,7 @@ export function Navbar() {
             </div>
 
             <Link
-              href="#contact"
+              href="/contact"
               onClick={() => setMenuOpen(false)}
               className="font-inter text-[16px] leading-normal tracking-[-0.25px] text-black hover:text-black/70 transition-colors"
             >
