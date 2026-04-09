@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useActionState } from "react";
 import Link from "next/link";
 import { AuthLeftPanel } from "@/components/auth/AuthLeftPanel";
+import { signupAction } from "./actions";
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [agreed, setAgreed] = useState(true);
+  const [state, formAction, isPending] = useActionState(signupAction, null);
 
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
@@ -35,23 +37,27 @@ export default function SignupPage() {
             </div>
           </div>
 
-          {/* Fields */}
-          <div className="flex flex-col gap-8">
-            <FloatingInput label="Enter Your Name" placeholder="First and last name" type="text" autoComplete="name" />
-            <FloatingInput label="Enter Your Email" placeholder="user@example.com" type="email" autoComplete="email" />
+          {/* Error */}
+          {state?.error && (
+            <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 font-inter text-sm text-red-700">
+              {state.error}
+            </div>
+          )}
+
+          {/* Form */}
+          <form action={formAction} className="flex flex-col gap-8">
+            <FloatingInput name="name" label="Enter Your Name" placeholder="First and last name" type="text" autoComplete="name" />
+            <FloatingInput name="email" label="Enter Your Email" placeholder="user@example.com" type="email" autoComplete="email" />
 
             {/* Phone row */}
             <div className="flex gap-2 items-stretch">
               {/* Country code */}
               <div className="relative flex w-[90px] shrink-0 items-center rounded-[4px] border border-[#79747e]">
                 <span className="pl-4 font-inter text-[16px] text-[#49454f] tracking-[0.5px]">+91</span>
-                <button className="flex h-12 w-12 shrink-0 items-center justify-center">
-                  <ChevronDown />
-                </button>
               </div>
               {/* Phone number */}
               <div className="flex-1">
-                <FloatingInput label="Phone Number" placeholder="Enter your phone number" type="tel" autoComplete="tel" />
+                <FloatingInput name="phone" label="Phone Number" placeholder="Enter your phone number" type="tel" autoComplete="tel" />
               </div>
             </div>
 
@@ -61,8 +67,11 @@ export default function SignupPage() {
                 <LockIcon />
               </span>
               <input
+                name="password"
                 type={showPassword ? "text" : "password"}
                 autoComplete="new-password"
+                required
+                minLength={6}
                 className="h-full flex-1 bg-transparent font-inter text-[16px] text-[#49454f] outline-none"
               />
               <button
@@ -72,7 +81,6 @@ export default function SignupPage() {
               >
                 <EyeIcon open={showPassword} />
               </button>
-              {/* Floating label — offset left to clear the lock icon */}
               <span className="absolute left-[40px] -top-[11px] bg-white px-1 font-inter text-[12px] leading-normal tracking-[-0.25px] text-[#49454f]">
                 Create Password
               </span>
@@ -99,15 +107,16 @@ export default function SignupPage() {
                 </Link>
               </p>
             </div>
-          </div>
 
-          {/* Register CTA */}
-          <button
-            type="submit"
-            className="w-full rounded-[31px] bg-[#2952e1] py-4 text-center font-inter font-medium text-[16px] leading-normal tracking-[-0.25px] text-white transition-colors hover:bg-[#1e42c7]"
-          >
-            Register
-          </button>
+            {/* Register CTA */}
+            <button
+              type="submit"
+              disabled={isPending || !agreed}
+              className="w-full rounded-[31px] bg-[#2952e1] py-4 text-center font-inter font-medium text-[16px] leading-normal tracking-[-0.25px] text-white transition-colors hover:bg-[#1e42c7] disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {isPending ? "Creating account…" : "Register"}
+            </button>
+          </form>
         </div>
       </div>
     </div>
@@ -116,11 +125,13 @@ export default function SignupPage() {
 
 /* ── Shared input with floating label ── */
 function FloatingInput({
+  name,
   label,
   placeholder,
   type,
   autoComplete,
 }: {
+  name: string;
   label: string;
   placeholder: string;
   type: string;
@@ -129,9 +140,11 @@ function FloatingInput({
   return (
     <div className="relative flex h-14 items-center rounded-[4px] border border-[#79747e] px-4">
       <input
+        name={name}
         type={type}
         autoComplete={autoComplete}
         placeholder={placeholder}
+        required
         className="h-full w-full bg-transparent font-inter text-[16px] text-[#49454f] placeholder:text-[#49454f] outline-none"
       />
       <span className="absolute left-3 -top-[11px] bg-white px-1 font-inter text-[12px] leading-normal tracking-[-0.25px] text-[#49454f]">
@@ -142,14 +155,6 @@ function FloatingInput({
 }
 
 /* ── Icons ── */
-function ChevronDown() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path d="M7 10l5 5 5-5" stroke="#49454f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
 function LockIcon() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">

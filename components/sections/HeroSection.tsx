@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button, Container } from "@/components/ui";
 
 export function HeroSection() {
@@ -26,9 +27,11 @@ export function HeroSection() {
           </p>
 
           <div className="mt-8 flex flex-col items-center gap-3">
-            <Button size="lg" className="bg-[#2952e1] px-8 hover:bg-[#2952e1]/90">
-              Get Started
-            </Button>
+            <Link href="/order">
+              <Button size="lg" className="bg-[#2952e1] px-8 hover:bg-[#2952e1]/90">
+                Get Started
+              </Button>
+            </Link>
             <p className="font-sans text-sm text-black/45">
               Takes 2 minutes &nbsp;·&nbsp; No designer hunting
             </p>

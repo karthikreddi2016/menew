@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useActionState } from "react";
 import Link from "next/link";
 import { AuthLeftPanel } from "@/components/auth/AuthLeftPanel";
+import { loginAction } from "./actions";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(true);
+  const [state, formAction, isPending] = useActionState(loginAction, null);
 
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
@@ -35,10 +37,18 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Fields */}
-          <div className="flex flex-col gap-8">
+          {/* Error */}
+          {state?.error && (
+            <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 font-inter text-sm text-red-700">
+              {state.error}
+            </div>
+          )}
+
+          {/* Form */}
+          <form action={formAction} className="flex flex-col gap-8">
             {/* Email */}
             <FloatingInput
+              name="email"
               label="Enter Your Email"
               placeholder="jasonglare@gmail.com"
               type="email"
@@ -51,9 +61,10 @@ export default function LoginPage() {
                 <LockIcon />
               </span>
               <input
+                name="password"
                 type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
-                placeholder="jasonglare@gmail.com"
+                placeholder="••••••••"
                 className="h-full flex-1 bg-transparent font-inter text-[16px] text-[#49454f] placeholder:text-[#49454f] outline-none"
               />
               <button
@@ -92,18 +103,19 @@ export default function LoginPage() {
                 href="/forgot-password"
                 className="font-inter font-medium text-[16px] leading-normal tracking-[-0.25px] text-[#2952e1]"
               >
-                Forgot Passwords
+                Forgot Password
               </Link>
             </div>
-          </div>
 
-          {/* Login CTA */}
-          <button
-            type="submit"
-            className="w-full rounded-[31px] bg-[#2952e1] py-4 text-center font-inter font-medium text-[16px] leading-normal tracking-[-0.25px] text-white transition-colors hover:bg-[#1e42c7]"
-          >
-            Login
-          </button>
+            {/* Login CTA */}
+            <button
+              type="submit"
+              disabled={isPending}
+              className="w-full rounded-[31px] bg-[#2952e1] py-4 text-center font-inter font-medium text-[16px] leading-normal tracking-[-0.25px] text-white transition-colors hover:bg-[#1e42c7] disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {isPending ? "Logging in…" : "Login"}
+            </button>
+          </form>
         </div>
       </div>
     </div>
@@ -112,11 +124,13 @@ export default function LoginPage() {
 
 /* ── Shared floating label input ── */
 function FloatingInput({
+  name,
   label,
   placeholder,
   type,
   autoComplete,
 }: {
+  name: string;
   label: string;
   placeholder: string;
   type: string;
@@ -125,9 +139,11 @@ function FloatingInput({
   return (
     <div className="relative flex h-14 items-center rounded-[4px] border border-[#79747e] px-4">
       <input
+        name={name}
         type={type}
         autoComplete={autoComplete}
         placeholder={placeholder}
+        required
         className="h-full w-full bg-transparent font-inter text-[16px] text-[#49454f] placeholder:text-[#49454f] outline-none"
       />
       <span className="absolute left-3 -top-[11px] bg-white px-1 font-inter text-[12px] leading-normal tracking-[-0.25px] text-[#49454f]">
