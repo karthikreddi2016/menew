@@ -45,7 +45,9 @@ export interface OrderMessage {
   created_at: string
 }
 
-// Supabase Database type (minimal, for typed client)
+// Supabase Database type — must satisfy the full shape expected by @supabase/supabase-js v2
+// generic machinery. Missing Relationships, Views, Functions, Enums, or CompositeTypes
+// causes select() return types to collapse to `never`.
 export type Database = {
   public: {
     Tables: {
@@ -53,22 +55,38 @@ export type Database = {
         Row: Profile
         Insert: Omit<Profile, 'created_at'>
         Update: Partial<Omit<Profile, 'id' | 'created_at'>>
+        Relationships: []
       }
       orders: {
         Row: Order
         Insert: Omit<Order, 'id' | 'created_at' | 'updated_at'>
         Update: Partial<Omit<Order, 'id' | 'created_at'>>
+        Relationships: []
       }
       order_files: {
         Row: OrderFile
         Insert: Omit<OrderFile, 'id' | 'created_at'>
         Update: Partial<Omit<OrderFile, 'id' | 'created_at'>>
+        Relationships: []
       }
       order_messages: {
         Row: OrderMessage
         Insert: Omit<OrderMessage, 'id' | 'created_at'>
         Update: Partial<Omit<OrderMessage, 'id' | 'created_at'>>
+        Relationships: []
       }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
     }
   }
 }
