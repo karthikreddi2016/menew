@@ -24,7 +24,7 @@ function OrderForm() {
   const [customDeadline, setCustomDeadline] = useState('')
   const [files, setFiles] = useState<File[]>([])
 
-  const [state, , isPending] = useActionState(createOrderAction, null)
+  const [state, formAction, isPending] = useActionState(createOrderAction, null)
 
   function canAdvance() {
     if (step === 0) return !!serviceType
@@ -98,7 +98,7 @@ function OrderForm() {
         <div className="rounded-2xl bg-white border border-black/8 p-6 md:p-8 shadow-sm">
           <h2 className="mb-6 font-serif text-xl text-[#1d2433]">{STEPS[step]}</h2>
 
-          <form onSubmit={handleSubmit} action={createOrderAction}>
+          <form onSubmit={handleSubmit} action={formAction}>
             {/* Hidden fields for server action */}
             <input type="hidden" name="service_type" value={serviceType ?? ''} />
             <input type="hidden" name="title" value={title} />
