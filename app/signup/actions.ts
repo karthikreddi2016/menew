@@ -1,16 +1,16 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 
 export async function signupAction(
-  _prevState: { error?: string } | null,
+  _prevState: { error?: string; success?: boolean; email?: string } | null,
   formData: FormData
-): Promise<{ error: string }> {
+): Promise<{ error?: string; success?: boolean; email?: string }> {
   const supabase = await createClient()
+  const email = formData.get('email') as string
 
   const { error } = await supabase.auth.signUp({
-    email: formData.get('email') as string,
+    email,
     password: formData.get('password') as string,
     options: {
       data: {
@@ -22,5 +22,5 @@ export async function signupAction(
 
   if (error) return { error: error.message }
 
-  redirect('/dashboard')
+  return { success: true, email }
 }

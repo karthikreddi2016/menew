@@ -37,13 +37,6 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Error */}
-          {state?.error && (
-            <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 font-inter text-sm text-red-700">
-              {state.error}
-            </div>
-          )}
-
           {/* Form */}
           <form action={formAction} className="flex flex-col gap-8">
             {/* Email */}
@@ -106,6 +99,13 @@ export default function LoginPage() {
                 Forgot Password
               </Link>
             </div>
+
+            {/* Error */}
+            {state?.error && (
+              <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 font-inter text-sm text-red-700">
+                {state.error}
+              </div>
+            )}
 
             {/* Login CTA */}
             <button
