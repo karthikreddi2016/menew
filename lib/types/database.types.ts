@@ -49,6 +49,7 @@ export interface OrderMessage {
 // generic machinery. Missing Relationships, Views, Functions, Enums, or CompositeTypes
 // causes select() return types to collapse to `never`.
 export type Database = {
+  PostgrestVersion: "12"
   public: {
     Tables: {
       profiles: {
