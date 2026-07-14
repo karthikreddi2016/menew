@@ -98,49 +98,66 @@ export default function ComingSoonPage() {
             is the new way.
           </h1>
 
-          {/* Subtitle */}
-          <p className="cs-subtitle">
-            Join our waiting list to gain access to the world&apos;s most practical and efficient on-demand content production platform.
-          </p>
+          {/* Subtitle — hidden on success */}
+          {status !== "success" && (
+            <p className="cs-subtitle">
+              Join our waiting list to gain access to the world&apos;s most practical and efficient on-demand content production platform.
+            </p>
+          )}
 
-          {/* Email form */}
-          <form className="cs-form" onSubmit={handleSubmit}>
-            <div className="cs-form__group">
-              <input
-                type="email"
-                placeholder="Enter Your Email"
-                className="cs-form__input"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  if (status !== "idle") setStatus("idle");
-                }}
-                required
-                disabled={status === "loading"}
-                id="waitlist-email"
-              />
-              <button
-                type="submit"
-                className="cs-form__btn"
-                disabled={status === "loading"}
-                id="waitlist-submit"
-              >
-                {status === "loading" ? (
-                  <span className="cs-spinner" />
-                ) : (
-                  "Get Started"
-                )}
-              </button>
+          {/* Email form — hidden on success */}
+          {status !== "success" && (
+            <form className="cs-form" onSubmit={handleSubmit}>
+              <div className="cs-form__group">
+                <input
+                  type="email"
+                  placeholder="Enter Your Email"
+                  className="cs-form__input"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (status !== "idle") setStatus("idle");
+                  }}
+                  required
+                  disabled={status === "loading"}
+                  id="waitlist-email"
+                />
+                <button
+                  type="submit"
+                  className="cs-form__btn"
+                  disabled={status === "loading"}
+                  id="waitlist-submit"
+                >
+                  {status === "loading" ? (
+                    <span className="cs-spinner" />
+                  ) : (
+                    "Join Waitlist"
+                  )}
+                </button>
+              </div>
+
+              {/* Error feedback */}
+              {status === "error" && (
+                <p className="cs-feedback cs-feedback--error">{message}</p>
+              )}
+            </form>
+          )}
+
+          {/* Success state — shown after successful signup */}
+          {status === "success" && (
+            <div className="cs-success">
+              <div className="cs-success__icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <h2 className="cs-success__title">You&apos;re on the list!</h2>
+              <p className="cs-success__text">
+                We&apos;ve added you to our early-access queue. Look out for an email from us
+                as we roll out the first invite codes.
+              </p>
             </div>
-
-            {/* Feedback */}
-            {status === "success" && (
-              <p className="cs-feedback cs-feedback--success">{message}</p>
-            )}
-            {status === "error" && (
-              <p className="cs-feedback cs-feedback--error">{message}</p>
-            )}
-          </form>
+          )}
         </div>
 
         {/* Social links */}
