@@ -32,9 +32,9 @@ const ibmPlexSans = IBM_Plex_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Menew - Creative Ideas Produced by Experienced Creatives",
+  title: "Menew — Coming Soon | The New Way to Create",
   description:
-    "Tell us what you need, a poster, PPT, reel, or logo, and we'll turn your messy thoughts into designs that actually feel you. No designer jargon. No long back-and-forth.",
+    "The era of hiring freelancers ends. Join the Menew waitlist to gain access to the world's most creative on-demand content production platform.",
 };
 
 export default function RootLayout({

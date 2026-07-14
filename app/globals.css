@@ -129,3 +129,333 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(24, 64, 67, 0.7);
 }
+
+/* ═══════════════════════════════════════════
+   Coming Soon Page
+   ═══════════════════════════════════════════ */
+
+.cs-page {
+  position: relative;
+  background: #0b0b0b;
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+/* ── Background image (inverted to dark) ── */
+.cs-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.cs-bg__img {
+  object-fit: cover;
+  filter: invert(1) brightness(0.12);
+  opacity: 0.8;
+}
+
+/* ── Blue sparkle ── */
+.cs-sparkle {
+  position: fixed;
+  top: 60px;
+  right: 80px;
+  z-index: 3;
+  animation: cs-twinkle 3s ease-in-out infinite;
+}
+
+@keyframes cs-twinkle {
+  0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  50% { opacity: 0.5; transform: scale(0.8) rotate(15deg); }
+}
+
+/* ── Hero section (full viewport) ── */
+.cs-hero {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 40px 24px;
+}
+
+/* ── Header ── */
+.cs-header {
+  padding-top: 16px;
+}
+
+.cs-logo {
+  filter: invert(1);
+  opacity: 0.92;
+}
+
+/* ── Hero content ── */
+.cs-hero__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 28px;
+  max-width: 900px;
+  width: 100%;
+}
+
+/* ── Launching Soon badge ── */
+.cs-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 24px;
+  border-radius: 100px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #2ee8a5;
+  background: transparent;
+  border: 1px solid rgba(46, 232, 165, 0.35);
+}
+
+/* ── Headline ── */
+.cs-headline {
+  font-family: var(--font-source-serif), Georgia, serif;
+  font-size: 50px;
+  font-weight: 600;
+  line-height: 1.22;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  margin: 0;
+  white-space: normal;
+}
+
+.cs-headline__highlight {
+  color: #FF8CC9;
+  position: relative;
+  display: inline-block;
+}
+
+.cs-headline__underline {
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+/* ── Subtitle ── */
+.cs-subtitle {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.55);
+  max-width: 900px;
+  margin: 0;
+}
+
+/* ── Email form ── */
+.cs-form {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.cs-form__group {
+  display: flex;
+  gap: 14px;
+  width: 100%;
+  align-items: stretch;
+}
+
+.cs-form__input {
+  flex: 1;
+  padding: 16px 24px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 100px;
+  outline: none;
+  color: #ffffff;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  min-width: 0;
+  transition: border-color 0.3s ease;
+}
+
+.cs-form__input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.cs-form__input:focus {
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.cs-form__input:disabled {
+  opacity: 0.5;
+}
+
+.cs-form__btn {
+  padding: 16px 36px;
+  background: #4F46E5;
+  color: #ffffff;
+  border: none;
+  border-radius: 100px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.cs-form__btn:hover:not(:disabled) {
+  background: #6366f1;
+  transform: translateY(-1px);
+}
+
+.cs-form__btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.cs-form__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Loading spinner ── */
+.cs-spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: cs-spin 0.6s linear infinite;
+}
+
+@keyframes cs-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Feedback messages ── */
+.cs-feedback {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0;
+  animation: cs-fade-in 0.3s ease;
+}
+
+.cs-feedback--success {
+  color: #2ee8a5;
+}
+
+.cs-feedback--error {
+  color: #ff6b6b;
+}
+
+@keyframes cs-fade-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Footer / Social ── */
+.cs-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding-bottom: 48px;
+}
+
+.cs-footer__label {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.cs-social {
+  display: flex;
+  gap: 24px;
+}
+
+.cs-social__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.cs-social__link:hover {
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.cs-social__icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* ── Watermark section (scroll to reveal) ── */
+.cs-watermark-section {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  padding: 20px 24px 40px;
+  overflow: hidden;
+}
+
+.cs-watermark-section__inner {
+  opacity: 0.15;
+}
+
+.cs-watermark__img {
+  width: min(900px, 90vw);
+  height: auto;
+  filter: invert(1);
+  user-select: none;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .cs-headline {
+    font-size: 30px;
+  }
+
+  .cs-subtitle {
+    font-size: 13px;
+  }
+
+  .cs-form__group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cs-form__input {
+    padding: 14px 20px;
+  }
+
+  .cs-form__btn {
+    padding: 14px 24px;
+  }
+
+  .cs-hero {
+    padding: 32px 20px;
+  }
+
+  .cs-sparkle {
+    top: 30px;
+    right: 30px;
+  }
+}
