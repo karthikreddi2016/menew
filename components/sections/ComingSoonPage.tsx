@@ -186,19 +186,19 @@ export default function ComingSoonPage() {
             </a>
           </div>
         </footer>
-      </section>
 
-      {/* ─── Section 2: Big Menew watermark background ─── */}
-      <div className="cs-watermark-bg" aria-hidden="true">
-        <Image
-          src="/images/logo.png"
-          alt=""
-          width={900}
-          height={300}
-          className="cs-watermark__img"
-          priority
-        />
-      </div>
+        {/* ─── Section 2: Big Menew watermark background ─── */}
+        <div className="cs-watermark-wrap" aria-hidden="true">
+          <Image
+            src="/images/logo.png"
+            alt=""
+            width={900}
+            height={300}
+            className="cs-watermark__img"
+            priority
+          />
+        </div>
+      </section>
     </div>
   );
 }
