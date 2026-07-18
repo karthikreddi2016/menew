@@ -2,7 +2,6 @@
 
 import { useState, FormEvent } from "react";
 import Image from "next/image";
-import { createClient } from "@/lib/supabase/client";
 
 export default function ComingSoonPage() {
   const [email, setEmail] = useState("");
@@ -16,22 +15,21 @@ export default function ComingSoonPage() {
     setStatus("loading");
 
     try {
-      const supabase = createClient();
-      const { error } = await supabase.from("waitlist").insert({ email: email.trim().toLowerCase() });
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim().toLowerCase() }),
+      });
 
-      if (error) {
-        if (error.code === "23505") {
-          setStatus("error");
-          setMessage("You're already on the waitlist!");
-        } else {
-          setStatus("error");
-          setMessage("Something went wrong. Please try again.");
-        }
+      const data = await res.json();
+
+      if (!res.ok) {
+        setStatus("error");
+        setMessage(data.error || "Something went wrong. Please try again.");
         return;
       }
 
       setStatus("success");
-      setMessage("You're on the list! We'll be in touch soon.");
       setEmail("");
     } catch {
       setStatus("error");

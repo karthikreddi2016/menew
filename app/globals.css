@@ -333,7 +333,13 @@
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  width: 100%;
   animation: cs-fade-in 0.5s ease;
+}
+
+@keyframes cs-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .cs-success__icon {
