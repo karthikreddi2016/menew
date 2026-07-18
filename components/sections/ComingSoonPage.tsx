@@ -200,14 +200,6 @@ export default function ComingSoonPage() {
               className="cs-watermark__img"
               aria-hidden="true"
             />
-            <Image
-              src="/images/coming-soon-underline.svg"
-              alt=""
-              width={600}
-              height={30}
-              className="cs-watermark__underline"
-              aria-hidden="true"
-            />
           </div>
         </div>
       </section>
