@@ -453,10 +453,10 @@
 
 /* ── Watermark (Centered at Bottom of Flow) ── */
 .cs-watermark-wrap {
-  width: min(900px, 90vw);
-  margin-top: auto; /* Push it to the bottom of the flexbox */
-  margin-bottom: -130px; /* Pull down slightly so bottom is cut off by viewport edge */
-  opacity: 0.15;
+  width: min(1300px, 95vw);
+  margin-top: 50px; /* Fixed tight gap below footer to look like a single page view */
+  margin-bottom: -50px; /* Sits at the absolute bottom of the viewport frame */
+  opacity: 0.38; /* Brighter, more visible watermark */
   pointer-events: none;
   display: flex;
   justify-content: center;
