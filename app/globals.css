@@ -138,7 +138,11 @@
   position: relative;
   background: #0b0b0b;
   color: #ffffff;
-  overflow-x: hidden;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ── Background image (inverted to dark) ── */
@@ -176,7 +180,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
+  height: 100%;
+  flex: 1;
   padding: 40px 24px;
 }
 
@@ -449,24 +454,22 @@
   height: 20px;
 }
 
-/* ── Watermark section (scroll to reveal) ── */
-.cs-watermark-section {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 40vh;
-  padding: 20px 24px 40px;
-  overflow: hidden;
-}
-
-.cs-watermark-section__inner {
+/* ── Watermark Background (Centered at Bottom) ── */
+.cs-watermark-bg {
+  position: absolute;
+  bottom: -90px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
   opacity: 0.15;
+  pointer-events: none;
+  width: min(900px, 90vw);
+  display: flex;
+  justify-content: center;
 }
 
 .cs-watermark__img {
-  width: min(900px, 90vw);
+  width: 100%;
   height: auto;
   filter: invert(1);
   user-select: none;
@@ -502,5 +505,13 @@
   .cs-sparkle {
     top: 30px;
     right: 30px;
+  }
+}
+
+/* Allow scrolling on short screen heights or mobile views so nothing gets cut off */
+@media (max-height: 720px), (max-width: 640px) {
+  .cs-page {
+    max-height: none;
+    overflow-y: auto;
   }
 }
