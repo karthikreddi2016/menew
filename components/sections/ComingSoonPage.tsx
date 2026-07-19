@@ -64,8 +64,8 @@ export default function ComingSoonPage() {
           <Image
             src="/images/logo.png"
             alt="Menew"
-            width={130}
-            height={44}
+            width={260}
+            height={88}
             className="cs-logo"
             priority
           />
