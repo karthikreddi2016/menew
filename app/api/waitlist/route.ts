@@ -79,9 +79,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Append to Google Sheet (fire-and-forget, don't block response)
+    // Append to Google Sheet (await to ensure it completes before serverless shutdown)
     if (GOOGLE_SHEET_ID && GOOGLE_SERVICE_ACCOUNT_EMAIL && GOOGLE_PRIVATE_KEY) {
-      appendToGoogleSheet(email);
+      await appendToGoogleSheet(email);
     }
 
     return NextResponse.json({ success: true });
