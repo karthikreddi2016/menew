@@ -1,212 +1,547 @@
 'use client'
 
-import { useState, useActionState, Suspense } from 'react'
+import { useState, useActionState, Suspense, useRef } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { ServiceSelector } from '@/components/order/ServiceSelector'
-import { BriefStep } from '@/components/order/BriefStep'
-import { FileUploadStep } from '@/components/order/FileUploadStep'
-import { OrderConfirmStep } from '@/components/order/OrderConfirmStep'
 import { createOrderAction } from './actions'
 import type { ServiceType } from '@/lib/types/database.types'
 
-const STEPS = ['Choose Service', 'Describe Your Need', 'Upload References', 'Confirm & Submit']
+const SERVICE_TITLES: Record<string, string> = {
+  graphic_design: 'Graphic Design Request',
+  ppt_design: 'PPT Design Request',
+  video_editing: 'Video Editing Request',
+  branding_kit: 'Branding Request',
+  social_media: 'Social Media Request',
+  banners_flex: 'Banners & Flex Request',
+  business_card: 'Business Card Request',
+  poster: 'Poster Request',
+  brochure: 'Brochure Request',
+}
 
-function OrderForm() {
+function OrderFormContent() {
   const searchParams = useSearchParams()
-  const preselected = searchParams.get('service') as ServiceType | null
+  const rawService = searchParams.get('service') as ServiceType | null
+  const selectedType = searchParams.get('type') || ''
+  const currentService = rawService || 'graphic_design'
 
-  const [step, setStep] = useState(preselected ? 1 : 0)
-  const [serviceType, setServiceType] = useState<ServiceType | null>(preselected)
-  const [title, setTitle] = useState('')
+  const pageTitle = SERVICE_TITLES[currentService] || 'Graphic Design Request'
+
+  // Form State
+  const [creativeType, setCreativeType] = useState('Digital')
+  const [whatYouWant, setWhatYouWant] = useState(selectedType || 'Brochure')
+  const [numberOfSlides, setNumberOfSlides] = useState('')
+  const [quantity, setQuantity] = useState('')
   const [brief, setBrief] = useState('')
-  const [deadlinePref, setDeadlinePref] = useState('48h')
-  const [customDeadline, setCustomDeadline] = useState('')
-  const [files, setFiles] = useState<File[]>([])
+  
+  // Content Help Toggle: 'no' = "No, I will Provide All the Copy Myself", 'yes' = "Yes, I Need Help with Content"
+  const [needContentHelp, setNeedContentHelp] = useState<'no' | 'yes'>('no')
+  const [copyContent, setCopyContent] = useState('')
+
+  const [purpose, setPurpose] = useState('Social')
+  const [assetLink, setAssetLink] = useState('')
+  const [referenceLink, setReferenceLink] = useState('')
+  const [stylePref, setStylePref] = useState('Modern')
+  const [deadlinePref, setDeadlinePref] = useState('Standard')
+  const [contactPref, setContactPref] = useState('Email')
+  const [fullName, setFullName] = useState('')
+
+  const [assetFiles, setAssetFiles] = useState<File[]>([])
+  const [refFiles, setRefFiles] = useState<File[]>([])
+
+  const assetInputRef = useRef<HTMLInputElement | null>(null)
+  const refInputRef = useRef<HTMLInputElement | null>(null)
 
   const [state, formAction, isPending] = useActionState(createOrderAction, null)
 
-  function canAdvance() {
-    if (step === 0) return !!serviceType
-    if (step === 1) return title.trim().length > 0 && brief.trim().length > 0
-    return true
-  }
-
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    if (step < STEPS.length - 1) {
-      e.preventDefault()
-      setStep((s) => s + 1)
-    }
-    // on final step, form submits normally via action
-  }
+  const constructedTitle = currentService === 'ppt_design'
+    ? `PPT (${selectedType || 'Presentation'}) - ${numberOfSlides ? numberOfSlides + ' slides' : 'Custom'}`
+    : `${whatYouWant || 'Design'} for ${purpose} (${creativeType})`
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa]">
-      {/* Header */}
-      <div className="bg-white border-b border-black/10 px-4 py-4 md:px-[70px]">
-        <div className="mx-auto max-w-[900px] flex items-center justify-between">
-          <Link href="/" className="font-inter text-sm text-black/50 hover:text-black/70 transition-colors">
-            ← Back to home
+    <div className="min-h-screen bg-[#F8FAFC] pb-16">
+      {/* ── Top Back Navigation Bar ── */}
+      <header className="bg-white border-b border-[#EDEDED] py-3.5 px-4 sm:px-8">
+        <div className="max-w-[900px] mx-auto flex items-center justify-start">
+          <Link
+            href="/services"
+            className="inline-flex items-center gap-2 font-inter text-[14px] font-medium text-[#49454f] hover:text-[#2952E1] transition-colors"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+            <span>Back</span>
           </Link>
-          <p className="font-serif text-lg text-[#184043]">Place an Order</p>
-          <div className="w-24" />
         </div>
-      </div>
+      </header>
 
-      <div className="mx-auto max-w-[900px] px-4 py-8 md:px-8">
-        {/* Step indicators */}
-        <div className="mb-8 flex items-center gap-2">
-          {STEPS.map((label, i) => (
-            <div key={i} className="flex items-center gap-2 flex-1">
-              <div className="flex items-center gap-2">
-                <div
-                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-inter text-xs font-medium transition-colors ${
-                    i < step
-                      ? 'bg-[#184043] text-white'
-                      : i === step
-                      ? 'bg-[#184043] text-white ring-4 ring-[#184043]/20'
-                      : 'bg-black/10 text-black/40'
-                  }`}
-                >
-                  {i < step ? (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M20 6L9 17l-5-5" />
-                    </svg>
-                  ) : (
-                    i + 1
-                  )}
-                </div>
-                <span className={`hidden sm:block font-inter text-xs ${i === step ? 'font-medium text-[#184043]' : 'text-black/40'}`}>
-                  {label}
-                </span>
-              </div>
-              {i < STEPS.length - 1 && (
-                <div className={`flex-1 h-px transition-colors ${i < step ? 'bg-[#184043]' : 'bg-black/15'}`} />
-              )}
-            </div>
-          ))}
+      {/* ── Form Container ── */}
+      <div className="max-w-[860px] mx-auto px-4 sm:px-6 pt-8">
+        {/* Header Title */}
+        <div className="mb-8">
+          <h1 className="font-serif text-[30px] sm:text-[36px] text-[#111827] font-normal tracking-[-0.01em]">
+            {pageTitle}
+          </h1>
+          <p className="font-inter text-[14px] sm:text-[15px] text-[#6f6f6f] mt-1">
+            Tell us about your project. Explain like you would to a friend!
+          </p>
         </div>
 
-        {/* Error */}
+        {/* Error message */}
         {state?.error && (
-          <div className="mb-6 rounded-lg bg-red-50 border border-red-200 px-4 py-3 font-inter text-sm text-red-700">
+          <div className="mb-6 rounded-[12px] bg-red-50 border border-red-200 p-4 font-inter text-sm text-red-700">
             {state.error}
           </div>
         )}
 
-        {/* Step content */}
-        <div className="rounded-2xl bg-white border border-black/8 p-6 md:p-8 shadow-sm">
-          <h2 className="mb-6 font-serif text-xl text-[#1d2433]">{STEPS[step]}</h2>
+        <form action={formAction} className="space-y-6">
+          <input type="hidden" name="service_type" value={currentService} />
+          <input type="hidden" name="title" value={constructedTitle} />
+          <input type="hidden" name="brief" value={brief || (needContentHelp === 'no' ? copyContent : '') || 'Design request'} />
+          <input type="hidden" name="deadline_pref" value={deadlinePref} />
 
-          <form onSubmit={handleSubmit} action={formAction}>
-            {/* Hidden fields for server action */}
-            <input type="hidden" name="service_type" value={serviceType ?? ''} />
-            <input type="hidden" name="title" value={title} />
-            <input type="hidden" name="brief" value={brief} />
-            <input type="hidden" name="deadline_pref" value={deadlinePref === 'custom' ? customDeadline : deadlinePref} />
-            {files.map((f, i) => (
-              // files are appended to FormData in a hidden file input trick — handled client-side via FileUploadStep state
-              // actual upload happens through FormData in server action via a hidden input population
-              <span key={i} style={{ display: 'none' }} />
-            ))}
+          {/* ── Card 1: Main Project Inputs ── */}
+          <div className="rounded-[20px] border border-[#EDEDED] bg-white p-6 sm:p-8 shadow-xs space-y-6">
+            {/* Conditional Service Inputs */}
+            {currentService === 'ppt_design' ? (
+              /* PPT Specific Fields */
+              <div>
+                <label className="block font-inter text-[14px] font-semibold text-[#111827]">
+                  Number of Slides
+                </label>
+                <p className="font-inter text-[12px] text-[#6f6f6f] mb-2">
+                  You can share any rough estimate if not sure about exact slide.
+                </p>
+                <input
+                  type="text"
+                  value={numberOfSlides}
+                  onChange={(e) => setNumberOfSlides(e.target.value)}
+                  placeholder="No of slides, ex: 20"
+                  className="w-full rounded-[10px] border border-[#EDEDED] bg-white px-4 py-3 font-inter text-[14px] text-[#111827] placeholder:text-[#9CA3AF] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all"
+                />
+              </div>
+            ) : (
+              /* Graphic Design / Default Fields */
+              <>
+                {/* Creative Type */}
+                <div>
+                  <label className="block font-inter text-[14px] font-semibold text-[#111827] mb-2">
+                    Creative Type
+                  </label>
+                  <select
+                    value={creativeType}
+                    onChange={(e) => setCreativeType(e.target.value)}
+                    className="w-full rounded-[10px] border border-[#EDEDED] bg-white px-4 py-3 font-inter text-[14px] text-[#111827] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all"
+                  >
+                    <option value="Digital">Digital</option>
+                    <option value="Print">Print</option>
+                    <option value="Both">Both (Digital & Print)</option>
+                  </select>
+                </div>
 
-            {step === 0 && (
-              <ServiceSelector selected={serviceType} onSelect={(s) => { setServiceType(s); }} />
+                {/* Tell us what you want */}
+                <div>
+                  <label className="block font-inter text-[14px] font-semibold text-[#111827] mb-2">
+                    Tell us what you want
+                  </label>
+                  <select
+                    value={whatYouWant}
+                    onChange={(e) => setWhatYouWant(e.target.value)}
+                    className="w-full rounded-[10px] border border-[#EDEDED] bg-white px-4 py-3 font-inter text-[14px] text-[#111827] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all"
+                  >
+                    <option value="Brochure">Brochure</option>
+                    <option value="Social Media Post">Social Media Post</option>
+                    <option value="Banner / Flex">Banner / Flex</option>
+                    <option value="Poster">Poster</option>
+                    <option value="Business Card">Business Card</option>
+                    <option value="Logo / Identity">Logo / Identity</option>
+                    <option value="Thumbnail">Thumbnail</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                {/* Quantity */}
+                <div>
+                  <label className="block font-inter text-[14px] font-semibold text-[#111827]">
+                    Quantity
+                  </label>
+                  <p className="font-inter text-[12px] text-[#6f6f6f] mb-2">
+                    Pages, Sides are considered as unique quantity.
+                  </p>
+                  <input
+                    type="text"
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
+                    placeholder="e.g. 2 pages, 1 side"
+                    className="w-full rounded-[10px] border border-[#EDEDED] bg-white px-4 py-3 font-inter text-[14px] text-[#111827] placeholder:text-[#9CA3AF] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all"
+                  />
+                </div>
+              </>
             )}
-            {step === 1 && (
-              <BriefStep
-                title={title}
-                brief={brief}
-                deadlinePref={deadlinePref}
-                customDeadline={customDeadline}
-                onTitleChange={setTitle}
-                onBriefChange={setBrief}
-                onDeadlinePrefChange={setDeadlinePref}
-                onCustomDeadlineChange={setCustomDeadline}
+
+            {/* Brief, Instructions or Content */}
+            <div>
+              <label className="block font-inter text-[14px] font-semibold text-[#111827]">
+                Brief, Instructions or Content
+              </label>
+              <p className="font-inter text-[12px] text-[#6f6f6f] mb-2">
+                Describe your idea in simple words. What should it say? Who is it for? Any key message?
+              </p>
+              <textarea
+                rows={4}
+                value={brief}
+                onChange={(e) => setBrief(e.target.value)}
+                placeholder="This is for a Diwali offer campaign for our clothing store..."
+                className="w-full rounded-[10px] border border-[#EDEDED] bg-white p-4 font-inter text-[14px] text-[#111827] placeholder:text-[#9CA3AF] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all resize-y"
               />
-            )}
-            {step === 2 && (
-              <FileUploadStep files={files} onFilesChange={setFiles} />
-            )}
-            {step === 3 && serviceType && (
-              <OrderConfirmStep
-                serviceType={serviceType}
-                title={title}
-                brief={brief}
-                deadlinePref={deadlinePref}
-                customDeadline={customDeadline}
-                files={files}
-              />
-            )}
+            </div>
 
-            {/* Navigation */}
-            <div className="mt-8 flex items-center justify-between">
-              {step > 0 ? (
+            {/* Need Help with Writing Content Copy? */}
+            <div>
+              <label className="block font-inter text-[14px] font-semibold text-[#111827] mb-3">
+                Need Help with Writing Content Copy?
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <button
                   type="button"
-                  onClick={() => setStep((s) => s - 1)}
-                  className="rounded-full border border-black/20 px-6 py-3 font-inter text-sm text-[#1d2433] transition-colors hover:bg-black/5"
+                  onClick={() => setNeedContentHelp('no')}
+                  className={`rounded-[10px] py-3.5 px-4 font-inter text-[14px] font-medium text-center transition-all ${
+                    needContentHelp === 'no'
+                      ? 'border-2 border-[#2952E1] bg-[#2952E1]/5 text-[#2952E1] font-semibold shadow-xs'
+                      : 'border border-[#EDEDED] bg-white text-[#111827] hover:border-gray-300 hover:bg-gray-50'
+                  }`}
                 >
-                  Back
+                  No, I will Provide All the Copy Myself
                 </button>
-              ) : (
-                <div />
-              )}
 
-              {step < STEPS.length - 1 ? (
                 <button
-                  type="submit"
-                  disabled={!canAdvance()}
-                  className="rounded-full bg-[#184043] px-8 py-3 font-inter font-medium text-sm text-white transition-colors hover:bg-[#184043]/90 disabled:opacity-40 disabled:cursor-not-allowed"
+                  type="button"
+                  onClick={() => setNeedContentHelp('yes')}
+                  className={`rounded-[10px] py-3.5 px-4 font-inter text-[14px] font-medium text-center transition-all ${
+                    needContentHelp === 'yes'
+                      ? 'border-2 border-[#2952E1] bg-[#2952E1]/5 text-[#2952E1] font-semibold shadow-xs'
+                      : 'border border-[#EDEDED] bg-white text-[#111827] hover:border-gray-300 hover:bg-gray-50'
+                  }`}
                 >
-                  Continue
+                  Yes, I Need Help with Content
                 </button>
-              ) : (
-                <SubmitButton isPending={isPending} files={files} />
+              </div>
+            </div>
+
+            {/* Copy Content for the creative (Shown ONLY when user selects NO, I will Provide Copy Myself) */}
+            {needContentHelp === 'no' && (
+              <div className="pt-2 animate-fadeIn">
+                <label className="block font-inter text-[14px] font-semibold text-[#111827] mb-2">
+                  Copy Content for the creative
+                </label>
+                <textarea
+                  rows={4}
+                  value={copyContent}
+                  onChange={(e) => setCopyContent(e.target.value)}
+                  placeholder="This is for a Diwali offer campaign for our clothing store..."
+                  className="w-full rounded-[10px] border border-[#EDEDED] bg-white p-4 font-inter text-[14px] text-[#111827] placeholder:text-[#9CA3AF] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all resize-y"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* ── Card 2: Purpose of design ── */}
+          <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 sm:p-8 shadow-xs">
+            <label className="block font-inter text-[15px] font-semibold text-[#111827] mb-4">
+              Purpose of design
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {['Social', 'Work', 'Business', 'Study'].map((item) => {
+                const isSelected = purpose === item
+                return (
+                  <button
+                    type="button"
+                    key={item}
+                    onClick={() => setPurpose(item)}
+                    className={`rounded-[10px] py-3 px-4 font-inter text-[14px] font-medium text-center transition-all ${
+                      isSelected
+                        ? 'border-2 border-[#2952E1] bg-[#2952E1]/5 text-[#2952E1] font-semibold shadow-xs'
+                        : 'border border-[#EDEDED] bg-white text-[#111827] hover:border-gray-300 hover:bg-gray-50'
+                    }`}
+                  >
+                    {item}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* ── Card 3: Upload Design Assets ── */}
+          <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 sm:p-8 shadow-xs">
+            <h3 className="font-inter text-[15px] font-semibold text-[#111827]">
+              Upload Design Assets
+            </h3>
+            <p className="font-inter text-[12px] text-[#6f6f6f] mt-0.5 mb-4">
+              Brand files, logo, design elements, guidelines or any other assets that you want to be in the design
+            </p>
+
+            {/* Drag and Drop Zone */}
+            <div
+              onClick={() => assetInputRef.current?.click()}
+              className="border-2 border-dashed border-[#D1D5DB] hover:border-[#2952E1] bg-[#FAFBFD] rounded-[12px] p-8 text-center cursor-pointer transition-colors"
+            >
+              <input
+                ref={assetInputRef}
+                type="file"
+                multiple
+                className="hidden"
+                onChange={(e) => {
+                  if (e.target.files) {
+                    setAssetFiles(Array.from(e.target.files))
+                  }
+                }}
+              />
+              <div className="mx-auto w-10 h-10 rounded-full bg-[#EAEFFF] text-[#2952E1] flex items-center justify-center mb-2">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+              </div>
+              <p className="font-inter text-[14px] font-medium text-[#111827]">
+                Click to upload or drag and drop
+              </p>
+              <p className="font-inter text-[12px] text-[#6f6f6f] mt-1">
+                PNG, JPG, PDF up to 10MB
+              </p>
+
+              {assetFiles.length > 0 && (
+                <div className="mt-3 text-xs text-[#2952E1] font-medium">
+                  {assetFiles.length} file(s) selected: {assetFiles.map(f => f.name).join(', ')}
+                </div>
               )}
             </div>
-          </form>
-        </div>
+
+            <div className="relative flex items-center justify-center my-4">
+              <div className="w-full border-t border-[#EDEDED]" />
+              <span className="absolute bg-white px-3 font-inter text-[12px] text-[#9CA3AF]">
+                or
+              </span>
+            </div>
+
+            <input
+              type="text"
+              value={assetLink}
+              onChange={(e) => setAssetLink(e.target.value)}
+              placeholder="Paste a Link of Brand Guideline, Logo, or any other file"
+              className="w-full rounded-[10px] border border-[#EDEDED] bg-white px-4 py-3 font-inter text-[14px] text-[#111827] placeholder:text-[#9CA3AF] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all"
+            />
+          </div>
+
+          {/* ── Card 4: Upload references (optional) ── */}
+          <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 sm:p-8 shadow-xs">
+            <h3 className="font-inter text-[15px] font-semibold text-[#111827]">
+              Upload references (optional)
+            </h3>
+            <p className="font-inter text-[12px] text-[#6f6f6f] mt-0.5 mb-4">
+              Images, links, or files that inspire you
+            </p>
+
+            <div
+              onClick={() => refInputRef.current?.click()}
+              className="border-2 border-dashed border-[#D1D5DB] hover:border-[#2952E1] bg-[#FAFBFD] rounded-[12px] p-8 text-center cursor-pointer transition-colors"
+            >
+              <input
+                ref={refInputRef}
+                type="file"
+                multiple
+                className="hidden"
+                onChange={(e) => {
+                  if (e.target.files) {
+                    setRefFiles(Array.from(e.target.files))
+                  }
+                }}
+              />
+              <div className="mx-auto w-10 h-10 rounded-full bg-[#EAEFFF] text-[#2952E1] flex items-center justify-center mb-2">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+              </div>
+              <p className="font-inter text-[14px] font-medium text-[#111827]">
+                Click to upload or drag and drop
+              </p>
+              <p className="font-inter text-[12px] text-[#6f6f6f] mt-1">
+                PNG, JPG, PDF up to 10MB
+              </p>
+
+              {refFiles.length > 0 && (
+                <div className="mt-3 text-xs text-[#2952E1] font-medium">
+                  {refFiles.length} file(s) selected: {refFiles.map(f => f.name).join(', ')}
+                </div>
+              )}
+            </div>
+
+            <div className="relative flex items-center justify-center my-4">
+              <div className="w-full border-t border-[#EDEDED]" />
+              <span className="absolute bg-white px-3 font-inter text-[12px] text-[#9CA3AF]">
+                or
+              </span>
+            </div>
+
+            <input
+              type="text"
+              value={referenceLink}
+              onChange={(e) => setReferenceLink(e.target.value)}
+              placeholder="Describe in text or Share links from Canva, Pinterest, Instagram, YouTube etc."
+              className="w-full rounded-[10px] border border-[#EDEDED] bg-white px-4 py-3 font-inter text-[14px] text-[#111827] placeholder:text-[#9CA3AF] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all"
+            />
+          </div>
+
+          {/* ── Card 5: Style preference ── */}
+          <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 sm:p-8 shadow-xs">
+            <label className="block font-inter text-[15px] font-semibold text-[#111827] mb-4">
+              Style preference
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {['Modern', 'Minimal', 'Bold', 'Not sure'].map((item) => {
+                const isSelected = stylePref === item
+                return (
+                  <button
+                    type="button"
+                    key={item}
+                    onClick={() => setStylePref(item)}
+                    className={`rounded-[10px] py-3 px-4 font-inter text-[14px] font-medium text-center transition-all ${
+                      isSelected
+                        ? 'border-2 border-[#2952E1] bg-[#2952E1]/5 text-[#2952E1] font-semibold shadow-xs'
+                        : 'border border-[#EDEDED] bg-white text-[#111827] hover:border-gray-300 hover:bg-gray-50'
+                    }`}
+                  >
+                    {item}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* ── Card 6: Deadline preference ── */}
+          <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 sm:p-8 shadow-xs">
+            <label className="block font-inter text-[15px] font-semibold text-[#111827] mb-4">
+              Deadline preference
+            </label>
+            <div className="grid grid-cols-3 gap-3">
+              {['Flexible', 'Standard', 'Urgent'].map((item) => {
+                const isSelected = deadlinePref === item
+                return (
+                  <button
+                    type="button"
+                    key={item}
+                    onClick={() => setDeadlinePref(item)}
+                    className={`rounded-[10px] py-3 px-4 font-inter text-[14px] font-medium text-center transition-all ${
+                      isSelected
+                        ? 'border-2 border-[#2952E1] bg-[#2952E1]/5 text-[#2952E1] font-semibold shadow-xs'
+                        : 'border border-[#EDEDED] bg-white text-[#111827] hover:border-gray-300 hover:bg-gray-50'
+                    }`}
+                  >
+                    {item}
+                  </button>
+                )
+              })}
+            </div>
+            <div className="mt-4 pt-3 border-t border-[#F3F4F6]">
+              <p className="font-inter text-[13px] font-semibold text-[#111827]">
+                Expected: <span className="font-bold">4-5 Days</span>
+              </p>
+              <p className="font-inter text-[12px] text-[#6f6f6f] mt-0.5">
+                We will notify you of any changes, and will try to push deadline based on your preference.
+              </p>
+            </div>
+          </div>
+
+          {/* ── Card 7: Contact preference ── */}
+          <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 sm:p-8 shadow-xs">
+            <label className="block font-inter text-[15px] font-semibold text-[#111827] mb-4">
+              Contact preference
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <button
+                type="button"
+                onClick={() => setContactPref('Email')}
+                className={`rounded-[10px] py-3 px-4 font-inter text-[14px] font-medium text-center transition-all ${
+                  contactPref === 'Email'
+                    ? 'border-2 border-[#2952E1] bg-[#2952E1]/5 text-[#2952E1] font-semibold'
+                    : 'border border-[#EDEDED] bg-white text-[#111827] hover:bg-gray-50'
+                }`}
+              >
+                Email
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setContactPref('WhatsApp')}
+                className={`rounded-[10px] py-3 px-4 font-inter text-[14px] font-medium text-center transition-all ${
+                  contactPref === 'WhatsApp'
+                    ? 'border-2 border-[#2952E1] bg-[#2952E1]/5 text-[#2952E1] font-semibold'
+                    : 'border border-[#EDEDED] bg-white text-[#111827] hover:bg-gray-50'
+                }`}
+              >
+                WhatsApp
+              </button>
+
+              <div className="relative">
+                <input
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="First and last name"
+                  className="w-full rounded-[10px] border border-[#EDEDED] bg-white pl-4 pr-10 py-3 font-inter text-[14px] text-[#111827] placeholder:text-[#9CA3AF] outline-none focus:border-[#2952E1]"
+                />
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 20h9" />
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Action Buttons ── */}
+          <div className="flex items-center justify-between gap-4 pt-4">
+            <Link
+              href="/services"
+              className="inline-flex items-center justify-center rounded-full border border-[#2952E1] bg-white px-10 sm:px-14 py-3 font-inter font-medium text-[15px] text-[#2952E1] hover:bg-[#2952E1]/5 transition-colors"
+            >
+              Cancel
+            </Link>
+
+            <button
+              type="submit"
+              disabled={isPending}
+              className="inline-flex items-center justify-center rounded-full bg-[#2952E1] px-12 sm:px-16 py-3 font-inter font-medium text-[15px] text-white shadow-md hover:bg-[#1e42c7] transition-all disabled:opacity-60"
+            >
+              {isPending ? 'Submitting…' : 'Next'}
+            </button>
+          </div>
+
+          {/* ── Pink Payment Note ── */}
+          <div className="rounded-[12px] bg-[#FFF1F5] border border-[#FBCFE8] p-4 flex items-center gap-3 text-[#BE185D] mt-6">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#FCE7F3] text-[#DB2777]">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              </svg>
+            </div>
+            <p className="font-inter text-[13px] sm:text-[14px] leading-snug">
+              <strong className="font-semibold">Payment:</strong> After submitting, you&apos;ll receive a payment link via email. Once paid, your designer will start working on your project!
+            </p>
+          </div>
+        </form>
       </div>
     </div>
-  )
-}
-
-function SubmitButton({ isPending, files }: { isPending: boolean; files: File[] }) {
-  return (
-    <button
-      type="submit"
-      disabled={isPending}
-      className="rounded-full bg-[#d96d43] px-8 py-3 font-inter font-medium text-sm text-white transition-colors hover:bg-[#d96d43]/90 disabled:opacity-60 disabled:cursor-not-allowed"
-      onClick={(e) => {
-        // Attach files to the form before submit
-        const form = (e.target as HTMLButtonElement).closest('form')!
-        // Remove old file inputs
-        form.querySelectorAll('input[data-file-upload]').forEach((el) => el.remove())
-        // Add new file inputs for each file (workaround: files are in state, we inject a DataTransfer)
-        if (files.length > 0) {
-          const dt = new DataTransfer()
-          files.forEach((f) => dt.items.add(f))
-          const input = document.createElement('input')
-          input.type = 'file'
-          input.name = 'files'
-          input.multiple = true
-          input.setAttribute('data-file-upload', 'true')
-          input.style.display = 'none'
-          input.files = dt.files
-          form.appendChild(input)
-        }
-      }}
-    >
-      {isPending ? 'Submitting…' : 'Submit Order'}
-    </button>
   )
 }
 
 export default function OrderPage() {
   return (
     <Suspense fallback={<div className="min-h-screen flex items-center justify-center font-inter text-black/40">Loading…</div>}>
-      <OrderForm />
+      <OrderFormContent />
     </Suspense>
   )
 }

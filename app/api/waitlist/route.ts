@@ -10,7 +10,7 @@ const GOOGLE_SHEET_ID = process.env.GOOGLE_SHEET_ID!;
 const GOOGLE_SERVICE_ACCOUNT_EMAIL = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL!;
 const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY!;
 
-async function appendToGoogleSheet(email: string) {
+async function appendToGoogleSheet(email: string, phone: string) {
   try {
     const privateKey = GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n");
 
@@ -26,10 +26,10 @@ async function appendToGoogleSheet(email: string) {
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: GOOGLE_SHEET_ID,
-      range: "Sheet1!A:B",
+      range: "Sheet1!A:C",
       valueInputOption: "USER_ENTERED",
       requestBody: {
-        values: [[email, new Date().toISOString()]],
+        values: [[email, phone, new Date().toISOString()]],
       },
     });
   } catch (error) {
@@ -42,10 +42,11 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const email = body.email?.trim()?.toLowerCase();
+    const phone = body.phone?.trim();
 
-    if (!email) {
+    if (!email || !phone) {
       return NextResponse.json(
-        { error: "Email is required" },
+        { error: "Both email and phone number are required." },
         { status: 400 }
       );
     }
@@ -63,25 +64,37 @@ export async function POST(request: NextRequest) {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     const { error: dbError } = await supabase
       .from("waitlist")
-      .insert({ email });
+      .insert({ email, phone });
 
     if (dbError) {
-      if (dbError.code === "23505") {
+      // Fallback if 'phone' column is not created yet in Supabase schema
+      if (dbError.message?.includes("phone") || dbError.code === "PGRST204") {
+        const { error: fallbackError } = await supabase
+          .from("waitlist")
+          .insert({ email });
+        if (fallbackError && fallbackError.code === "23505") {
+          return NextResponse.json(
+            { error: "You're already on the waitlist!" },
+            { status: 409 }
+          );
+        }
+      } else if (dbError.code === "23505") {
         return NextResponse.json(
           { error: "You're already on the waitlist!" },
           { status: 409 }
         );
+      } else {
+        console.error("Supabase insert error:", dbError);
+        return NextResponse.json(
+          { error: "Something went wrong. Please try again." },
+          { status: 500 }
+        );
       }
-      console.error("Supabase insert error:", dbError);
-      return NextResponse.json(
-        { error: "Something went wrong. Please try again." },
-        { status: 500 }
-      );
     }
 
-    // Append to Google Sheet (await to ensure it completes before serverless shutdown)
+    // Append to Google Sheet
     if (GOOGLE_SHEET_ID && GOOGLE_SERVICE_ACCOUNT_EMAIL && GOOGLE_PRIVATE_KEY) {
-      await appendToGoogleSheet(email);
+      await appendToGoogleSheet(email, phone);
     }
 
     return NextResponse.json({ success: true });

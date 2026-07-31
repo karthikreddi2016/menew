@@ -1,59 +1,154 @@
 import Link from "next/link";
-import { Container } from "@/components/ui";
 import { QUICK_SERVICE_MAP } from "@/lib/types/order.types";
 
-const iconPoster = "/images/icon-poster.svg";
-const iconPPT = "/images/icon-ppt.svg";
-const iconVideo = "/images/icon-video.svg";
-const iconBanner = "/images/icon-banner.svg";
-const iconBranding = "/images/icon-branding.svg";
-const iconBrochure = "/images/icon-brochure.svg";
-const iconAds = "/images/icon-ads.svg";
-const iconSocial = "/images/icon-social.svg";
-const iconBizCard = "/images/icon-bizcard.svg";
-
-const services = [
-  { icon: iconPoster, name: "Poster Design" },
-  { icon: iconPPT, name: "PPT Design" },
-  { icon: iconVideo, name: "Video Editing" },
-  { icon: iconBanner, name: "Banner Design" },
-  { icon: iconBranding, name: "Branding Kit" },
-  { icon: iconBrochure, name: "Brochure Design" },
-  { icon: iconAds, name: "Ads/Flex Design" },
-  { icon: iconSocial, name: "Social Media Post Design" },
-  { icon: iconBizCard, name: "Business Card Design" },
+const items = [
+  {
+    name: "PPT",
+    bgColor: "bg-[#E865AA]",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2 3h20v14H2z" />
+        <path d="M8 21h8" />
+        <path d="M12 17v4" />
+        <path d="M7 8h5a2 2 0 0 1 0 4H7V8z" />
+      </svg>
+    ),
+  },
+  {
+    name: "Banners/flex",
+    bgColor: "bg-[#2952E1]",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="6" width="18" height="12" rx="2" />
+        <line x1="8" y1="10" x2="16" y2="10" />
+        <line x1="8" y1="14" x2="13" y2="14" />
+      </svg>
+    ),
+  },
+  {
+    name: "Social Media",
+    bgColor: "bg-[#FFAE45]",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="4" />
+        <circle cx="8.5" cy="8.5" r="1.5" />
+        <polyline points="21 15 16 10 5 21" />
+      </svg>
+    ),
+  },
+  {
+    name: "Brand Identity",
+    bgColor: "bg-[#00C288]",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 19l7-7 3 3-7 7-3-3z" />
+        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L11 18l7-5z" />
+        <path d="M2 2l7.586 7.586" />
+        <circle cx="11" cy="11" r="2" />
+      </svg>
+    ),
+  },
+  {
+    name: "Business Card",
+    bgColor: "bg-[#D9383A]",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="5" width="20" height="14" rx="2" />
+        <circle cx="8" cy="12" r="2" />
+        <path d="M14 10h4" />
+        <path d="M14 14h3" />
+      </svg>
+    ),
+  },
+  {
+    name: "Poster",
+    bgColor: "bg-[#FFAE45]",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+        <circle cx="12" cy="9" r="2.5" />
+        <path d="M8 17s1.5-2 4-2 4 2 4 2" />
+      </svg>
+    ),
+  },
+  {
+    name: "Video Editing",
+    bgColor: "bg-[#10B981]",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="3" />
+        <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" />
+      </svg>
+    ),
+  },
+  {
+    name: "Brochure",
+    bgColor: "bg-[#E865AA]",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+        <line x1="9" y1="7" x2="16" y2="7" />
+        <line x1="9" y1="11" x2="14" y2="11" />
+      </svg>
+    ),
+  },
+  {
+    name: "Explore More",
+    bgColor: "bg-[#F3F4F6] text-[#2952E1]",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2952E1" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="5" cy="12" r="1" fill="#2952E1" />
+        <circle cx="12" cy="12" r="1" fill="#2952E1" />
+        <circle cx="19" cy="12" r="1" fill="#2952E1" />
+      </svg>
+    ),
+  },
 ];
 
 export function CreateTodaySection() {
   return (
-    <section className="section-shell">
-      <Container>
-        <div className="flex items-center gap-3 sm:gap-4 mb-8">
-          <div className="flex-1 h-px bg-black/15" />
-          <p className="shrink-0 font-serif text-base sm:text-xl text-(--foreground) tracking-[-0.01em] text-center">
+    <section className="shrink-0 bg-white pb-3 pt-1 px-4 sm:px-8 max-w-[1360px] mx-auto w-full">
+      {/* Dashed divider line with header text */}
+      <div className="relative flex items-center justify-center mb-2.5 sm:mb-3">
+        <div className="absolute inset-0 flex items-center" aria-hidden="true">
+          <div className="w-full border-t border-dashed border-[#D9D9D9]" />
+        </div>
+        <div className="relative bg-white px-4">
+          <span className="font-serif text-[14px] sm:text-[17px] text-[#2C2C2C] font-normal tracking-[-0.01em]">
             What would you like to create today
-          </p>
-          <div className="flex-1 h-px bg-black/15" />
+          </span>
         </div>
+      </div>
 
-        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 justify-items-center">
-          {services.map((service) => {
-            const serviceSlug = QUICK_SERVICE_MAP[service.name];
-            return (
-              <Link
-                key={service.name}
-                href={serviceSlug ? `/order?service=${serviceSlug}` : "/order"}
-                className="flex h-[100px] w-full max-w-[120px] flex-col items-center justify-center gap-2 rounded-lg border border-black/10 bg-white/80 p-3 transition-shadow hover:shadow-md hover:border-[#184043]/30"
+      {/* Grid of 9 circular icon cards in a single row */}
+      <div className="grid grid-cols-3 sm:grid-cols-9 gap-2 sm:gap-2.5 justify-items-center">
+        {items.map((item) => {
+          const serviceSlug = QUICK_SERVICE_MAP[item.name] || "graphic_design";
+          let href = `/order?service=${serviceSlug}`;
+          if (item.name === "Explore More") href = "/services";
+          else if (item.name === "PPT") href = "/services/ppt";
+          else if (item.name === "Video Editing") href = "/services/video-editing";
+          else if (item.name === "Logo / Identity") href = "/services/branding";
+
+          return (
+            <Link
+              key={item.name}
+              href={href}
+              className="group flex flex-col items-center justify-center rounded-[12px] border border-[#EDEDED] bg-white p-2 w-full h-[82px] sm:h-[92px] transition-all hover:border-[#2952E1]/40 hover:shadow-md hover:-translate-y-0.5"
+            >
+              <div
+                className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center text-white transition-transform group-hover:scale-105 ${item.bgColor}`}
               >
-                <img src={service.icon} alt={service.name} className="h-6 w-6 object-contain" />
-                <p className="text-center font-inter text-[11px] sm:text-[13px] font-medium leading-tight text-(--foreground)">
-                  {service.name}
-                </p>
-              </Link>
-            );
-          })}
-        </div>
-      </Container>
+                {item.icon}
+              </div>
+              <p className="mt-1 text-center font-inter text-[10px] sm:text-[11px] font-medium leading-tight text-[#49454f] group-hover:text-[#2952E1] truncate w-full">
+                {item.name}
+              </p>
+            </Link>
+          );
+        })}
+      </div>
     </section>
   );
 }

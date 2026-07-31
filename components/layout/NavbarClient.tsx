@@ -9,7 +9,7 @@ export function NavbarClient({ isLoggedIn }: { isLoggedIn: boolean }) {
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-[#dadada]">
-      <div className="flex items-center justify-between px-4 md:px-[70px] py-[16px] max-w-[1440px] mx-auto">
+      <div className="flex items-center justify-between px-4 md:px-[60px] py-2 sm:py-3 max-w-[1440px] mx-auto">
         {/* Logo */}
         <Link href="/" className="shrink-0">
           <div
@@ -61,19 +61,19 @@ export function NavbarClient({ isLoggedIn }: { isLoggedIn: boolean }) {
         </nav>
 
         {/* Action buttons — desktop */}
-        <div className="hidden md:flex items-center gap-5">
+        <div className="hidden md:flex items-center gap-4">
           {isLoggedIn ? (
             <>
               <Link
                 href="/dashboard"
-                className="bg-[#e7ecff] text-[#2952e1] font-inter font-medium text-[16px] tracking-[-0.25px] leading-normal px-8 py-4 rounded-full hover:bg-[#d4dcff] transition-colors whitespace-nowrap"
+                className="bg-[#EAEFFF] text-[#2952E1] font-inter font-medium text-[15px] px-6 py-2.5 rounded-full hover:bg-[#d4dcff] transition-colors whitespace-nowrap"
               >
                 Dashboard
               </Link>
               <form action={logoutAction}>
                 <button
                   type="submit"
-                  className="bg-[#2952e1] text-white font-inter font-medium text-[16px] tracking-[-0.25px] leading-normal px-8 py-4 rounded-full hover:bg-[#1e42c7] transition-colors whitespace-nowrap"
+                  className="bg-[#2952E1] text-white font-inter font-medium text-[15px] px-6 py-2.5 rounded-full hover:bg-[#1e42c7] transition-colors whitespace-nowrap"
                 >
                   Logout
                 </button>
@@ -83,13 +83,13 @@ export function NavbarClient({ isLoggedIn }: { isLoggedIn: boolean }) {
             <>
               <Link
                 href="/login"
-                className="bg-[#e7ecff] text-[#2952e1] font-inter font-medium text-[16px] tracking-[-0.25px] leading-normal px-8 py-4 rounded-full hover:bg-[#d4dcff] transition-colors whitespace-nowrap"
+                className="bg-[#EAEFFF] text-[#2952E1] font-inter font-medium text-[15px] px-7 py-2.5 rounded-full hover:bg-[#d4dcff] transition-colors whitespace-nowrap"
               >
                 Login
               </Link>
               <Link
                 href="/order"
-                className="bg-[#2952e1] text-white font-inter font-medium text-[16px] tracking-[-0.25px] leading-normal px-8 py-4 rounded-full hover:bg-[#1e42c7] transition-colors whitespace-nowrap"
+                className="bg-[#2952E1] text-white font-inter font-medium text-[15px] px-7 py-2.5 rounded-full hover:bg-[#1e42c7] transition-colors whitespace-nowrap"
               >
                 Get Started
               </Link>

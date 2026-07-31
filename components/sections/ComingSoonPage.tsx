@@ -5,12 +5,17 @@ import Image from "next/image";
 
 export default function ComingSoonPage() {
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    if (!email.trim()) return;
+    if (!email.trim() || !phone.trim()) {
+      setStatus("error");
+      setMessage("Both email and phone number are required.");
+      return;
+    }
 
     setStatus("loading");
 
@@ -18,7 +23,10 @@ export default function ComingSoonPage() {
       const res = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim().toLowerCase() }),
+        body: JSON.stringify({
+          email: email.trim().toLowerCase(),
+          phone: phone.trim(),
+        }),
       });
 
       const data = await res.json();
@@ -31,6 +39,7 @@ export default function ComingSoonPage() {
 
       setStatus("success");
       setEmail("");
+      setPhone("");
     } catch {
       setStatus("error");
       setMessage("Something went wrong. Please try again.");
@@ -38,8 +47,8 @@ export default function ComingSoonPage() {
   }
 
   return (
-    <div className="cs-page">
-      {/* Background image (inverted to dark) */}
+    <div className="cs-page border-t border-[#EDEDED]/10">
+      {/* Background image */}
       <div className="cs-bg" aria-hidden="true">
         <Image
           src="/images/coming-soon-bg.jpg"
@@ -57,7 +66,7 @@ export default function ComingSoonPage() {
         </svg>
       </div>
 
-      {/* ─── Section 1: Hero (full viewport) ─── */}
+      {/* ─── Hero Section ─── */}
       <section className="cs-hero">
         {/* Header logo */}
         <header className="cs-header">
@@ -103,14 +112,14 @@ export default function ComingSoonPage() {
             </p>
           )}
 
-          {/* Email form — hidden on success */}
+          {/* Form with compulsory Email & Phone inputs */}
           {status !== "success" && (
-            <form className="cs-form" onSubmit={handleSubmit}>
-              <div className="cs-form__group">
+            <form className="cs-form w-full max-w-[560px] mx-auto" onSubmit={handleSubmit}>
+              <div className="flex flex-col sm:flex-row gap-3 w-full">
                 <input
                   type="email"
-                  placeholder="Enter Your Email"
-                  className="cs-form__input"
+                  placeholder="Enter Your Email *"
+                  className="cs-form__input w-full"
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
@@ -120,9 +129,26 @@ export default function ComingSoonPage() {
                   disabled={status === "loading"}
                   id="waitlist-email"
                 />
+
+                <input
+                  type="tel"
+                  placeholder="Enter Phone Number *"
+                  className="cs-form__input w-full"
+                  value={phone}
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                    if (status !== "idle") setStatus("idle");
+                  }}
+                  required
+                  disabled={status === "loading"}
+                  id="waitlist-phone"
+                />
+              </div>
+
+              <div className="mt-4 flex justify-center w-full">
                 <button
                   type="submit"
-                  className="cs-form__btn"
+                  className="cs-form__btn px-10 py-3.5"
                   disabled={status === "loading"}
                   id="waitlist-submit"
                 >
@@ -136,12 +162,12 @@ export default function ComingSoonPage() {
 
               {/* Error feedback */}
               {status === "error" && (
-                <p className="cs-feedback cs-feedback--error">{message}</p>
+                <p className="cs-feedback cs-feedback--error text-center mt-3">{message}</p>
               )}
             </form>
           )}
 
-          {/* Success state — shown after successful signup */}
+          {/* Success state */}
           {status === "success" && (
             <div className="cs-success">
               <div className="cs-success__icon">
@@ -188,7 +214,7 @@ export default function ComingSoonPage() {
         </div>
       </section>
 
-      {/* ─── Watermark: flex child at bottom of page ─── */}
+      {/* Watermark */}
       <div className="cs-watermark-wrap" aria-hidden="true">
         <Image
           src="/images/logo.png"
