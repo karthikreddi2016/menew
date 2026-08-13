@@ -49,6 +49,10 @@ export default function BrandingChoosePage() {
   const [selectedId, setSelectedId] = useState('starter')
 
   function handleNext() {
+    if (selectedId === 'custom') {
+      router.push('/services/branding/custom')
+      return
+    }
     const pkg = packages.find((p) => p.id === selectedId)
     const titleSlug = encodeURIComponent(pkg?.title || 'Starter Kit')
     router.push(`/order?service=branding_kit&type=${titleSlug}`)

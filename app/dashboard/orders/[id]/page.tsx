@@ -1,35 +1,67 @@
-import { notFound, redirect } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { OrderStatusBadge } from '@/components/dashboard/OrderStatusBadge'
 import { OrderTimeline } from '@/components/dashboard/OrderTimeline'
 import { MessageThread } from '@/components/dashboard/MessageThread'
 import { MessageInput } from '@/components/dashboard/MessageInput'
 import { FileList } from '@/components/dashboard/FileList'
-import { SERVICE_CONFIG, STATUS_LABELS } from '@/lib/types/order.types'
+import { SERVICE_CONFIG } from '@/lib/types/order.types'
 import { sendMessageAction } from './actions'
-import type { OrderFile, OrderMessage, Profile } from '@/lib/types/database.types'
+import type { OrderFile } from '@/lib/types/database.types'
 
 export default async function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
 
-  // Fetch order (RLS ensures only owner can read)
-  const { data: order } = await supabase
-    .from('orders')
-    .select('*')
-    .eq('id', id)
-    .single()
+  // Demo fallback order matching the Figma mockups
+  const isDemo = id.startsWith('demo-')
 
-  if (!order) notFound()
+  let orderData = {
+    id: '23456789',
+    service_type: 'graphic_design',
+    title: 'Graphic Design',
+    brief: 'Promotional campaign poster and digital creatives for our store.',
+    status: isDemo && id === 'demo-2' ? 'completed' : 'in_progress',
+    created_at: '2026-01-14T10:00:00Z',
+    expected_delivery: '15 Jan 2026',
+  }
 
-  // Fetch files
-  const { data: rawFiles } = await supabase
-    .from('order_files')
-    .select('*')
-    .eq('order_id', id)
+  let rawFiles: OrderFile[] = []
+  let messages: { id: string; body: string; created_at: string; sender_id: string; profiles?: { full_name: string | null } }[] = []
+
+  if (!isDemo && user) {
+    const { data: dbOrder } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (dbOrder) {
+      orderData = {
+        id: dbOrder.id.replace(/-/g, '').slice(0, 8).toUpperCase(),
+        service_type: dbOrder.service_type,
+        title: dbOrder.title || SERVICE_CONFIG[dbOrder.service_type as keyof typeof SERVICE_CONFIG]?.label || 'Graphic Design',
+        brief: dbOrder.brief || '',
+        status: dbOrder.status,
+        created_at: dbOrder.created_at,
+        expected_delivery: new Date(new Date(dbOrder.created_at).getTime() + (dbOrder.service_type === 'branding_kit' ? 6 : 1) * 86400000).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
+      }
+
+      const { data: filesData } = await supabase
+        .from('order_files')
+        .select('*')
+        .eq('order_id', id)
+      rawFiles = filesData || []
+
+      const { data: msgsData } = await supabase
+        .from('order_messages')
+        .select('*, profiles!order_messages_sender_id_fkey(full_name)')
+        .eq('order_id', id)
+        .order('created_at', { ascending: true })
+      messages = msgsData || []
+    }
+  }
 
   // Generate signed URLs for deliverables
   const files = await Promise.all(
@@ -44,108 +76,134 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
     })
   )
 
-  // Fetch messages with sender names
-  const { data: messages } = await supabase
-    .from('order_messages')
-    .select('*, profiles!order_messages_sender_id_fkey(full_name)')
-    .eq('order_id', id)
-    .order('created_at', { ascending: true })
-
-  const service = SERVICE_CONFIG[order.service_type]
+  const service = SERVICE_CONFIG[orderData.service_type as keyof typeof SERVICE_CONFIG] || { label: 'Graphic Design' }
 
   async function sendMessage(body: string) {
     'use server'
     return sendMessageAction(id, body)
   }
 
-  return (
-    <div className="px-4 py-6 md:px-8 md:py-8">
-      {/* Back */}
-      <Link href="/dashboard" className="mb-4 inline-flex items-center gap-1.5 font-inter text-sm text-black/50 hover:text-black/70 transition-colors">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="15 18 9 12 15 6" />
-        </svg>
-        All Orders
-      </Link>
+  const formattedOrderDate = isDemo
+    ? '14 Jan 2026'
+    : new Date(orderData.created_at).toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      })
 
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-        {/* Left — main content */}
-        <div className="flex-1 flex flex-col gap-5">
-          {/* Header card */}
-          <div className="rounded-2xl border border-black/10 bg-white p-5">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="font-inter text-xs text-black/40 mb-1">{service.label}</p>
-                <h1 className="font-serif text-xl text-[#1d2433]">{order.title}</h1>
-              </div>
-              <OrderStatusBadge status={order.status} />
+  return (
+    <div className="min-h-screen bg-[#F8FAFC] pb-16">
+      {/* ── Top Back Navigation Bar ── */}
+      <header className="bg-white border-b border-[#EDEDED] py-3.5 px-4 sm:px-8 mb-8">
+        <div className="max-w-[860px] mx-auto flex items-center justify-start">
+          <Link
+            href="/cart"
+            className="inline-flex items-center gap-2 font-inter text-[14px] font-medium text-[#49454f] hover:text-[#2952E1] transition-colors"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+            <span>Back</span>
+          </Link>
+        </div>
+      </header>
+
+      {/* ── Main Order Tracking Container ── */}
+      <div className="max-w-[860px] mx-auto px-4 sm:px-6 space-y-6">
+        {/* ── Card 1: Order Details Header Card ── */}
+        <div className="bg-white rounded-[20px] border border-[#EDEDED] p-6 sm:p-8 shadow-xs">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h1 className="font-serif text-[28px] sm:text-[34px] font-normal text-[#111827]">
+                {service.label}
+              </h1>
             </div>
-            <div className="mt-4">
-              <p className="font-inter text-sm font-medium text-black/50 mb-1">Brief</p>
-              <p className="font-inter text-sm text-[#1d2433] whitespace-pre-wrap">{order.brief}</p>
-            </div>
-            {order.deadline_pref && (
-              <div className="mt-3 flex items-center gap-2">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#184043" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
-                </svg>
-                <p className="font-inter text-sm text-[#184043]">Deadline: {order.deadline_pref}</p>
-              </div>
-            )}
+
+            {/* Three Dots Menu Button */}
+            <button
+              type="button"
+              className="p-2 rounded-full hover:bg-gray-100 text-gray-500 transition-colors"
+              aria-label="Options"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="5" cy="12" r="2" />
+                <circle cx="12" cy="12" r="2" />
+                <circle cx="19" cy="12" r="2" />
+              </svg>
+            </button>
           </div>
 
-          {/* Files */}
-          {files.length > 0 && (
-            <div className="rounded-2xl border border-black/10 bg-white p-5 flex flex-col gap-4">
-              <p className="font-inter text-sm font-semibold text-[#1d2433]">Files</p>
-              <FileList files={files} role="reference" />
-              <FileList files={files} role="deliverable" />
-            </div>
-          )}
+          <div className="mt-4 space-y-1.5 font-inter text-[14px]">
+            <p className="text-[#111827]">
+              Order ID: <span className="font-semibold">{orderData.id}</span>
+            </p>
+            <p className="text-[#111827]">
+              Ordered: <span className="font-normal text-[#111827]">{formattedOrderDate}</span>
+            </p>
+            <p className="text-[#111827]">
+              Expected Delivery: <span className="font-normal text-[#111827]">{orderData.expected_delivery}</span>
+            </p>
+          </div>
 
-          {/* Messages */}
-          <div className="rounded-2xl border border-black/10 bg-white p-5 flex flex-col gap-4">
-            <p className="font-inter text-sm font-semibold text-[#1d2433]">Messages</p>
-            <MessageThread
-              messages={(messages ?? []) as Parameters<typeof MessageThread>[0]['messages']}
-              currentUserId={user.id}
-            />
-            {order.status !== 'completed' && order.status !== 'cancelled' && (
-              <MessageInput onSend={sendMessage} />
+          {/* Status Badge */}
+          <div className="mt-5">
+            {orderData.status === 'completed' ? (
+              <span className="inline-flex items-center px-3.5 py-1.5 rounded-lg bg-[#059669] text-white font-inter text-[13px] font-semibold">
+                Completed
+              </span>
+            ) : (
+              <span className="inline-flex items-center px-3.5 py-1.5 rounded-lg border border-[#10B981] text-[#10B981] bg-[#10B981]/5 font-inter text-[13px] font-semibold">
+                Order Confirmed
+              </span>
             )}
           </div>
         </div>
 
-        {/* Right — sidebar */}
-        <div className="w-full lg:w-64 shrink-0 flex flex-col gap-4">
-          {/* Status timeline */}
-          <div className="rounded-2xl border border-black/10 bg-white p-5">
-            <p className="font-inter text-sm font-semibold text-[#1d2433] mb-4">Progress</p>
-            <OrderTimeline status={order.status} />
-          </div>
+        {/* ── Card 2: Order Progress Stepper Card ── */}
+        <OrderTimeline status={orderData.status as any} createdDate={orderData.created_at} />
 
-          {/* Metadata */}
-          <div className="rounded-2xl border border-black/10 bg-white p-5 flex flex-col gap-3">
-            <MetaRow label="Order ID" value={`#${order.id.slice(0, 8).toUpperCase()}`} />
-            <MetaRow label="Service" value={service.label} />
-            <MetaRow label="Status" value={STATUS_LABELS[order.status]} />
-            <MetaRow
-              label="Created"
-              value={new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-            />
-            {order.deadline_pref && <MetaRow label="Deadline" value={order.deadline_pref} />}
+        {/* ── Files & Messages Card (if files or messages exist) ── */}
+        {(files.length > 0 || (messages && messages.length > 0)) && (
+          <div className="bg-white rounded-[20px] border border-[#EDEDED] p-6 sm:p-8 shadow-xs space-y-6">
+            {files.length > 0 && (
+              <div>
+                <h3 className="font-inter text-[16px] font-semibold text-[#111827] mb-3">Project Files</h3>
+                <FileList files={files} role="reference" />
+                <FileList files={files} role="deliverable" />
+              </div>
+            )}
+
+            {user && (
+              <div>
+                <h3 className="font-inter text-[16px] font-semibold text-[#111827] mb-3">Messages</h3>
+                <MessageThread
+                  messages={(messages ?? []) as Parameters<typeof MessageThread>[0]['messages']}
+                  currentUserId={user.id}
+                />
+                {orderData.status !== 'completed' && orderData.status !== 'cancelled' && (
+                  <div className="mt-4">
+                    <MessageInput onSend={sendMessage} />
+                  </div>
+                )}
+              </div>
+            )}
           </div>
+        )}
+
+        {/* ── Pink Payment Notice Box ── */}
+        <div className="rounded-[16px] bg-[#FFF1F5] border border-[#FBCFE8] p-5 flex items-center gap-3 text-[#BE185D]">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#FCE7F3] text-[#DB2777]">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            </svg>
+          </div>
+          <p className="font-inter text-[13px] sm:text-[14px] leading-snug">
+            <strong className="font-semibold">Payment:</strong> After submitting, you&apos;ll receive a payment link via email. Once paid, your designer will start working on your project!
+          </p>
         </div>
       </div>
-    </div>
-  )
-}
-
-function MetaRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex flex-col gap-0.5">
-      <p className="font-inter text-xs text-black/40">{label}</p>
-      <p className="font-inter text-sm text-[#1d2433]">{value}</p>
     </div>
   )
 }

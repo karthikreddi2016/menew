@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { logoutAction } from "@/app/auth/actions";
 
-export function NavbarClient({ isLoggedIn }: { isLoggedIn: boolean }) {
+export function NavbarClient({ isLoggedIn, isAdmin = false }: { isLoggedIn: boolean; isAdmin?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -64,6 +64,14 @@ export function NavbarClient({ isLoggedIn }: { isLoggedIn: boolean }) {
         <div className="hidden md:flex items-center gap-4">
           {isLoggedIn ? (
             <>
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  className="bg-[#184043] text-white font-inter font-semibold text-[15px] px-5 py-2.5 rounded-full hover:bg-[#102d30] transition-colors whitespace-nowrap"
+                >
+                  ⚡ Admin Panel
+                </Link>
+              )}
               <Link
                 href="/dashboard"
                 className="bg-[#EAEFFF] text-[#2952E1] font-inter font-medium text-[15px] px-6 py-2.5 rounded-full hover:bg-[#d4dcff] transition-colors whitespace-nowrap"

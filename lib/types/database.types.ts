@@ -1,7 +1,8 @@
 export type OrderStatus = 'pending' | 'in_progress' | 'revision' | 'delivered' | 'completed' | 'cancelled'
 export type ServiceType = 'graphic_design' | 'video_editing' | '3d_motion' | 'branding_kit' | 'thumbnail' | 'ppt_design'
 export type FileRole = 'reference' | 'deliverable'
-export type UserRole = 'customer' | 'admin'
+export type UserRole = 'customer' | 'editor' | 'admin'
+export type PaymentStatus = 'unpaid' | 'paid' | 'refunded'
 
 export type Profile = {
   id: string
@@ -21,6 +22,9 @@ export type Order = {
   deadline_pref: string | null
   status: OrderStatus
   assigned_admin: string | null
+  amount: number | null
+  payment_status: PaymentStatus | null
+  creative_showcase: boolean | null
   created_at: string
   updated_at: string
 }
@@ -78,6 +82,9 @@ export type Database = {
           deadline_pref?: string | null
           status?: OrderStatus
           assigned_admin?: string | null
+          amount?: number | null
+          payment_status?: PaymentStatus | null
+          creative_showcase?: boolean | null
         }
         Update: {
           customer_id?: string
@@ -87,6 +94,9 @@ export type Database = {
           deadline_pref?: string | null
           status?: OrderStatus
           assigned_admin?: string | null
+          amount?: number | null
+          payment_status?: PaymentStatus | null
+          creative_showcase?: boolean | null
           updated_at?: string
         }
         Relationships: [

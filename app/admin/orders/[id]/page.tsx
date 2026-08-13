@@ -7,13 +7,14 @@ import { MessageInput } from '@/components/dashboard/MessageInput'
 import { FileList } from '@/components/dashboard/FileList'
 import { StatusDropdown } from '@/components/admin/StatusDropdown'
 import { DeliverableUpload } from '@/components/admin/DeliverableUpload'
+import { OrderAdminActions } from '@/components/admin/OrderAdminActions'
 import { SERVICE_CONFIG, STATUS_LABELS } from '@/lib/types/order.types'
 import {
   updateOrderStatusAction,
   uploadDeliverableAction,
   sendAdminMessageAction,
 } from './actions'
-import type { OrderFile, OrderMessage, Profile } from '@/lib/types/database.types'
+import type { OrderFile } from '@/lib/types/database.types'
 
 export default async function AdminOrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -33,6 +34,13 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
     .select('full_name, email, phone')
     .eq('id', order.customer_id)
     .single()
+
+  // Team members (editors + admins)
+  const { data: teamMembers } = await supabase
+    .from('profiles')
+    .select('id, full_name, role')
+    .in('role', ['admin', 'editor'])
+    .order('full_name')
 
   // Files with signed URLs
   const { data: rawFiles } = await supabase.from('order_files').select('*').eq('order_id', id)
@@ -76,7 +84,7 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
             <div className="flex items-start justify-between gap-3 mb-4">
               <div>
                 <p className="font-inter text-xs text-black/40 mb-1">{service.label}</p>
-                <h1 className="font-serif text-xl text-[#1d2433]">{order.title}</h1>
+                <h1 className="font-serif text-2xl text-[#1d2433]">{order.title}</h1>
               </div>
               <StatusDropdown
                 orderId={id}
@@ -129,14 +137,23 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
         </div>
 
         {/* Right sidebar */}
-        <div className="w-full lg:w-64 shrink-0 flex flex-col gap-4">
+        <div className="w-full lg:w-72 shrink-0 flex flex-col gap-4">
+          <OrderAdminActions
+            orderId={id}
+            currentAmount={order.amount || 0}
+            currentPaymentStatus={order.payment_status || 'unpaid'}
+            currentAssignedId={order.assigned_admin}
+            currentShowcase={!!order.creative_showcase}
+            teamMembers={teamMembers ?? []}
+          />
+
           <div className="rounded-2xl border border-black/10 bg-white p-5">
-            <p className="font-inter text-sm font-semibold text-[#1d2433] mb-4">Progress</p>
+            <p className="font-inter text-sm font-semibold text-[#1d2433] mb-4">Progress Timeline</p>
             <OrderTimeline status={order.status} />
           </div>
 
           <div className="rounded-2xl border border-black/10 bg-white p-5 flex flex-col gap-3">
-            <p className="font-inter text-sm font-semibold text-[#1d2433]">Customer</p>
+            <p className="font-inter text-sm font-semibold text-[#1d2433]">Customer Profile</p>
             <MetaRow label="Name" value={customer?.full_name ?? '—'} />
             <MetaRow label="Email" value={customer?.email ?? '—'} />
             {customer?.phone && <MetaRow label="Phone" value={customer.phone} />}

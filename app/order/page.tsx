@@ -18,19 +18,42 @@ const SERVICE_TITLES: Record<string, string> = {
   brochure: 'Brochure Request',
 }
 
+const BRANDING_SUBTITLES: Record<string, string> = {
+  'Starter Kit': 'Logo, Color Palette, Typography',
+  'Business Kit': 'Logo, Brand colors, Social templates, Business card',
+  'Premium Branding Kit': 'Logo, Brand guide, Social templates, Packaging, Business card',
+}
+
 function OrderFormContent() {
   const searchParams = useSearchParams()
   const rawService = searchParams.get('service') as ServiceType | null
   const selectedType = searchParams.get('type') || ''
+  const customItemsParam = searchParams.get('items') || ''
   const currentService = rawService || 'graphic_design'
 
-  const pageTitle = SERVICE_TITLES[currentService] || 'Graphic Design Request'
+  const isBranding = currentService === 'branding_kit'
+
+  // Dynamic Header Title & Subtitle for Branding vs Other Services
+  const pageTitle = isBranding
+    ? selectedType || 'Custom Kit'
+    : SERVICE_TITLES[currentService] || 'Graphic Design Request'
+
+  const pageSubtitle = isBranding
+    ? customItemsParam || BRANDING_SUBTITLES[selectedType] || 'Logo, Brand guide, Social templates, Packaging, Business card'
+    : 'Tell us about your project. Explain like you would to a friend!'
 
   // Form State
   const [creativeType, setCreativeType] = useState('Digital')
   const [whatYouWant, setWhatYouWant] = useState(selectedType || 'Brochure')
   const [numberOfSlides, setNumberOfSlides] = useState('')
   const [quantity, setQuantity] = useState('')
+
+  // Branding-Specific Fields
+  const [brandName, setBrandName] = useState('')
+  const [industry, setIndustry] = useState('')
+  const [tagline, setTagline] = useState('')
+  const [brandPersonality, setBrandPersonality] = useState('Bold')
+
   const [brief, setBrief] = useState('')
   
   // Content Help Toggle: 'no' = "No, I will Provide All the Copy Myself", 'yes' = "Yes, I Need Help with Content"
@@ -53,7 +76,9 @@ function OrderFormContent() {
 
   const [state, formAction, isPending] = useActionState(createOrderAction, null)
 
-  const constructedTitle = currentService === 'ppt_design'
+  const constructedTitle = isBranding
+    ? `Branding (${selectedType || 'Custom'}) - ${brandName || 'New Brand'}`
+    : currentService === 'ppt_design'
     ? `PPT (${selectedType || 'Presentation'}) - ${numberOfSlides ? numberOfSlides + ' slides' : 'Custom'}`
     : `${whatYouWant || 'Design'} for ${purpose} (${creativeType})`
 
@@ -77,13 +102,13 @@ function OrderFormContent() {
 
       {/* ── Form Container ── */}
       <div className="max-w-[860px] mx-auto px-4 sm:px-6 pt-8">
-        {/* Header Title */}
+        {/* Header Title & Subtitle */}
         <div className="mb-8">
           <h1 className="font-serif text-[30px] sm:text-[36px] text-[#111827] font-normal tracking-[-0.01em]">
             {pageTitle}
           </h1>
           <p className="font-inter text-[14px] sm:text-[15px] text-[#6f6f6f] mt-1">
-            Tell us about your project. Explain like you would to a friend!
+            {pageSubtitle}
           </p>
         </div>
 
@@ -102,8 +127,69 @@ function OrderFormContent() {
 
           {/* ── Card 1: Main Project Inputs ── */}
           <div className="rounded-[20px] border border-[#EDEDED] bg-white p-6 sm:p-8 shadow-xs space-y-6">
-            {/* Conditional Service Inputs */}
-            {currentService === 'ppt_design' ? (
+            {isBranding ? (
+              /* Branding Specific Fields */
+              <>
+                {/* Brand Name */}
+                <div>
+                  <label className="block font-inter text-[14px] font-semibold text-[#111827] mb-2">
+                    Brand Name
+                  </label>
+                  <input
+                    type="text"
+                    value={brandName}
+                    onChange={(e) => setBrandName(e.target.value)}
+                    placeholder="Enter your brand name"
+                    className="w-full rounded-[10px] border border-[#EDEDED] bg-white px-4 py-3 font-inter text-[14px] text-[#111827] placeholder:text-[#9CA3AF] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all"
+                  />
+                </div>
+
+                {/* Industry */}
+                <div>
+                  <label className="block font-inter text-[14px] font-semibold text-[#111827] mb-2">
+                    Industry
+                  </label>
+                  <input
+                    type="text"
+                    value={industry}
+                    onChange={(e) => setIndustry(e.target.value)}
+                    placeholder="Ex: Edtech"
+                    className="w-full rounded-[10px] border border-[#EDEDED] bg-white px-4 py-3 font-inter text-[14px] text-[#111827] placeholder:text-[#9CA3AF] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all"
+                  />
+                </div>
+
+                {/* Tagline */}
+                <div>
+                  <label className="block font-inter text-[14px] font-semibold text-[#111827] mb-2">
+                    Tagline
+                  </label>
+                  <input
+                    type="text"
+                    value={tagline}
+                    onChange={(e) => setTagline(e.target.value)}
+                    placeholder="Write your brand tagline, if have any"
+                    className="w-full rounded-[10px] border border-[#EDEDED] bg-white px-4 py-3 font-inter text-[14px] text-[#111827] placeholder:text-[#9CA3AF] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all"
+                  />
+                </div>
+
+                {/* Brief, Instructions about your Brand */}
+                <div>
+                  <label className="block font-inter text-[14px] font-semibold text-[#111827]">
+                    Brief, Instructions about your Brand
+                  </label>
+                  <p className="font-inter text-[12px] text-[#6f6f6f] mb-2">
+                    Describe your idea in simple words. What should it say? Who is it for? Any key message?
+                  </p>
+                  <textarea
+                    rows={4}
+                    value={brief}
+                    onChange={(e) => setBrief(e.target.value)}
+                    placeholder="This is for a Diwali offer campaign for our clothing store..."
+                    className="w-full rounded-[10px] border border-[#EDEDED] bg-white p-4 font-inter text-[14px] text-[#111827] placeholder:text-[#9CA3AF] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all resize-y"
+                  />
+                </div>
+              </>
+            ) : currentService === 'ppt_design' ? (
               /* PPT Specific Fields */
               <div>
                 <label className="block font-inter text-[14px] font-semibold text-[#111827]">
@@ -179,22 +265,24 @@ function OrderFormContent() {
               </>
             )}
 
-            {/* Brief, Instructions or Content */}
-            <div>
-              <label className="block font-inter text-[14px] font-semibold text-[#111827]">
-                Brief, Instructions or Content
-              </label>
-              <p className="font-inter text-[12px] text-[#6f6f6f] mb-2">
-                Describe your idea in simple words. What should it say? Who is it for? Any key message?
-              </p>
-              <textarea
-                rows={4}
-                value={brief}
-                onChange={(e) => setBrief(e.target.value)}
-                placeholder="This is for a Diwali offer campaign for our clothing store..."
-                className="w-full rounded-[10px] border border-[#EDEDED] bg-white p-4 font-inter text-[14px] text-[#111827] placeholder:text-[#9CA3AF] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all resize-y"
-              />
-            </div>
+            {!isBranding && (
+              /* Brief for non-branding */
+              <div>
+                <label className="block font-inter text-[14px] font-semibold text-[#111827]">
+                  Brief, Instructions or Content
+                </label>
+                <p className="font-inter text-[12px] text-[#6f6f6f] mb-2">
+                  Describe your idea in simple words. What should it say? Who is it for? Any key message?
+                </p>
+                <textarea
+                  rows={4}
+                  value={brief}
+                  onChange={(e) => setBrief(e.target.value)}
+                  placeholder="This is for a Diwali offer campaign for our clothing store..."
+                  className="w-full rounded-[10px] border border-[#EDEDED] bg-white p-4 font-inter text-[14px] text-[#111827] placeholder:text-[#9CA3AF] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all resize-y"
+                />
+              </div>
+            )}
 
             {/* Need Help with Writing Content Copy? */}
             <div>
@@ -245,31 +333,58 @@ function OrderFormContent() {
             )}
           </div>
 
-          {/* ── Card 2: Purpose of design ── */}
-          <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 sm:p-8 shadow-xs">
-            <label className="block font-inter text-[15px] font-semibold text-[#111827] mb-4">
-              Purpose of design
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {['Social', 'Work', 'Business', 'Study'].map((item) => {
-                const isSelected = purpose === item
-                return (
-                  <button
-                    type="button"
-                    key={item}
-                    onClick={() => setPurpose(item)}
-                    className={`rounded-[10px] py-3 px-4 font-inter text-[14px] font-medium text-center transition-all ${
-                      isSelected
-                        ? 'border-2 border-[#2952E1] bg-[#2952E1]/5 text-[#2952E1] font-semibold shadow-xs'
-                        : 'border border-[#EDEDED] bg-white text-[#111827] hover:border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    {item}
-                  </button>
-                )
-              })}
+          {/* ── Card 2: Brand Personality (for Branding) OR Purpose of design (for others) ── */}
+          {isBranding ? (
+            <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 sm:p-8 shadow-xs">
+              <label className="block font-inter text-[15px] font-semibold text-[#111827] mb-4">
+                Brand Personality
+              </label>
+              <div className="flex flex-wrap gap-3">
+                {['Bold', 'Minimal', 'Premium', 'Playful', 'Not Specified'].map((item) => {
+                  const isSelected = brandPersonality === item
+                  return (
+                    <button
+                      type="button"
+                      key={item}
+                      onClick={() => setBrandPersonality(item)}
+                      className={`rounded-[10px] py-3 px-5 font-inter text-[14px] font-medium text-center transition-all ${
+                        isSelected
+                          ? 'border-2 border-[#2952E1] bg-[#2952E1]/5 text-[#2952E1] font-semibold shadow-xs'
+                          : 'border border-[#EDEDED] bg-white text-[#111827] hover:border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      {item}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 sm:p-8 shadow-xs">
+              <label className="block font-inter text-[15px] font-semibold text-[#111827] mb-4">
+                Purpose of design
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {['Social', 'Work', 'Business', 'Study'].map((item) => {
+                  const isSelected = purpose === item
+                  return (
+                    <button
+                      type="button"
+                      key={item}
+                      onClick={() => setPurpose(item)}
+                      className={`rounded-[10px] py-3 px-4 font-inter text-[14px] font-medium text-center transition-all ${
+                        isSelected
+                          ? 'border-2 border-[#2952E1] bg-[#2952E1]/5 text-[#2952E1] font-semibold shadow-xs'
+                          : 'border border-[#EDEDED] bg-white text-[#111827] hover:border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      {item}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
 
           {/* ── Card 3: Upload Design Assets ── */}
           <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 sm:p-8 shadow-xs">
@@ -394,31 +509,33 @@ function OrderFormContent() {
             />
           </div>
 
-          {/* ── Card 5: Style preference ── */}
-          <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 sm:p-8 shadow-xs">
-            <label className="block font-inter text-[15px] font-semibold text-[#111827] mb-4">
-              Style preference
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {['Modern', 'Minimal', 'Bold', 'Not sure'].map((item) => {
-                const isSelected = stylePref === item
-                return (
-                  <button
-                    type="button"
-                    key={item}
-                    onClick={() => setStylePref(item)}
-                    className={`rounded-[10px] py-3 px-4 font-inter text-[14px] font-medium text-center transition-all ${
-                      isSelected
-                        ? 'border-2 border-[#2952E1] bg-[#2952E1]/5 text-[#2952E1] font-semibold shadow-xs'
-                        : 'border border-[#EDEDED] bg-white text-[#111827] hover:border-gray-300 hover:bg-gray-50'
-                    }`}
-                  >
-                    {item}
-                  </button>
-                )
-              })}
+          {/* ── Card 5: Style preference (non-branding) ── */}
+          {!isBranding && (
+            <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 sm:p-8 shadow-xs">
+              <label className="block font-inter text-[15px] font-semibold text-[#111827] mb-4">
+                Style preference
+              </label>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {['Modern', 'Minimal', 'Bold', 'Not sure'].map((item) => {
+                  const isSelected = stylePref === item
+                  return (
+                    <button
+                      type="button"
+                      key={item}
+                      onClick={() => setStylePref(item)}
+                      className={`rounded-[10px] py-3 px-4 font-inter text-[14px] font-medium text-center transition-all ${
+                        isSelected
+                          ? 'border-2 border-[#2952E1] bg-[#2952E1]/5 text-[#2952E1] font-semibold shadow-xs'
+                          : 'border border-[#EDEDED] bg-white text-[#111827] hover:border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      {item}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* ── Card 6: Deadline preference ── */}
           <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 sm:p-8 shadow-xs">
@@ -446,7 +563,7 @@ function OrderFormContent() {
             </div>
             <div className="mt-4 pt-3 border-t border-[#F3F4F6]">
               <p className="font-inter text-[13px] font-semibold text-[#111827]">
-                Expected: <span className="font-bold">4-5 Days</span>
+                Expected: <span className="font-bold">{isBranding ? '6-7 Days' : '4-5 Days'}</span>
               </p>
               <p className="font-inter text-[12px] text-[#6f6f6f] mt-0.5">
                 We will notify you of any changes, and will try to push deadline based on your preference.

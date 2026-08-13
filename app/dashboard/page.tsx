@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { logoutAction } from '@/app/auth/actions'
+import { DashboardHeader } from '@/components/layout/DashboardHeader'
 import { CreateTodaySection } from '@/components/sections/CreateTodaySection'
 import { SERVICE_CONFIG, STATUS_LABELS } from '@/lib/types/order.types'
 import type { ServiceType } from '@/lib/types/database.types'
@@ -122,64 +123,39 @@ export default async function DashboardPage() {
 
   const ordersBadgeCount = orders && orders.length > 0 ? orders.length : displayProjects.length
 
+  const isAdminUser = profile?.role === 'admin'
+
   return (
     <div className="bg-white min-h-screen">
       {/* ── Logged In Top Navbar ── */}
-      <header className="sticky top-0 z-50 bg-white border-b border-[#EDEDED]">
-        <div className="flex items-center justify-between px-4 sm:px-8 md:px-[60px] py-3.5 max-w-[1440px] mx-auto">
-          {/* Logo */}
-          <Link href="/" className="shrink-0">
-            <div className="h-[39px] w-[150px] overflow-hidden relative" aria-label="Menew">
-              <div
-                style={{
-                  position: 'absolute',
-                  width: '167.91px',
-                  height: '165.83px',
-                  left: '-8.955px',
-                  top: '-63.414px',
-                  backgroundImage: "url('/images/logo.png')",
-                  backgroundSize: '100% 100%',
-                }}
-              />
-            </div>
-          </Link>
+      <DashboardHeader
+        ordersCount={ordersBadgeCount}
+        avatarInitials={avatarInitials}
+        isLoggedIn={true}
+        isAdmin={isAdminUser}
+      />
 
-          {/* User actions */}
-          <div className="flex items-center gap-4">
-            {/* My Orders button with badge matching present orders count */}
-            <Link
-              href="/cart"
-              className="relative inline-flex items-center gap-2 rounded-full bg-[#2952E1] px-5 py-2.5 font-inter font-medium text-[14px] text-white shadow-sm transition-all hover:bg-[#1e42c7] hover:shadow-md"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-              </svg>
-              <span>My Orders</span>
-              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#EF4444] text-[11px] font-bold text-white shadow-sm">
-                {ordersBadgeCount}
+      {/* ── Admin Mode Banner ── */}
+      {isAdminUser && (
+        <div className="bg-[#184043] text-white px-4 py-3 border-b border-white/10">
+          <div className="max-w-[1360px] mx-auto flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2.5">
+              <span className="bg-[#2952E1] text-white text-[11px] font-bold px-2 py-0.5 rounded font-inter uppercase">
+                Admin Mode
               </span>
-            </Link>
-
-            {/* Avatar Circle */}
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#2952E1] text-white font-inter font-semibold text-[15px] shadow-sm">
-                {avatarInitials}
-              </div>
-              <form action={logoutAction}>
-                <button
-                  type="submit"
-                  title="Sign out"
-                  className="font-inter text-xs text-[#6f6f6f] hover:text-red-600 transition-colors hidden sm:block"
-                >
-                  Sign out
-                </button>
-              </form>
+              <p className="font-inter text-xs sm:text-sm font-medium text-white/90">
+                Logged in as Admin ({profile?.full_name || profile?.email}). Manage orders, creatives, users, payments, & team.
+              </p>
             </div>
+            <Link
+              href="/admin"
+              className="shrink-0 bg-[#2952E1] hover:bg-[#1e42c7] text-white font-inter text-xs font-semibold px-4 py-2 rounded-xl transition-all shadow-xs"
+            >
+              Go to Admin Panel →
+            </Link>
           </div>
         </div>
-      </header>
+      )}
 
       {/* ── Section 1: Greeting & Quick Services ── */}
       <section className="pt-10 pb-8 px-4 sm:px-8 max-w-[1360px] mx-auto text-center">
