@@ -107,7 +107,7 @@ export function NavbarClient({ isLoggedIn, isAdmin = false }: { isLoggedIn: bool
 
         {/* Hamburger — mobile */}
         <button
-          className="flex md:hidden h-10 w-10 items-center justify-center rounded-lg transition-colors hover:bg-black/5"
+          className="flex md:hidden h-10 w-10 items-center justify-center rounded-full bg-[#2952E1] text-white shadow-xs hover:bg-[#1e42c7] transition-all"
           onClick={() => setMenuOpen((v) => !v)}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
         >
