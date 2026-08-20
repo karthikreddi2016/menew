@@ -99,6 +99,16 @@ export async function toggleCreativeShowcaseAction(
       .update({ creative_showcase: showcase })
       .eq('id', orderId)
 
+    if (error) return { error: error.message }
+
+    revalidatePath('/admin/creatives')
+    revalidatePath('/admin')
+    return {}
+  } catch (err: any) {
+    return { error: err.message || 'Failed to toggle creative showcase status' }
+  }
+}
+
 export async function updateOrderStatusAction(
   orderId: string,
   newStatus: string

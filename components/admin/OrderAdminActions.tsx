@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 import type { PaymentStatus, OrderStatus } from '@/lib/types/database.types'
 import { assignOrderAction, updateOrderPaymentAction, toggleCreativeShowcaseAction, updateOrderStatusAction } from '@/app/admin/actions'
