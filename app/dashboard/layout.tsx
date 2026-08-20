@@ -5,8 +5,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) redirect('/login')
-
+  // If no user session exists, let children (like demo pages) render gracefully or handle auth individually
   return (
     <div className="min-h-screen bg-white text-[#111827]">
       {children}

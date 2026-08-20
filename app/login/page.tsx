@@ -3,10 +3,10 @@
 import { useState, useActionState } from "react";
 import Link from "next/link";
 import { AuthLeftPanel } from "@/components/auth/AuthLeftPanel";
+import { FloatingInput, FloatingPasswordInput } from "@/components/auth/AuthInput";
 import { loginAction } from "./actions";
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(true);
   const [state, formAction, isPending] = useActionState(loginAction, null);
 
@@ -38,63 +38,44 @@ export default function LoginPage() {
           </div>
 
           {/* Form */}
-          <form action={formAction} className="flex flex-col gap-8">
+          <form action={formAction} className="flex flex-col gap-7">
             {/* Email */}
             <FloatingInput
               name="email"
               label="Enter Your Email"
-              placeholder="jasonglare@gmail.com"
               type="email"
               autoComplete="email"
             />
 
             {/* Password */}
-            <div className="relative flex h-14 items-center rounded-[4px] border border-[#79747e]">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center">
-                <LockIcon />
-              </span>
-              <input
-                name="password"
-                type={showPassword ? "text" : "password"}
-                autoComplete="current-password"
-                placeholder="••••••••"
-                className="h-full flex-1 bg-transparent font-inter text-[16px] text-[#49454f] placeholder:text-[#49454f] outline-none"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword((v) => !v)}
-                className="flex h-12 w-12 shrink-0 items-center justify-center"
-              >
-                <EyeIcon open={showPassword} />
-              </button>
-              <span className="absolute left-[40px] -top-[11px] bg-white px-1 font-inter text-[12px] leading-normal tracking-[-0.25px] text-[#49454f]">
-                Enter Password
-              </span>
-            </div>
+            <FloatingPasswordInput
+              name="password"
+              label="Enter Password"
+              autoComplete="current-password"
+            />
 
             {/* Remember me + Forgot password */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={() => setRemember((v) => !v)}
-                  className="flex h-6 w-6 shrink-0 items-center justify-center"
+            <div className="flex items-center justify-between pt-1">
+              <div className="flex items-center gap-2 cursor-pointer" onClick={() => setRemember((v) => !v)}>
+                <div
+                  className={`flex h-[18px] w-[18px] items-center justify-center rounded-[3px] transition-colors ${
+                    remember ? "bg-[#2952e1]" : "border-2 border-[#747775] bg-white"
+                  }`}
                 >
-                  <div
-                    className={`flex h-[18px] w-[18px] items-center justify-center rounded-[2px] ${remember ? "bg-[#2952e1]" : "border-2 border-[#49454f]"
-                      }`}
-                  >
-                    {remember && <CheckIcon />}
-                  </div>
-                </button>
-                <p className="font-inter text-[14px] leading-[22px] text-[#161616]">
+                  {remember && (
+                    <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+                      <path d="M1 5l3.5 3.5L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  )}
+                </div>
+                <span className="font-inter text-[14px] text-[#161616] select-none">
                   Remember me
-                </p>
+                </span>
               </div>
 
               <Link
                 href="/forgot-password"
-                className="font-inter font-medium text-[16px] leading-normal tracking-[-0.25px] text-[#2952e1]"
+                className="font-inter font-medium text-[14px] text-[#2952e1] hover:underline"
               >
                 Forgot Password
               </Link>
@@ -111,7 +92,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isPending}
-              className="w-full rounded-[31px] bg-[#2952e1] py-4 text-center font-inter font-medium text-[16px] leading-normal tracking-[-0.25px] text-white transition-colors hover:bg-[#1e42c7] disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full rounded-[31px] bg-[#2952e1] py-4 text-center font-inter font-medium text-[16px] leading-normal tracking-[-0.25px] text-white transition-all hover:bg-[#1e42c7] shadow-[0_4px_14px_0_rgba(41,82,225,0.35)] disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.99]"
             >
               {isPending ? "Logging in…" : "Login"}
             </button>
@@ -119,68 +100,5 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
-  );
-}
-
-/* ── Shared floating label input ── */
-function FloatingInput({
-  name,
-  label,
-  placeholder,
-  type,
-  autoComplete,
-}: {
-  name: string;
-  label: string;
-  placeholder: string;
-  type: string;
-  autoComplete?: string;
-}) {
-  return (
-    <div className="relative flex h-14 items-center rounded-[4px] border border-[#79747e] px-4">
-      <input
-        name={name}
-        type={type}
-        autoComplete={autoComplete}
-        placeholder={placeholder}
-        required
-        className="h-full w-full bg-transparent font-inter text-[16px] text-[#49454f] placeholder:text-[#49454f] outline-none"
-      />
-      <span className="absolute left-3 -top-[11px] bg-white px-1 font-inter text-[12px] leading-normal tracking-[-0.25px] text-[#49454f]">
-        {label}
-      </span>
-    </div>
-  );
-}
-
-/* ── Icons ── */
-function LockIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <rect x="5" y="11" width="14" height="10" rx="2" stroke="#49454f" strokeWidth="1.5" />
-      <path d="M8 11V7a4 4 0 0 1 8 0v4" stroke="#49454f" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function EyeIcon({ open }: { open: boolean }) {
-  return open ? (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="#49454f" strokeWidth="1.5" />
-      <circle cx="12" cy="12" r="3" stroke="#49454f" strokeWidth="1.5" />
-    </svg>
-  ) : (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" stroke="#49454f" strokeWidth="1.5" strokeLinecap="round" />
-      <line x1="1" y1="1" x2="23" y2="23" stroke="#49454f" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
-      <path d="M1 5l3.5 3.5L11 1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
   );
 }

@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import Link from "next/link";
 import { AuthLeftPanel } from "@/components/auth/AuthLeftPanel";
+import { FloatingInput } from "@/components/auth/AuthInput";
 import { forgotPasswordAction } from "./actions";
 
 export default function ForgotPasswordPage() {
@@ -59,11 +60,10 @@ export default function ForgotPasswordPage() {
             </div>
           ) : (
             /* Form */
-            <form action={formAction} className="flex flex-col gap-8">
+            <form action={formAction} className="flex flex-col gap-7">
               <FloatingInput
                 name="email"
                 label="Enter Your Email"
-                placeholder="user@example.com"
                 type="email"
                 autoComplete="email"
               />
@@ -77,7 +77,7 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={isPending}
-                className="w-full rounded-[31px] bg-[#2952e1] py-4 text-center font-inter font-medium text-[16px] leading-normal tracking-[-0.25px] text-white transition-colors hover:bg-[#1e42c7] disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full rounded-[31px] bg-[#2952e1] py-4 text-center font-inter font-medium text-[16px] leading-normal tracking-[-0.25px] text-white transition-all hover:bg-[#1e42c7] shadow-[0_4px_14px_0_rgba(41,82,225,0.35)] disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.99]"
               >
                 {isPending ? "Sending…" : "Send reset link"}
               </button>
@@ -86,7 +86,7 @@ export default function ForgotPasswordPage() {
                 Remember your password?{" "}
                 <Link
                   href="/login"
-                  className="font-medium text-[#2952e1]"
+                  className="font-medium text-[#2952e1] hover:underline"
                 >
                   Log in
                 </Link>
@@ -95,36 +95,6 @@ export default function ForgotPasswordPage() {
           )}
         </div>
       </div>
-    </div>
-  );
-}
-
-function FloatingInput({
-  name,
-  label,
-  placeholder,
-  type,
-  autoComplete,
-}: {
-  name: string;
-  label: string;
-  placeholder: string;
-  type: string;
-  autoComplete?: string;
-}) {
-  return (
-    <div className="relative flex h-14 items-center rounded-[4px] border border-[#79747e] px-4">
-      <input
-        name={name}
-        type={type}
-        autoComplete={autoComplete}
-        placeholder={placeholder}
-        required
-        className="h-full w-full bg-transparent font-inter text-[16px] text-[#49454f] placeholder:text-[#49454f] outline-none"
-      />
-      <span className="absolute left-3 -top-[11px] bg-white px-1 font-inter text-[12px] leading-normal tracking-[-0.25px] text-[#49454f]">
-        {label}
-      </span>
     </div>
   );
 }

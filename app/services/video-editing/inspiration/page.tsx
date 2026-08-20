@@ -6,14 +6,14 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 const inspirationItems = [
-  { id: 1, title: 'Inspiration 1', image: '/images/video-inspiration.png' },
-  { id: 2, title: 'Inspiration 2', image: '/images/video-inspiration.png' },
-  { id: 3, title: 'Inspiration 3', image: '/images/video-inspiration.png' },
-  { id: 4, title: 'Inspiration 4', image: '/images/video-inspiration.png' },
-  { id: 5, title: 'Inspiration 5', image: '/images/video-inspiration.png' },
-  { id: 6, title: 'Inspiration 6', image: '/images/video-inspiration.png' },
-  { id: 7, title: 'Inspiration 7', image: '/images/video-inspiration.png' },
-  { id: 8, title: 'Inspiration 8', image: '/images/video-inspiration.png' },
+  { id: 1, title: 'Inspiration 1', image: '/images/inspiration_sample_art.png' },
+  { id: 2, title: 'Inspiration 2', image: '/images/inspiration_sample_art.png' },
+  { id: 3, title: 'Inspiration 3', image: '/images/inspiration_sample_art.png' },
+  { id: 4, title: 'Inspiration 4', image: '/images/inspiration_sample_art.png' },
+  { id: 5, title: 'Inspiration 5', image: '/images/inspiration_sample_art.png' },
+  { id: 6, title: 'Inspiration 6', image: '/images/inspiration_sample_art.png' },
+  { id: 7, title: 'Inspiration 7', image: '/images/inspiration_sample_art.png' },
+  { id: 8, title: 'Inspiration 8', image: '/images/inspiration_sample_art.png' },
 ]
 
 export default function VideoInspirationPage() {
@@ -38,19 +38,19 @@ export default function VideoInspirationPage() {
               <line x1="19" y1="12" x2="5" y2="12" />
               <polyline points="12 19 5 12 12 5" />
             </svg>
-            <span>Back to Services</span>
+            <span>Back to Video Editing</span>
           </Link>
         </div>
       </header>
 
       {/* ── Main Design Inspiration Content ── */}
       <main className="flex-1 max-w-[1280px] w-full mx-auto px-4 sm:px-8 py-10 sm:py-14 flex flex-col justify-center">
-        {/* Header Title & Subtitle */}
+        {/* Header Title & Subtitle matching Figma */}
         <div className="text-center mb-8 sm:mb-10">
-          <h1 className="font-serif text-[30px] sm:text-[38px] text-[#111827] font-normal tracking-[-0.01em]">
+          <h1 className="font-serif text-[28px] sm:text-[34px] lg:text-[38px] text-[#111827] font-normal tracking-[-0.25px]">
             Design Inspiration that you are feel best fit.
           </h1>
-          <p className="font-inter text-[14px] sm:text-[15px] text-[#6f6f6f] mt-2">
+          <p className="font-inter text-[14px] sm:text-[15px] text-[#6f6f6f] mt-2 tracking-[-0.2px]">
             Pick one, we&apos;ll guide you next.
           </p>
         </div>
@@ -74,18 +74,8 @@ export default function VideoInspirationPage() {
                     src={item.image}
                     alt={item.title}
                     fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105 rounded-[14px]"
                   />
-
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-80" />
-
-                  {/* Play Button Icon at Bottom Left */}
-                  <div className="absolute bottom-3 left-3 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-[#111827] shadow-sm transition-transform group-hover:scale-110">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                      <polygon points="5 3 19 12 5 21 5 3" />
-                    </svg>
-                  </div>
 
                   {/* Selected checkmark indicator on top right */}
                   {isSelected && (

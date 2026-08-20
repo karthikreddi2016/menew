@@ -6,14 +6,14 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 const pptInspirationItems = [
-  { id: 1, title: 'PPT Inspiration 1', image: '/images/video-inspiration.png' },
-  { id: 2, title: 'PPT Inspiration 2', image: '/images/video-inspiration.png' },
-  { id: 3, title: 'PPT Inspiration 3', image: '/images/video-inspiration.png' },
-  { id: 4, title: 'PPT Inspiration 4', image: '/images/video-inspiration.png' },
-  { id: 5, title: 'PPT Inspiration 5', image: '/images/video-inspiration.png' },
-  { id: 6, title: 'PPT Inspiration 6', image: '/images/video-inspiration.png' },
-  { id: 7, title: 'PPT Inspiration 7', image: '/images/video-inspiration.png' },
-  { id: 8, title: 'PPT Inspiration 8', image: '/images/video-inspiration.png' },
+  { id: 1, title: 'PPT Inspiration 1', image: '/images/inspiration_sample_art.png' },
+  { id: 2, title: 'PPT Inspiration 2', image: '/images/inspiration_sample_art.png' },
+  { id: 3, title: 'PPT Inspiration 3', image: '/images/inspiration_sample_art.png' },
+  { id: 4, title: 'PPT Inspiration 4', image: '/images/inspiration_sample_art.png' },
+  { id: 5, title: 'PPT Inspiration 5', image: '/images/inspiration_sample_art.png' },
+  { id: 6, title: 'PPT Inspiration 6', image: '/images/inspiration_sample_art.png' },
+  { id: 7, title: 'PPT Inspiration 7', image: '/images/inspiration_sample_art.png' },
+  { id: 8, title: 'PPT Inspiration 8', image: '/images/inspiration_sample_art.png' },
 ]
 
 export default function PPTInspirationPage() {
@@ -38,19 +38,19 @@ export default function PPTInspirationPage() {
               <line x1="19" y1="12" x2="5" y2="12" />
               <polyline points="12 19 5 12 12 5" />
             </svg>
-            <span>Back to Services</span>
+            <span>Back to PPT</span>
           </Link>
         </div>
       </header>
 
       {/* ── Main Design Inspiration Content ── */}
       <main className="flex-1 max-w-[1280px] w-full mx-auto px-4 sm:px-8 py-10 sm:py-14 flex flex-col justify-center">
-        {/* Header Title & Subtitle */}
+        {/* Header Title & Subtitle matching Figma */}
         <div className="text-center mb-8 sm:mb-10">
-          <h1 className="font-serif text-[30px] sm:text-[38px] text-[#111827] font-normal tracking-[-0.01em]">
+          <h1 className="font-serif text-[28px] sm:text-[34px] lg:text-[38px] text-[#111827] font-normal tracking-[-0.25px]">
             Design Inspiration that you are feel best fit.
           </h1>
-          <p className="font-inter text-[14px] sm:text-[15px] text-[#6f6f6f] mt-2">
+          <p className="font-inter text-[14px] sm:text-[15px] text-[#6f6f6f] mt-2 tracking-[-0.2px]">
             Pick one, we&apos;ll guide you next.
           </p>
         </div>
@@ -74,11 +74,8 @@ export default function PPTInspirationPage() {
                     src={item.image}
                     alt={item.title}
                     fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105 rounded-[14px]"
                   />
-
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-80" />
 
                   {/* Selected checkmark indicator on top right */}
                   {isSelected && (

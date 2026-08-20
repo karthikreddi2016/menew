@@ -62,5 +62,5 @@ export async function createOrderAction(
     }
   }
 
-  redirect(`/dashboard/orders/${order.id}`)
+  redirect('/order/summary')
 }

@@ -1,11 +1,10 @@
-'use client'
-
 import { useState } from 'react'
-import type { PaymentStatus } from '@/lib/types/database.types'
-import { assignOrderAction, updateOrderPaymentAction, toggleCreativeShowcaseAction } from '@/app/admin/actions'
+import type { PaymentStatus, OrderStatus } from '@/lib/types/database.types'
+import { assignOrderAction, updateOrderPaymentAction, toggleCreativeShowcaseAction, updateOrderStatusAction } from '@/app/admin/actions'
 
 export function OrderAdminActions({
   orderId,
+  currentStatus = 'pending',
   currentAmount,
   currentPaymentStatus,
   currentAssignedId,
@@ -13,18 +12,33 @@ export function OrderAdminActions({
   teamMembers,
 }: {
   orderId: string
+  currentStatus?: string
   currentAmount: number
   currentPaymentStatus: PaymentStatus
   currentAssignedId: string | null
   currentShowcase: boolean
   teamMembers: { id: string; full_name: string; role: string }[]
 }) {
+  const [orderStatus, setOrderStatus] = useState<string>(currentStatus)
   const [amount, setAmount] = useState<number>(currentAmount || 0)
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>(currentPaymentStatus || 'unpaid')
   const [assignedId, setAssignedId] = useState<string>(currentAssignedId || '')
   const [showcase, setShowcase] = useState<boolean>(!!currentShowcase)
   const [loading, setLoading] = useState(false)
   const [msg, setMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+
+  async function handleStatusChange(newStatus: string) {
+    setOrderStatus(newStatus)
+    setLoading(true)
+    setMsg(null)
+    const res = await updateOrderStatusAction(orderId, newStatus)
+    setLoading(false)
+    if (res.error) {
+      setMsg({ type: 'error', text: res.error })
+    } else {
+      setMsg({ type: 'success', text: `Order status updated to "${newStatus}"!` })
+    }
+  }
 
   async function handleSavePayment(e: React.FormEvent) {
     e.preventDefault()
@@ -92,6 +106,46 @@ export function OrderAdminActions({
             </option>
           ))}
         </select>
+      </div>
+
+      {/* Order Status & Cancellation Lifecycle Management */}
+      <div className="rounded-2xl border border-black/10 bg-white p-5 flex flex-col gap-3">
+        <p className="font-inter text-sm font-semibold text-[#1d2433]">Order Lifecycle & Cancellation</p>
+        <label className="font-inter text-xs text-black/50">Current Progress Status</label>
+        <select
+          value={orderStatus}
+          disabled={loading}
+          onChange={(e) => handleStatusChange(e.target.value)}
+          className="rounded-xl border border-black/15 bg-white px-3 py-2 font-inter text-xs text-[#1d2433] focus:border-[#2952E1] outline-none"
+        >
+          <option value="pending">Payment Pending</option>
+          <option value="in_progress">In Progress (Active)</option>
+          <option value="revision">Revision Requested</option>
+          <option value="delivered">Final Draft Sent</option>
+          <option value="completed">Completed / Delivered</option>
+          <option value="cancel_requested">⚠️ Cancel Request Received</option>
+          <option value="refund_initiated">💸 Refund Initiated</option>
+          <option value="cancelled">🚫 Order Cancelled & Closed</option>
+        </select>
+
+        <div className="flex items-center gap-2 mt-1">
+          <button
+            type="button"
+            disabled={loading}
+            onClick={() => handleStatusChange('refund_initiated')}
+            className="flex-1 py-1.5 px-3 rounded-lg border border-[#00C288] text-[#008F64] bg-[#E8FFF7] hover:bg-[#d1faed] font-inter text-[11px] font-medium transition-all"
+          >
+            Initiate Refund
+          </button>
+          <button
+            type="button"
+            disabled={loading}
+            onClick={() => handleStatusChange('cancelled')}
+            className="flex-1 py-1.5 px-3 rounded-lg border border-[#EF4444] text-[#DC2626] bg-[#FEF2F2] hover:bg-[#fee2e2] font-inter text-[11px] font-medium transition-all"
+          >
+            Cancel Order
+          </button>
+        </div>
       </div>
 
       {/* Payment & Quote Management */}

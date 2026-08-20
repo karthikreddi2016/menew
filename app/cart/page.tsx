@@ -171,54 +171,72 @@ export default async function CartPage({
 
           {/* Grid of Design Request Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            {finalOrders.map((order) => (
-              <div
-                key={order.id}
-                className="rounded-[16px] border border-[#EDEDED] bg-white p-6 flex flex-col justify-between gap-4 shadow-xs transition-all hover:border-[#2952E1]/30 hover:shadow-sm"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="font-serif text-[20px] font-semibold text-[#111827]">
-                      {order.serviceType}
-                    </h3>
-                    <p className="font-inter text-[13px] text-[#6f6f6f] mt-2 leading-relaxed">
-                      {order.title}
-                    </p>
+            {finalOrders.map((order) => {
+              const href = `/dashboard/orders/${order.id}${order.statusText.includes('Pending') ? '?status=pending' : '?status=confirmed'}`
+              return (
+                <Link
+                  key={order.id}
+                  href={href}
+                  className="rounded-[16px] border border-[#EDEDED] bg-white p-6 flex flex-col justify-between gap-4 shadow-xs transition-all hover:border-[#2952E1]/50 hover:shadow-md block"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <h3 className="font-serif text-[20px] font-semibold text-[#111827]">
+                        {order.serviceType}
+                      </h3>
+                      <p className="font-inter text-[13px] text-[#6f6f6f] mt-2 leading-relaxed">
+                        {order.title}
+                      </p>
+                    </div>
+                    <div className="p-2.5 rounded-lg bg-[#F8F9FA] border border-[#EDEDED] shrink-0 text-[#111827]">
+                      {order.serviceType.toLowerCase().includes('video') || order.serviceType.toLowerCase().includes('reel') ? (
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
+                          <line x1="7" y1="2" x2="7" y2="22" />
+                          <line x1="17" y1="2" x2="17" y2="22" />
+                          <line x1="2" y1="12" x2="22" y2="12" />
+                        </svg>
+                      ) : order.serviceType.toLowerCase().includes('brochure') ? (
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                        </svg>
+                      ) : (
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="3" width="18" height="18" rx="2" />
+                          <circle cx="8.5" cy="8.5" r="1.5" />
+                          <polyline points="21 15 16 10 5 21" />
+                        </svg>
+                      )}
+                    </div>
                   </div>
-                  <div className="p-2.5 rounded-lg bg-[#F8F9FA] border border-[#EDEDED] shrink-0 text-[#111827]">
-                    {order.serviceType.toLowerCase().includes('video') || order.serviceType.toLowerCase().includes('reel') ? (
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
-                        <line x1="7" y1="2" x2="7" y2="22" />
-                        <line x1="17" y1="2" x2="17" y2="22" />
-                        <line x1="2" y1="12" x2="22" y2="12" />
-                      </svg>
-                    ) : order.serviceType.toLowerCase().includes('brochure') ? (
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                      </svg>
-                    ) : (
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="3" y="3" width="18" height="18" rx="2" />
-                        <circle cx="8.5" cy="8.5" r="1.5" />
-                        <polyline points="21 15 16 10 5 21" />
-                      </svg>
-                    )}
-                  </div>
-                </div>
 
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-[#F3F4F6]">
-                  <div className="flex flex-col text-[12px] sm:text-[13px] text-[#6f6f6f] gap-0.5">
-                    <span>Ordered: {order.orderedDate}</span>
-                    {order.expectedDate && <span>Expected: {order.expectedDate}</span>}
+                  <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-[#F3F4F6]">
+                    <div className="flex flex-col text-[12px] sm:text-[13px] text-[#6f6f6f] gap-0.5">
+                      <span>Ordered: {order.orderedDate}</span>
+                      {order.expectedDate && <span>Expected: {order.expectedDate}</span>}
+                    </div>
+                    <span className={`font-inter text-[12px] font-medium px-3 py-1 rounded-[4px] ${order.statusStyle}`}>
+                      {order.statusText}
+                    </span>
                   </div>
-                  <span className={`font-inter text-[12px] font-medium px-3 py-1 rounded-[4px] ${order.statusStyle}`}>
-                    {order.statusText}
-                  </span>
-                </div>
-              </div>
-            ))}
+                </Link>
+              )
+            })}
+          </div>
+
+          {/* Proceed to Checkout Action Bar */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 rounded-[16px] bg-[#F8FAFC] border border-[#EDEDED] mb-12">
+            <div>
+              <h3 className="font-serif text-[18px] text-[#191919] font-medium">Ready to complete your order?</h3>
+              <p className="font-inter text-[13px] text-[#6f6f6f] mt-0.5">Review items, apply coupons, and checkout securely.</p>
+            </div>
+            <Link
+              href="/order/summary"
+              className="inline-flex items-center justify-center rounded-full bg-[#2952E1] hover:bg-[#1e42c7] text-white px-8 py-3 font-inter font-medium text-[14px] shadow-sm transition-all active:scale-95 shrink-0"
+            >
+              Proceed to Checkout →
+            </Link>
           </div>
         </main>
       )}

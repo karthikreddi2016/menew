@@ -50,6 +50,32 @@
     scroll-behavior: smooth;
   }
 
+  .font-serif,
+  h1.font-serif,
+  h2.font-serif,
+  h3.font-serif,
+  h4.font-serif,
+  p.font-serif,
+  span.font-serif {
+    font-family: 'Source Serif 4', 'Source Serif Pro', var(--font-source-serif), Georgia, Cambria, 'Times New Roman', Times, serif !important;
+  }
+
+  .font-inter,
+  p.font-inter,
+  span.font-inter,
+  button.font-inter,
+  a.font-inter {
+    font-family: 'Inter', var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
   body {
     color: var(--foreground);
     background:

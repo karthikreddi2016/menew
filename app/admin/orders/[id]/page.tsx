@@ -140,6 +140,7 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
         <div className="w-full lg:w-72 shrink-0 flex flex-col gap-4">
           <OrderAdminActions
             orderId={id}
+            currentStatus={order.status}
             currentAmount={order.amount || 0}
             currentPaymentStatus={order.payment_status || 'unpaid'}
             currentAssignedId={order.assigned_admin}

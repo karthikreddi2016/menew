@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { logoutAction } from '@/app/auth/actions'
 import { DashboardHeader } from '@/components/layout/DashboardHeader'
 import { CreateTodaySection } from '@/components/sections/CreateTodaySection'
+import { PaymentSuccessModal } from '@/components/dashboard/PaymentSuccessModal'
 import { SERVICE_CONFIG, STATUS_LABELS } from '@/lib/types/order.types'
 import type { ServiceType } from '@/lib/types/database.types'
 
@@ -127,6 +128,9 @@ export default async function DashboardPage() {
 
   return (
     <div className="bg-white min-h-screen">
+      {/* ── Payment Success Modal (shown when payment_success=true query param is present) ── */}
+      <PaymentSuccessModal />
+
       {/* ── Logged In Top Navbar ── */}
       <DashboardHeader
         ordersCount={ordersBadgeCount}

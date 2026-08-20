@@ -99,12 +99,26 @@ export async function toggleCreativeShowcaseAction(
       .update({ creative_showcase: showcase })
       .eq('id', orderId)
 
+export async function updateOrderStatusAction(
+  orderId: string,
+  newStatus: string
+): Promise<{ error?: string }> {
+  try {
+    const { supabase } = await ensureAdmin()
+    const { error } = await supabase
+      .from('orders')
+      .update({ status: newStatus as any })
+      .eq('id', orderId)
+
     if (error) return { error: error.message }
 
-    revalidatePath('/admin/creatives')
     revalidatePath('/admin')
+    revalidatePath('/admin/orders')
+    revalidatePath(`/admin/orders/${orderId}`)
+    revalidatePath(`/dashboard/orders/${orderId}`)
     return {}
   } catch (err: any) {
-    return { error: err.message || 'Failed to toggle creative showcase status' }
+    return { error: err.message || 'Failed to update order status' }
   }
 }
+

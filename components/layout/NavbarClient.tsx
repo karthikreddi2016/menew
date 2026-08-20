@@ -32,9 +32,12 @@ export function NavbarClient({ isLoggedIn, isAdmin = false }: { isLoggedIn: bool
 
         {/* Nav links — desktop */}
         <nav className="hidden md:flex items-center gap-8">
-          <button className="font-inter text-[16px] leading-normal tracking-[-0.25px] text-black hover:text-black/70 transition-colors">
+          <Link
+            href="/services"
+            className="font-inter text-[16px] leading-normal tracking-[-0.25px] text-black hover:text-black/70 transition-colors"
+          >
             Services
-          </button>
+          </Link>
 
           <div className="flex items-center gap-1">
             <span className="font-inter text-[16px] leading-normal tracking-[-0.25px] text-black">
@@ -53,7 +56,7 @@ export function NavbarClient({ isLoggedIn, isAdmin = false }: { isLoggedIn: bool
           </Link>
 
           <Link
-            href="#join"
+            href="/join-the-team"
             className="font-inter text-[16px] leading-normal tracking-[-0.25px] text-black hover:text-black/70 transition-colors"
           >
             Join the Team

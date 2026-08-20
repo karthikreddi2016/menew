@@ -26,11 +26,11 @@ export default function Home() {
       {/* ── Remaining Sections Below ── */}
       <main>
         <FeaturesSection />
-        <HowItWorksSection />
         <WhyChooseUsSection />
-        <FAQSection />
+        <HowItWorksSection />
         <TestimonialsSection />
         <CTASection />
+        <FAQSection />
       </main>
 
       <Footer />
