@@ -3,8 +3,8 @@ import Image from "next/image";
 
 export function Footer() {
   return (
-    <footer className="bg-white border-t border-[#EAEAEA] pt-14 pb-12 px-4 sm:px-8 lg:px-[70px]">
-      <div className="max-w-[1300px] mx-auto">
+    <footer className="bg-white border-t border-[#EAEAEA] pt-14 pb-12 px-4 sm:px-8 xl:px-10">
+      <div className="max-w-[1340px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12 pb-10">
           {/* Column 1: Logo (md:col-span-3) */}
           <div className="md:col-span-3">

@@ -108,7 +108,7 @@ const items = [
 
 export function CreateTodaySection() {
   return (
-    <section className="shrink-0 bg-white pb-10 pt-0 px-4 sm:px-8 max-w-[1340px] mx-auto w-full">
+    <section className="shrink-0 bg-white pb-10 pt-0 px-4 sm:px-8 xl:px-10 max-w-[1340px] mx-auto w-full">
       {/* Dashed divider line with header text (Figma Node 249:15546) */}
       <div className="relative flex items-center justify-center mb-7 sm:mb-9">
         <div className="absolute inset-0 flex items-center" aria-hidden="true">

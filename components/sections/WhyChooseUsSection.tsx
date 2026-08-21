@@ -65,7 +65,7 @@ export function WhyChooseUsSection() {
         </h2>
 
         {/* 2x2 Grid of Feature Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[1300px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
           {features.map((feature, index) => (
             <div
               key={index}

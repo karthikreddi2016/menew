@@ -5,7 +5,7 @@ import { Container } from "@/components/ui";
 export function HowItWorksSection() {
   return (
     <section id="process" className="bg-white py-16 sm:py-24 border-t border-[#F0F0F0]">
-      <Container className="max-w-[1300px]">
+      <Container>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
           {/* Left Column: Sticky Steps & CTA */}
           <div className="lg:col-span-5 lg:sticky lg:top-28 flex flex-col gap-8">

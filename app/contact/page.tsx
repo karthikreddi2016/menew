@@ -68,9 +68,9 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col justify-between">
-      {/* ── Top Navigation Bar: Max 1300px, 70px desktop margin ── */}
+      {/* ── Top Navigation Bar: Max 1340px ── */}
       <header className="border-b border-[#EDEDED] py-4 bg-white sticky top-0 z-40">
-        <div className="max-w-[1300px] mx-auto px-4 sm:px-8 lg:px-[70px] flex items-center justify-between">
+        <div className="max-w-[1340px] mx-auto px-4 sm:px-8 xl:px-10 flex items-center justify-between">
           <Link href="/" className="inline-block shrink-0">
             <div className="h-[39px] w-[150px] overflow-hidden relative" aria-label="Menew">
               <div
@@ -106,7 +106,7 @@ export default function ContactPage() {
 
         {/* Dropdown Menu for Nav Links */}
         {mobileMenuOpen && (
-          <div className="absolute top-full right-4 sm:right-8 lg:right-[70px] mt-2 w-56 rounded-[16px] bg-white p-3 shadow-xl border border-[#E5E7EB] z-50 animate-in fade-in zoom-in-95 duration-150">
+          <div className="absolute top-full right-4 sm:right-8 xl:right-10 mt-2 w-56 rounded-[16px] bg-white p-3 shadow-xl border border-[#E5E7EB] z-50 animate-in fade-in zoom-in-95 duration-150">
             <Link
               href="/"
               onClick={() => setMobileMenuOpen(false)}
@@ -139,8 +139,8 @@ export default function ContactPage() {
         )}
       </header>
 
-      {/* ── Contact Main Content: Max 1300px, 70px desktop margin ── */}
-      <main className="flex-1 w-full max-w-[1300px] mx-auto px-4 sm:px-8 lg:px-[70px] py-10 sm:py-16">
+      {/* ── Contact Main Content: Max 1340px ── */}
+      <main className="flex-1 w-full max-w-[1340px] mx-auto px-4 sm:px-8 xl:px-10 py-10 sm:py-16">
         {/* Heading */}
         <div className="mb-8 sm:mb-12">
           <h1 className="font-serif text-[38px] sm:text-[44px] font-normal text-[#191919] tracking-[-0.02em]">

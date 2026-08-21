@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export function HeroSection() {
+export function HeroSection({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
   return (
     <section className="relative flex-1 flex flex-col items-center justify-center bg-white px-4 pt-6 pb-10 sm:pb-12 w-full overflow-hidden min-h-0">
       {/* ── Mobile Layout (< 1024px): Characters in top row ── */}
@@ -29,7 +29,7 @@ export function HeroSection() {
       </div>
 
       {/* ── Desktop Canvas Frame (Exact 1440px proportions from Figma node 249:15309) ── */}
-      <div className="relative w-full max-w-[1400px] mx-auto flex flex-col items-center justify-center">
+      <div className="relative w-full max-w-[1340px] mx-auto px-4 sm:px-8 xl:px-10 flex flex-col items-center justify-center">
         {/* Left Illustration: Blue Artist (positioned with clear breathing room so it never overlaps the headline) */}
         <div
           className="hidden lg:block absolute left-[-60px] xl:left-[-30px] 2xl:left-0 top-1/2 -translate-y-[52%] w-[220px] lg:w-[245px] xl:w-[275px] h-[165px] lg:h-[184px] xl:h-[206px] pointer-events-none select-none z-0"
@@ -85,7 +85,7 @@ export function HeroSection() {
           <div className="mt-[28px] sm:mt-[32px] flex flex-col items-center">
             {/* Get Started Button */}
             <Link
-              href="/order"
+              href={isLoggedIn ? "/dashboard" : "/order"}
               className="inline-flex items-center justify-center rounded-[31px] bg-[#2952E1] w-[148px] sm:w-[151px] h-[52px] sm:h-[56px] font-inter font-medium text-[15px] sm:text-[16px] text-white shadow-[0_4px_14px_0_rgba(41,82,225,0.35)] transition-all hover:bg-[#1e42c7] hover:shadow-lg active:scale-95 tracking-[-0.25px]"
             >
               Get Started

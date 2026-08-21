@@ -183,7 +183,7 @@ function ReviewCard({ item }: { item: TestimonialItem }) {
 export function TestimonialsSection() {
   return (
     <section id="reviews" className="bg-white py-16 sm:py-24 border-t border-[#F0F0F0] overflow-hidden">
-      <Container className="max-w-[1300px]">
+      <Container>
         {/* Single Section Heading matching Figma */}
         <div className="mb-8 sm:mb-10">
           <h2 className="font-serif text-[28px] sm:text-[32px] font-normal text-[#191919] leading-[40px] sm:leading-[48px] tracking-[-0.25px]">

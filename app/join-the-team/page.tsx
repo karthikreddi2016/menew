@@ -101,9 +101,9 @@ export default function JoinTheTeamPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col justify-between">
-      {/* ── Top Navbar matching Figma Header (max-w-[1300px], px-[70px]) ── */}
+      {/* ── Top Navbar matching Figma Header ── */}
       <header className="border-b border-[#EDEDED] py-3.5 bg-white sticky top-0 z-40">
-        <div className="max-w-[1300px] mx-auto px-4 sm:px-8 lg:px-[70px] flex items-center justify-between">
+        <div className="max-w-[1340px] mx-auto px-4 sm:px-8 xl:px-10 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="inline-block shrink-0">
             <div className="h-[39px] w-[150px] overflow-hidden relative" aria-label="Menew">
@@ -175,7 +175,7 @@ export default function JoinTheTeamPage() {
       {/* ── Main Join the Team Content ── */}
       <main className="flex-1 w-full pb-20">
         {/* ── Section 1: Hero Section ── */}
-        <section className="pt-16 pb-12 sm:pt-20 sm:pb-16 text-center max-w-[1300px] mx-auto px-4 sm:px-8 lg:px-[70px]">
+        <section className="pt-16 pb-12 sm:pt-20 sm:pb-16 text-center max-w-[1340px] mx-auto px-4 sm:px-8 xl:px-10">
           <h1 className="font-serif text-[40px] sm:text-[50px] md:text-[56px] text-[#191919] font-normal tracking-[-0.02em] leading-[1.12] max-w-[760px] mx-auto">
             Build Value, with the<br />help of your skills
           </h1>
@@ -201,7 +201,7 @@ export default function JoinTheTeamPage() {
         </section>
 
         {/* ── Section 2: Horizontal 3D Artwork Showcase (Screenshot 1) ── */}
-        <section className="py-6 overflow-hidden max-w-[1400px] mx-auto px-4 sm:px-8">
+        <section className="py-6 overflow-hidden max-w-[1340px] mx-auto px-4 sm:px-8 xl:px-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {showcaseImages.slice(0, 3).map((item) => (
               <div
@@ -230,7 +230,7 @@ export default function JoinTheTeamPage() {
         </section>
 
         {/* ── Section 3: "Join Our Team" Open Positions (Screenshot 2) ── */}
-        <section id="open-positions" className="pt-16 sm:pt-20 max-w-[1300px] mx-auto px-4 sm:px-8 lg:px-[70px]">
+        <section id="open-positions" className="pt-16 sm:pt-20 max-w-[1340px] mx-auto px-4 sm:px-8 xl:px-10">
           {/* Section Header */}
           <div className="mb-8 sm:mb-10">
             <h2 className="font-serif text-[32px] sm:text-[36px] font-normal text-[#191919] tracking-[-0.25px]">

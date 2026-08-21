@@ -2,10 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { Container } from "@/components/ui";
 
-export function CTASection() {
+export function CTASection({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
   return (
     <section className="bg-white py-16 sm:py-20 border-t border-[#F0F0F0] relative overflow-hidden">
-      <Container className="max-w-[1300px]">
+      <Container>
         <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 rounded-[24px] bg-[#FBFBFB] border border-[#E5E7EB] p-8 sm:p-12 lg:p-14 overflow-hidden">
           {/* Left Column: Heading, Subheading & Action */}
           <div className="max-w-[560px] flex flex-col items-start">
@@ -17,7 +17,7 @@ export function CTASection() {
             </p>
             <div className="mt-7 sm:mt-8">
               <Link
-                href="/order"
+                href={isLoggedIn ? "/dashboard" : "/order"}
                 className="inline-flex items-center gap-2 rounded-[31px] bg-[#2952E1] px-8 h-[54px] sm:h-[56px] font-inter font-medium text-[16px] text-white shadow-[0_4px_14px_0_rgba(41,82,225,0.35)] transition-all hover:bg-[#1e42c7] hover:shadow-lg active:scale-95 tracking-[-0.25px]"
               >
                 Request a Design

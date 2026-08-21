@@ -9,7 +9,7 @@ export function NavbarClient({ isLoggedIn, isAdmin = false }: { isLoggedIn: bool
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-[#dadada]">
-      <div className="flex items-center justify-between px-4 md:px-[60px] py-2 sm:py-3 max-w-[1440px] mx-auto">
+      <div className="flex items-center justify-between px-4 sm:px-8 xl:px-10 py-2 sm:py-3 max-w-[1340px] mx-auto w-full">
         {/* Logo */}
         <Link href="/" className="shrink-0">
           <div
