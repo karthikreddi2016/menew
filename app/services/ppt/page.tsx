@@ -19,6 +19,14 @@ export default function PPTChoosePage() {
   const router = useRouter()
   const [selectedOption, setSelectedOption] = useState('Pitch Deck')
 
+  function handleBack() {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      router.back()
+    } else {
+      router.push('/dashboard')
+    }
+  }
+
   function handleNext() {
     if (!selectedOption) return
     const slug = encodeURIComponent(selectedOption)
@@ -30,16 +38,17 @@ export default function PPTChoosePage() {
       {/* ── Top Back Navigation Bar ── */}
       <header className="bg-white border-b border-[#EDEDED] py-3.5 px-4 sm:px-8">
         <div className="max-w-[1280px] mx-auto flex items-center justify-start">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 font-inter text-[14px] font-medium text-[#49454f] hover:text-[#2952E1] transition-colors"
+          <button
+            type="button"
+            onClick={handleBack}
+            className="inline-flex items-center gap-2 font-inter text-[14px] font-medium text-[#49454f] hover:text-[#2952E1] transition-colors cursor-pointer"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="19" y1="12" x2="5" y2="12" />
               <polyline points="12 19 5 12 12 5" />
             </svg>
-            <span>Back to Home</span>
-          </Link>
+            <span>Back</span>
+          </button>
         </div>
       </header>
 

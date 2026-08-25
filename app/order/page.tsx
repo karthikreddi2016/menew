@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useActionState, Suspense, useRef } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createOrderAction } from './actions'
 import type { ServiceType } from '@/lib/types/database.types'
@@ -43,8 +43,10 @@ function OrderFormContent() {
     : 'Tell us about your project. Explain like you would to a friend!'
 
   // Form State
+  const isVideo = currentService === 'video_editing'
+  const defaultWhatYouWant = isVideo ? 'Explainer Video (<60sec)' : 'Brochure'
   const [creativeType, setCreativeType] = useState('Digital')
-  const [whatYouWant, setWhatYouWant] = useState(selectedType || 'Brochure')
+  const [whatYouWant, setWhatYouWant] = useState(selectedType || defaultWhatYouWant)
   const [numberOfSlides, setNumberOfSlides] = useState('')
   const [quantity, setQuantity] = useState('')
 
@@ -76,6 +78,15 @@ function OrderFormContent() {
 
   const [state, formAction, isPending] = useActionState(createOrderAction, null)
 
+  const router = useRouter()
+  function handleBack() {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      router.back()
+    } else {
+      router.push('/dashboard')
+    }
+  }
+
   const constructedTitle = isBranding
     ? `Branding (${selectedType || 'Custom'}) - ${brandName || 'New Brand'}`
     : currentService === 'ppt_design'
@@ -87,16 +98,17 @@ function OrderFormContent() {
       {/* ── Top Back Navigation Bar ── */}
       <header className="bg-white border-b border-[#EDEDED] py-3.5 px-4 sm:px-8">
         <div className="max-w-[900px] mx-auto flex items-center justify-start">
-          <Link
-            href="/services"
-            className="inline-flex items-center gap-2 font-inter text-[14px] font-medium text-[#49454f] hover:text-[#2952E1] transition-colors"
+          <button
+            type="button"
+            onClick={handleBack}
+            className="inline-flex items-center gap-2 font-inter text-[14px] font-medium text-[#49454f] hover:text-[#2952E1] transition-colors cursor-pointer"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="19" y1="12" x2="5" y2="12" />
               <polyline points="12 19 5 12 12 5" />
             </svg>
             <span>Back</span>
-          </Link>
+          </button>
         </div>
       </header>
 
@@ -235,14 +247,30 @@ function OrderFormContent() {
                     onChange={(e) => setWhatYouWant(e.target.value)}
                     className="w-full rounded-[10px] border border-[#EDEDED] bg-white px-4 py-3 font-inter text-[14px] text-[#111827] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all"
                   >
-                    <option value="Brochure">Brochure</option>
-                    <option value="Social Media Post">Social Media Post</option>
-                    <option value="Banner / Flex">Banner / Flex</option>
-                    <option value="Poster">Poster</option>
-                    <option value="Business Card">Business Card</option>
-                    <option value="Logo / Identity">Logo / Identity</option>
-                    <option value="Thumbnail">Thumbnail</option>
-                    <option value="Other">Other</option>
+                    {isVideo ? (
+                      <>
+                        <option value="Explainer Video (<60sec)">Explainer Video (&lt;60sec)</option>
+                        <option value="YouTube Video (<10min)">YouTube Video (&lt;10min)</option>
+                        <option value="YouTube Video (>10 min)">YouTube Video (&gt;10 min)</option>
+                        <option value="Podcast Video">Podcast Video</option>
+                        <option value="AI Real Estate Video">AI Real Estate Video</option>
+                        <option value="AI Avatar Video">AI Avatar Video</option>
+                        <option value="Animation Video">Animation Video</option>
+                        <option value="Product Video">Product Video</option>
+                        <option value="Other">Other</option>
+                      </>
+                    ) : (
+                      <>
+                        <option value="Brochure">Brochure</option>
+                        <option value="Social Media Post">Social Media Post</option>
+                        <option value="Banner / Flex">Banner / Flex</option>
+                        <option value="Poster">Poster</option>
+                        <option value="Business Card">Business Card</option>
+                        <option value="Logo / Identity">Logo / Identity</option>
+                        <option value="Thumbnail">Thumbnail</option>
+                        <option value="Other">Other</option>
+                      </>
+                    )}
                   </select>
                 </div>
 
@@ -621,12 +649,13 @@ function OrderFormContent() {
 
           {/* ── Action Buttons ── */}
           <div className="flex items-center justify-between gap-4 pt-4">
-            <Link
-              href="/services"
-              className="inline-flex items-center justify-center rounded-full border border-[#2952E1] bg-white px-10 sm:px-14 py-3 font-inter font-medium text-[15px] text-[#2952E1] hover:bg-[#2952E1]/5 transition-colors"
+            <button
+              type="button"
+              onClick={handleBack}
+              className="inline-flex items-center justify-center rounded-full border border-[#2952E1] bg-white px-10 sm:px-14 py-3 font-inter font-medium text-[15px] text-[#2952E1] hover:bg-[#2952E1]/5 transition-colors cursor-pointer"
             >
               Cancel
-            </Link>
+            </button>
 
             <button
               type="submit"

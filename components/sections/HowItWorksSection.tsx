@@ -7,8 +7,8 @@ export function HowItWorksSection() {
     <section id="process" className="bg-white py-16 sm:py-24 border-t border-[#F0F0F0]">
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
-          {/* Left Column: Sticky Steps & CTA */}
-          <div className="lg:col-span-5 lg:sticky lg:top-28 flex flex-col gap-8">
+          {/* Left Column: Steps & CTA */}
+          <div className="lg:col-span-5 flex flex-col gap-8">
             {/* Step 01 */}
             <div className="flex flex-col gap-2">
               <span className="font-inter text-[15px] sm:text-[16px] font-medium text-[#2952E1] leading-[24px] tracking-wide">
@@ -27,7 +27,7 @@ export function HowItWorksSection() {
               <span className="font-inter text-[15px] sm:text-[16px] font-medium text-[#2952E1] leading-[24px] tracking-wide">
                 Step 02
               </span>
-              <h3 className="font-serif text-[28px] sm:text-[32px] font-normal text-[#000000]/40 leading-[38px] sm:leading-[48px] tracking-[-0.25px]">
+              <h3 className="font-serif text-[28px] sm:text-[32px] font-normal text-[#000000] leading-[38px] sm:leading-[48px] tracking-[-0.25px]">
                 Team gets to work
               </h3>
             </div>
@@ -37,7 +37,7 @@ export function HowItWorksSection() {
               <span className="font-inter text-[15px] sm:text-[16px] font-medium text-[#2952E1] leading-[24px] tracking-wide">
                 Step 03
               </span>
-              <h3 className="font-serif text-[28px] sm:text-[32px] font-normal text-[#000000]/40 leading-[38px] sm:leading-[48px] tracking-[-0.25px]">
+              <h3 className="font-serif text-[28px] sm:text-[32px] font-normal text-[#000000] leading-[38px] sm:leading-[48px] tracking-[-0.25px]">
                 Receive &amp; use
               </h3>
             </div>

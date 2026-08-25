@@ -60,6 +60,13 @@ const showcaseCards: Array<{
   },
 ]
 
+function getServiceLink(slug: ServiceType) {
+  if (slug === 'video_editing') return '/services/video-editing';
+  if (slug === 'ppt_design') return '/services/ppt';
+  if (slug === 'branding_kit') return '/services/branding';
+  return `/order?service=${slug}`;
+}
+
 export default async function DashboardPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -190,7 +197,7 @@ export default async function DashboardPage() {
           {showcaseCards.map((card) => (
             <Link
               key={card.title}
-              href={`/order?service=${card.slug}`}
+              href={getServiceLink(card.slug)}
               className="group rounded-[16px] border border-[#EDEDED] bg-white overflow-hidden shadow-xs transition-all hover:shadow-md hover:border-[#2952E1]/40 hover:-translate-y-1"
             >
               <div className="relative h-[200px] w-full overflow-hidden bg-gray-100">
@@ -280,7 +287,7 @@ export default async function DashboardPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Card 1 - Blue Gradient */}
-          <Link href="/order?service=branding_kit" className="rounded-[18px] bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] p-6 text-white h-[230px] flex flex-col justify-between relative overflow-hidden shadow-sm group transition-transform hover:-translate-y-1">
+          <Link href="/services/branding" className="rounded-[18px] bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] p-6 text-white h-[230px] flex flex-col justify-between relative overflow-hidden shadow-sm group transition-transform hover:-translate-y-1">
             <p className="font-inter text-[15px] font-medium leading-snug z-10 max-w-[200px]">
               Branding design that crafts a compelling brand narrative.
             </p>
@@ -300,7 +307,7 @@ export default async function DashboardPage() {
           </Link>
 
           {/* Card 3 - Emerald Gradient */}
-          <Link href="/order?service=video_editing" className="rounded-[18px] bg-gradient-to-br from-[#10B981] to-[#059669] p-6 text-white h-[230px] flex flex-col justify-between relative overflow-hidden shadow-sm group transition-transform hover:-translate-y-1">
+          <Link href="/services/video-editing" className="rounded-[18px] bg-gradient-to-br from-[#10B981] to-[#059669] p-6 text-white h-[230px] flex flex-col justify-between relative overflow-hidden shadow-sm group transition-transform hover:-translate-y-1">
             <p className="font-inter text-[15px] font-medium leading-snug z-10 max-w-[200px]">
               Short promotional reel for product launches or offers.
             </p>
@@ -310,7 +317,7 @@ export default async function DashboardPage() {
           </Link>
 
           {/* Card 4 - Red Gradient */}
-          <Link href="/order?service=ppt_design" className="rounded-[18px] bg-gradient-to-br from-[#EF4444] to-[#DC2626] p-6 text-white h-[230px] flex flex-col justify-between relative overflow-hidden shadow-sm group transition-transform hover:-translate-y-1">
+          <Link href="/services/ppt" className="rounded-[18px] bg-gradient-to-br from-[#EF4444] to-[#DC2626] p-6 text-white h-[230px] flex flex-col justify-between relative overflow-hidden shadow-sm group transition-transform hover:-translate-y-1">
             <p className="font-inter text-[15px] font-medium leading-snug z-10 max-w-[200px]">
               Investor pitch, sales deck, or internal presentation design.
             </p>

@@ -5,6 +5,13 @@ import type { ServiceType } from "@/lib/types/database.types";
 
 const services = Object.values(SERVICE_CONFIG);
 
+function getServiceLink(slug: ServiceType) {
+  if (slug === 'video_editing') return '/services/video-editing';
+  if (slug === 'ppt_design') return '/services/ppt';
+  if (slug === 'branding_kit') return '/services/branding';
+  return `/order?service=${slug}`;
+}
+
 function ServiceCard({
   image,
   label,
@@ -18,6 +25,7 @@ function ServiceCard({
   deliveryTag: string;
   slug: ServiceType;
 }) {
+  const href = getServiceLink(slug);
   return (
     <div className="flex flex-col overflow-hidden rounded-[16px] border border-[#E5E7EB] bg-white transition-all hover:border-[#2952E1]/40 hover:shadow-md">
       <div className="relative h-[200px] w-full overflow-hidden bg-[#F3F4F6]">
@@ -39,7 +47,7 @@ function ServiceCard({
         </div>
         <div className="mt-5">
           <Link
-            href={`/order?service=${slug}`}
+            href={href}
             className="inline-flex items-center gap-1.5 rounded-full bg-[#0F3738] hover:bg-[#103B3D] px-5 py-2.5 font-inter text-[14px] font-medium text-white transition-colors"
           >
             Order Now →

@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const inspirationItems = [
   { id: 1, title: 'Inspiration 1', image: '/images/inspiration_sample_art.png' },
@@ -16,13 +16,24 @@ const inspirationItems = [
   { id: 8, title: 'Inspiration 8', image: '/images/inspiration_sample_art.png' },
 ]
 
-export default function VideoInspirationPage() {
+function VideoInspirationContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const selectedType = searchParams.get('type') || ''
   const [selectedId, setSelectedId] = useState<number | null>(null)
+
+  function handleBack() {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      router.back()
+    } else {
+      router.push('/services/video-editing')
+    }
+  }
 
   function handleNext() {
     const refParam = selectedId ? `&refId=${selectedId}` : ''
-    router.push(`/order?service=video_editing${refParam}`)
+    const typeParam = selectedType ? `&type=${encodeURIComponent(selectedType)}` : ''
+    router.push(`/order?service=video_editing${typeParam}${refParam}`)
   }
 
   return (
@@ -30,16 +41,17 @@ export default function VideoInspirationPage() {
       {/* ── Top Back Navigation Bar ── */}
       <header className="bg-white border-b border-[#EDEDED] py-3.5 px-4 sm:px-8">
         <div className="max-w-[1280px] mx-auto flex items-center justify-start">
-          <Link
-            href="/services/video-editing"
-            className="inline-flex items-center gap-2 font-inter text-[14px] font-medium text-[#49454f] hover:text-[#2952E1] transition-colors"
+          <button
+            type="button"
+            onClick={handleBack}
+            className="inline-flex items-center gap-2 font-inter text-[14px] font-medium text-[#49454f] hover:text-[#2952E1] transition-colors cursor-pointer"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="19" y1="12" x2="5" y2="12" />
               <polyline points="12 19 5 12 12 5" />
             </svg>
-            <span>Back to Video Editing</span>
-          </Link>
+            <span>Back</span>
+          </button>
         </div>
       </header>
 
@@ -114,5 +126,13 @@ export default function VideoInspirationPage() {
         </p>
       </footer>
     </div>
+  )
+}
+
+export default function VideoInspirationPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center font-inter text-black/40">Loading…</div>}>
+      <VideoInspirationContent />
+    </Suspense>
   )
 }
