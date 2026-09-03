@@ -30,7 +30,7 @@ export default function PPTChoosePage() {
   function handleNext() {
     if (!selectedOption) return
     const slug = encodeURIComponent(selectedOption)
-    router.push(`/services/ppt/inspiration?type=${slug}`)
+    router.push(`/order?service=ppt_design&type=${slug}`)
   }
 
   return (

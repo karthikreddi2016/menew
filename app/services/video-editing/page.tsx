@@ -30,7 +30,7 @@ export default function VideoEditingChoosePage() {
   function handleNext() {
     if (!selectedOption) return
     const slug = encodeURIComponent(selectedOption)
-    router.push(`/services/video-editing/inspiration?type=${slug}`)
+    router.push(`/order?service=video_editing&type=${slug}`)
   }
 
   return (
