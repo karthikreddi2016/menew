@@ -15,9 +15,14 @@ export default async function AdminPage() {
     .from('orders')
     .select(`
       *,
-      profiles!orders_customer_id_fkey(full_name, email)
+      profiles!orders_customer_id_fkey(full_name, email, phone)
     `)
     .order('created_at', { ascending: false })
+
+  // Fetch reference & deliverable files
+  const { data: allFiles } = await supabase
+    .from('order_files')
+    .select('*')
 
   // Fetch team members (editors & admins)
   const { data: teamMembers } = await supabase
@@ -26,7 +31,10 @@ export default async function AdminPage() {
     .in('role', ['admin', 'editor'])
     .order('full_name')
 
-  const allOrders = orders ?? []
+  const allOrders = (orders ?? []).map((o) => ({
+    ...o,
+    order_files: (allFiles ?? []).filter((f) => f.order_id === o.id),
+  }))
   const pendingCount = allOrders.filter((o) => o.status === 'pending').length
   const inProgressCount = allOrders.filter((o) => o.status === 'in_progress').length
   const completedCount = allOrders.filter((o) => o.status === 'completed').length
