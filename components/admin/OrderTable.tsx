@@ -234,41 +234,7 @@ export function OrderTable({
         const isBranding = selectedOrder.service_type === 'branding_kit'
         const isPPT = selectedOrder.service_type === 'ppt_design'
         const isVideo = selectedOrder.service_type === 'video_editing'
-
-        // Derive filled fields from title / order data
-        let creativeType = 'Digital'
-        if (selectedOrder.title.includes('(Print)')) creativeType = 'Print'
-        else if (selectedOrder.title.includes('(Both)')) creativeType = 'Both (Digital & Print)'
-
-        let purpose = 'Social'
-        if (selectedOrder.title.includes('for Work')) purpose = 'Work'
-        else if (selectedOrder.title.includes('for Business')) purpose = 'Business'
-        else if (selectedOrder.title.includes('for Study')) purpose = 'Study'
-
-        let brandPersonality = 'Bold'
-        let whatYouWant = selectedOrder.title
-        if (!isBranding && !isPPT) {
-          const match = selectedOrder.title.match(/^(.*?)\s+for\s+/i)
-          if (match && match[1]) {
-            whatYouWant = match[1]
-          }
-        }
-
-        let brandName = ''
-        if (isBranding) {
-          const parts = selectedOrder.title.split(' - ')
-          if (parts.length > 1) {
-            brandName = parts.slice(1).join(' - ')
-          }
-        }
-
-        let slideCount = ''
-        if (isPPT) {
-          const slideMatch = selectedOrder.title.match(/-\s*(\d+\s*slides)/i)
-          if (slideMatch) slideCount = slideMatch[1]
-        }
-
-        const deadline = selectedOrder.deadline_pref || 'Standard'
+        const isGraphic = !isBranding && !isPPT && !isVideo
 
         const pageTitle = isBranding
           ? selectedOrder.title.split(' - ')[0] || 'Branding Package'
@@ -278,7 +244,12 @@ export function OrderTable({
 
         const pageSubtitle = isBranding
           ? 'Brand guide, Logo, Color Palette, Typography & Social Assets'
-          : 'Client project request details submitted via order form.'
+          : 'Tell us about your project. Explain like you would to a friend!'
+
+        const deadline = selectedOrder.deadline_pref || 'Standard'
+
+        // Files
+        const orderFiles = selectedOrder.order_files ?? []
 
         return (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
@@ -324,7 +295,7 @@ export function OrderTable({
                 </div>
               </div>
 
-              {/* Scrollable Form Body (Exact Form Design) */}
+              {/* Scrollable Form Body */}
               <div className="flex-1 overflow-y-auto px-4 sm:px-8 py-6 space-y-6">
                 {/* Form Title & Subtitle Banner */}
                 <div className="border-b border-[#EDEDED] pb-5">
@@ -348,12 +319,41 @@ export function OrderTable({
                         <input
                           type="text"
                           readOnly
-                          value={brandName || 'Brand Design'}
-                          className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] px-4 py-3 font-inter text-[14px] font-medium text-[#111827] outline-none"
+                          value={selectedOrder.brand_name || ''}
+                          placeholder="Not provided"
+                          className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] px-4 py-3 font-inter text-[14px] font-medium text-[#111827] outline-none placeholder:text-[#9CA3AF]"
                         />
                       </div>
 
-                      {/* Brief Instructions */}
+                      {/* Industry */}
+                      <div>
+                        <label className="block font-inter text-[14px] font-semibold text-[#111827] mb-2">
+                          Industry
+                        </label>
+                        <input
+                          type="text"
+                          readOnly
+                          value={selectedOrder.industry || ''}
+                          placeholder="Not provided"
+                          className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] px-4 py-3 font-inter text-[14px] font-medium text-[#111827] outline-none placeholder:text-[#9CA3AF]"
+                        />
+                      </div>
+
+                      {/* Tagline */}
+                      <div>
+                        <label className="block font-inter text-[14px] font-semibold text-[#111827] mb-2">
+                          Tagline
+                        </label>
+                        <input
+                          type="text"
+                          readOnly
+                          value={selectedOrder.tagline || ''}
+                          placeholder="Not provided"
+                          className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] px-4 py-3 font-inter text-[14px] font-medium text-[#111827] outline-none placeholder:text-[#9CA3AF]"
+                        />
+                      </div>
+
+                      {/* Brief */}
                       <div>
                         <div className="flex items-center justify-between mb-1">
                           <label className="block font-inter text-[14px] font-semibold text-[#111827]">
@@ -369,8 +369,8 @@ export function OrderTable({
                             </button>
                           )}
                         </div>
-                        <div className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] p-4 font-inter text-[14px] text-[#111827] leading-relaxed whitespace-pre-wrap">
-                          {selectedOrder.brief || '—'}
+                        <div className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] p-4 font-inter text-[14px] text-[#111827] leading-relaxed whitespace-pre-wrap min-h-[80px]">
+                          {selectedOrder.brief || <span className="text-[#9CA3AF]">Not provided</span>}
                         </div>
                       </div>
                     </>
@@ -384,8 +384,9 @@ export function OrderTable({
                         <input
                           type="text"
                           readOnly
-                          value={slideCount || 'Custom Deck'}
-                          className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] px-4 py-3 font-inter text-[14px] font-medium text-[#111827] outline-none"
+                          value={selectedOrder.num_slides || ''}
+                          placeholder="Not provided"
+                          className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] px-4 py-3 font-inter text-[14px] font-medium text-[#111827] outline-none placeholder:text-[#9CA3AF]"
                         />
                       </div>
 
@@ -405,8 +406,8 @@ export function OrderTable({
                             </button>
                           )}
                         </div>
-                        <div className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] p-4 font-inter text-[14px] text-[#111827] leading-relaxed whitespace-pre-wrap">
-                          {selectedOrder.brief || '—'}
+                        <div className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] p-4 font-inter text-[14px] text-[#111827] leading-relaxed whitespace-pre-wrap min-h-[80px]">
+                          {selectedOrder.brief || <span className="text-[#9CA3AF]">Not provided</span>}
                         </div>
                       </div>
                     </>
@@ -420,8 +421,9 @@ export function OrderTable({
                         <input
                           type="text"
                           readOnly
-                          value={creativeType}
-                          className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] px-4 py-3 font-inter text-[14px] font-medium text-[#111827] outline-none"
+                          value={selectedOrder.creative_type || ''}
+                          placeholder="Not provided"
+                          className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] px-4 py-3 font-inter text-[14px] font-medium text-[#111827] outline-none placeholder:text-[#9CA3AF]"
                         />
                       </div>
 
@@ -433,12 +435,26 @@ export function OrderTable({
                         <input
                           type="text"
                           readOnly
-                          value={whatYouWant}
+                          value={selectedOrder.title}
                           className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] px-4 py-3 font-inter text-[14px] font-medium text-[#111827] outline-none"
                         />
                       </div>
 
-                      {/* Brief Instructions */}
+                      {/* Quantity */}
+                      <div>
+                        <label className="block font-inter text-[14px] font-semibold text-[#111827] mb-2">
+                          Quantity
+                        </label>
+                        <input
+                          type="text"
+                          readOnly
+                          value={selectedOrder.quantity || ''}
+                          placeholder="Not provided"
+                          className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] px-4 py-3 font-inter text-[14px] font-medium text-[#111827] outline-none placeholder:text-[#9CA3AF]"
+                        />
+                      </div>
+
+                      {/* Brief */}
                       <div>
                         <div className="flex items-center justify-between mb-1">
                           <label className="block font-inter text-[14px] font-semibold text-[#111827]">
@@ -454,25 +470,76 @@ export function OrderTable({
                             </button>
                           )}
                         </div>
-                        <div className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] p-4 font-inter text-[14px] text-[#111827] leading-relaxed whitespace-pre-wrap">
-                          {selectedOrder.brief || '—'}
+                        <div className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] p-4 font-inter text-[14px] text-[#111827] leading-relaxed whitespace-pre-wrap min-h-[80px]">
+                          {selectedOrder.brief || <span className="text-[#9CA3AF]">Not provided</span>}
                         </div>
                       </div>
                     </>
                   )}
+
+                  {/* ── Need Help with Content + Copy ── */}
+                  <div className="border-t border-[#F3F4F6] pt-5">
+                    <label className="block font-inter text-[14px] font-semibold text-[#111827] mb-3">
+                      Need Help with Writing Content Copy?
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {['no', 'yes'].map((val) => {
+                        const isSelected = (selectedOrder.need_content_help || 'no') === val
+                        const label = val === 'no' ? 'No, I will Provide All the Copy Myself' : 'Yes, I Need Help with Content'
+                        return (
+                          <div
+                            key={val}
+                            className={`rounded-[10px] py-3.5 px-4 font-inter text-[14px] text-center transition-all ${
+                              isSelected
+                                ? 'border-2 border-[#2952E1] bg-[#2952E1]/5 text-[#2952E1] font-semibold shadow-xs'
+                                : 'border border-[#EDEDED] bg-[#FAFBFD] text-[#6f6f6f] opacity-60'
+                            }`}
+                          >
+                            {label}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Copy Content (shown when need_content_help is 'no') */}
+                  {(selectedOrder.need_content_help || 'no') === 'no' && (
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block font-inter text-[14px] font-semibold text-[#111827]">
+                          Copy Content for the creative
+                        </label>
+                        {selectedOrder.copy_content && (
+                          <button
+                            type="button"
+                            onClick={() => handleCopy(selectedOrder.copy_content!, 'copy')}
+                            className="text-[11px] font-inter text-[#2952E1] hover:underline"
+                          >
+                            {copiedField === 'copy' ? 'Copied!' : 'Copy Content'}
+                          </button>
+                        )}
+                      </div>
+                      <div className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] p-4 font-inter text-[14px] text-[#111827] leading-relaxed whitespace-pre-wrap min-h-[80px]">
+                        {selectedOrder.copy_content || <span className="text-[#9CA3AF]">Not provided</span>}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* ── Card 2: Purpose of design / Brand Personality ── */}
+                {/* ── Card 2: Purpose / Brand Personality ── */}
                 <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 shadow-xs">
                   <label className="block font-inter text-[15px] font-semibold text-[#111827] mb-4">
                     {isBranding ? 'Brand Personality' : 'Purpose of design'}
                   </label>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     {(isBranding
-                      ? ['Bold', 'Minimal', 'Premium', 'Playful']
+                      ? ['Bold', 'Minimal', 'Premium', 'Playful', 'Not Specified']
                       : ['Social', 'Work', 'Business', 'Study']
                     ).map((item) => {
-                      const isSelected = isBranding ? brandPersonality === item : purpose === item
+                      const currentVal = isBranding
+                        ? selectedOrder.brand_personality || 'Bold'
+                        : selectedOrder.purpose || 'Social'
+                      const isSelected = currentVal === item
                       return (
                         <div
                           key={item}
@@ -489,20 +556,20 @@ export function OrderTable({
                   </div>
                 </div>
 
-                {/* ── Card 3: Uploaded References & Design Assets ── */}
+                {/* ── Card 3: Upload Design Assets ── */}
                 <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 shadow-xs space-y-4">
                   <div>
                     <h3 className="font-inter text-[15px] font-semibold text-[#111827]">
-                      Uploaded Assets & References ({selectedOrder.order_files?.length || 0})
+                      Upload Design Assets
                     </h3>
                     <p className="font-inter text-[12px] text-[#6f6f6f] mt-0.5">
-                      Brand files, references, guidelines, or assets submitted with this request
+                      Brand files, logo, design elements, guidelines or any other assets
                     </p>
                   </div>
 
-                  {selectedOrder.order_files && selectedOrder.order_files.length > 0 ? (
+                  {orderFiles.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {selectedOrder.order_files.map((file) => (
+                      {orderFiles.map((file) => (
                         <div
                           key={file.id}
                           className="flex items-center justify-between rounded-xl border border-[#EDEDED] bg-[#FAFBFD] p-3.5"
@@ -528,12 +595,98 @@ export function OrderTable({
                     </div>
                   ) : (
                     <div className="border-2 border-dashed border-[#EDEDED] bg-[#FAFBFD] rounded-[12px] p-6 text-center">
-                      <p className="font-inter text-[13px] text-[#6f6f6f]">No external asset files attached by the user.</p>
+                      <p className="font-inter text-[13px] text-[#9CA3AF]">No files uploaded by the user.</p>
                     </div>
                   )}
+
+                  {/* Asset Link */}
+                  <div>
+                    <div className="relative flex items-center justify-center my-2">
+                      <div className="w-full border-t border-[#EDEDED]" />
+                      <span className="absolute bg-white px-3 font-inter text-[12px] text-[#9CA3AF]">
+                        or link
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        readOnly
+                        value={selectedOrder.asset_link || ''}
+                        placeholder="No asset link provided"
+                        className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] px-4 py-3 font-inter text-[14px] text-[#2952E1] outline-none placeholder:text-[#9CA3AF]"
+                      />
+                      {selectedOrder.asset_link && (
+                        <button
+                          type="button"
+                          onClick={() => handleCopy(selectedOrder.asset_link!, 'asset_link')}
+                          className="shrink-0 rounded-lg border border-[#EDEDED] bg-white px-3 py-2.5 font-inter text-[11px] font-medium text-[#2952E1] hover:bg-blue-50 transition-colors"
+                        >
+                          {copiedField === 'asset_link' ? '✓ Copied' : 'Copy'}
+                        </button>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
-                {/* ── Card 4: Deadline Preference ── */}
+                {/* ── Card 4: Upload References ── */}
+                <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 shadow-xs space-y-4">
+                  <div>
+                    <h3 className="font-inter text-[15px] font-semibold text-[#111827]">
+                      Upload references (optional)
+                    </h3>
+                    <p className="font-inter text-[12px] text-[#6f6f6f] mt-0.5">
+                      Images, links, or files that inspire the user
+                    </p>
+                  </div>
+
+                  {/* Reference Link */}
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      readOnly
+                      value={selectedOrder.reference_link || ''}
+                      placeholder="No reference link provided"
+                      className="w-full rounded-[10px] border border-[#EDEDED] bg-[#FAFBFD] px-4 py-3 font-inter text-[14px] text-[#2952E1] outline-none placeholder:text-[#9CA3AF]"
+                    />
+                    {selectedOrder.reference_link && (
+                      <button
+                        type="button"
+                        onClick={() => handleCopy(selectedOrder.reference_link!, 'ref_link')}
+                        className="shrink-0 rounded-lg border border-[#EDEDED] bg-white px-3 py-2.5 font-inter text-[11px] font-medium text-[#2952E1] hover:bg-blue-50 transition-colors"
+                      >
+                        {copiedField === 'ref_link' ? '✓ Copied' : 'Copy'}
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* ── Card 5: Style preference (non-branding only) ── */}
+                {!isBranding && (
+                  <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 shadow-xs">
+                    <label className="block font-inter text-[15px] font-semibold text-[#111827] mb-4">
+                      Style preference
+                    </label>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      {['Modern', 'Minimal', 'Bold', 'Not sure'].map((item) => {
+                        const isSelected = (selectedOrder.style_pref || 'Modern') === item
+                        return (
+                          <div
+                            key={item}
+                            className={`rounded-[10px] py-3 px-4 font-inter text-[14px] text-center transition-all ${
+                              isSelected
+                                ? 'border-2 border-[#2952E1] bg-[#2952E1]/5 text-[#2952E1] font-semibold shadow-xs'
+                                : 'border border-[#EDEDED] bg-[#FAFBFD] text-[#6f6f6f] opacity-60'
+                            }`}
+                          >
+                            {item}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* ── Card 6: Deadline Preference ── */}
                 <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 shadow-xs">
                   <label className="block font-inter text-[15px] font-semibold text-[#111827] mb-4">
                     Deadline preference
@@ -573,7 +726,31 @@ export function OrderTable({
                   </div>
                 </div>
 
-                {/* ── Card 5: Contact Information & Customer ── */}
+                {/* ── Card 7: Contact Preference ── */}
+                <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 shadow-xs">
+                  <label className="block font-inter text-[15px] font-semibold text-[#111827] mb-4">
+                    Contact preference
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {['Email', 'WhatsApp'].map((item) => {
+                      const isSelected = (selectedOrder.contact_pref || 'Email') === item
+                      return (
+                        <div
+                          key={item}
+                          className={`rounded-[10px] py-3 px-4 font-inter text-[14px] text-center transition-all ${
+                            isSelected
+                              ? 'border-2 border-[#2952E1] bg-[#2952E1]/5 text-[#2952E1] font-semibold shadow-xs'
+                              : 'border border-[#EDEDED] bg-[#FAFBFD] text-[#6f6f6f] opacity-60'
+                          }`}
+                        >
+                          {item}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                {/* ── Card 8: Customer & Contact Information ── */}
                 <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 shadow-xs">
                   <label className="block font-inter text-[15px] font-semibold text-[#111827] mb-4">
                     Customer & Contact Information
@@ -659,6 +836,7 @@ export function OrderTable({
           </div>
         )
       })()}
+
     </div>
   )
 }

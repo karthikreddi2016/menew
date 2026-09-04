@@ -18,12 +18,21 @@ export default async function Home() {
     data: { user },
   } = await supabase.auth.getUser();
   const isLoggedIn = !!user;
+  let isAdmin = false;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+    isAdmin = profile?.role === "admin";
+  }
 
   return (
     <div className="min-h-screen bg-white">
       {/* ── First Fold: Hero Landing Viewport ── */}
       <div className="min-h-screen flex flex-col justify-between bg-white relative">
-        <Navbar />
+        <Navbar isLoggedIn={isLoggedIn} isAdmin={isAdmin} />
         <div className="flex-1 flex flex-col justify-between overflow-hidden">
           <HeroSection isLoggedIn={isLoggedIn} />
           <CreateTodaySection />

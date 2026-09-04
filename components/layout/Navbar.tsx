@@ -1,13 +1,19 @@
 import { createClient } from '@/lib/supabase/server'
 import { NavbarClient } from './NavbarClient'
 
-export async function Navbar() {
+export async function Navbar({ isLoggedIn, isAdmin }: { isLoggedIn?: boolean; isAdmin?: boolean } = {}) {
+  // If props are provided, skip the supabase call to avoid duplicate auth checks
+  // which cause hydration mismatches during SSR streaming
+  if (typeof isLoggedIn === 'boolean') {
+    return <NavbarClient isLoggedIn={isLoggedIn} isAdmin={isAdmin ?? false} />
+  }
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  let isAdmin = false
+  let computedIsAdmin = false
   if (user) {
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
-    isAdmin = profile?.role === 'admin'
+    computedIsAdmin = profile?.role === 'admin'
   }
-  return <NavbarClient isLoggedIn={!!user} isAdmin={isAdmin} />
+  return <NavbarClient isLoggedIn={!!user} isAdmin={computedIsAdmin} />
 }

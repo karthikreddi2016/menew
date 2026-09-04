@@ -25,6 +25,20 @@ export type Order = {
   amount: number | null
   payment_status: PaymentStatus | null
   creative_showcase: boolean | null
+  copy_content: string | null
+  need_content_help: string | null
+  asset_link: string | null
+  reference_link: string | null
+  style_pref: string | null
+  contact_pref: string | null
+  quantity: string | null
+  creative_type: string | null
+  purpose: string | null
+  brand_name: string | null
+  industry: string | null
+  tagline: string | null
+  brand_personality: string | null
+  num_slides: string | null
   created_at: string
   updated_at: string
 }
@@ -85,6 +99,20 @@ export type Database = {
           amount?: number | null
           payment_status?: PaymentStatus | null
           creative_showcase?: boolean | null
+          copy_content?: string | null
+          need_content_help?: string | null
+          asset_link?: string | null
+          reference_link?: string | null
+          style_pref?: string | null
+          contact_pref?: string | null
+          quantity?: string | null
+          creative_type?: string | null
+          purpose?: string | null
+          brand_name?: string | null
+          industry?: string | null
+          tagline?: string | null
+          brand_personality?: string | null
+          num_slides?: string | null
         }
         Update: {
           customer_id?: string
@@ -97,6 +125,20 @@ export type Database = {
           amount?: number | null
           payment_status?: PaymentStatus | null
           creative_showcase?: boolean | null
+          copy_content?: string | null
+          need_content_help?: string | null
+          asset_link?: string | null
+          reference_link?: string | null
+          style_pref?: string | null
+          contact_pref?: string | null
+          quantity?: string | null
+          creative_type?: string | null
+          purpose?: string | null
+          brand_name?: string | null
+          industry?: string | null
+          tagline?: string | null
+          brand_personality?: string | null
+          num_slides?: string | null
           updated_at?: string
         }
         Relationships: [

@@ -134,8 +134,22 @@ function OrderFormContent() {
         <form action={formAction} className="space-y-6">
           <input type="hidden" name="service_type" value={currentService} />
           <input type="hidden" name="title" value={constructedTitle} />
-          <input type="hidden" name="brief" value={brief || (needContentHelp === 'no' ? copyContent : '') || 'Design request'} />
+          <input type="hidden" name="brief" value={brief || 'Design request'} />
           <input type="hidden" name="deadline_pref" value={deadlinePref} />
+          <input type="hidden" name="copy_content" value={copyContent} />
+          <input type="hidden" name="need_content_help" value={needContentHelp} />
+          <input type="hidden" name="asset_link" value={assetLink} />
+          <input type="hidden" name="reference_link" value={referenceLink} />
+          <input type="hidden" name="style_pref" value={stylePref} />
+          <input type="hidden" name="contact_pref" value={contactPref} />
+          <input type="hidden" name="quantity" value={quantity} />
+          <input type="hidden" name="creative_type" value={creativeType} />
+          <input type="hidden" name="purpose" value={purpose} />
+          <input type="hidden" name="brand_name" value={brandName} />
+          <input type="hidden" name="industry" value={industry} />
+          <input type="hidden" name="tagline" value={tagline} />
+          <input type="hidden" name="brand_personality" value={brandPersonality} />
+          <input type="hidden" name="num_slides" value={numberOfSlides} />
 
           {/* ── Card 1: Main Project Inputs ── */}
           <div className="rounded-[20px] border border-[#EDEDED] bg-white p-6 sm:p-8 shadow-xs space-y-6">
@@ -430,6 +444,7 @@ function OrderFormContent() {
             >
               <input
                 ref={assetInputRef}
+                name="asset_files"
                 type="file"
                 multiple
                 className="hidden"
@@ -491,6 +506,7 @@ function OrderFormContent() {
             >
               <input
                 ref={refInputRef}
+                name="ref_files"
                 type="file"
                 multiple
                 className="hidden"
@@ -631,17 +647,23 @@ function OrderFormContent() {
 
               <div className="relative">
                 <input
-                  type="text"
+                  type={contactPref === 'Email' ? 'email' : 'tel'}
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="First and last name"
+                  placeholder={contactPref === 'Email' ? 'Email address' : 'WhatsApp number'}
                   className="w-full rounded-[10px] border border-[#EDEDED] bg-white pl-4 pr-10 py-3 font-inter text-[14px] text-[#111827] placeholder:text-[#9CA3AF] outline-none focus:border-[#2952E1]"
                 />
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 20h9" />
-                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                  </svg>
+                  {contactPref === 'Email' ? (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect width="20" height="16" x="2" y="4" rx="2" />
+                      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                    </svg>
+                  ) : (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                  )}
                 </div>
               </div>
             </div>

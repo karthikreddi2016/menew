@@ -77,9 +77,8 @@ function OrderSummaryContent() {
 
   function handleCheckout() {
     setIsSubmitting(true)
-    // Navigate to the "Almost there!" payment link sent confirmation screen
     setTimeout(() => {
-      router.push('/order/payment-pending')
+      router.push('/dashboard')
     }, 400)
   }
 
