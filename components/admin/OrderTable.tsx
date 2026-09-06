@@ -43,6 +43,29 @@ export function OrderTable({
   const [assigningId, setAssigningId] = useState<string | null>(null)
   const [selectedOrder, setSelectedOrder] = useState<AdminOrder | null>(null)
   const [copiedField, setCopiedField] = useState<string | null>(null)
+  const [isSyncing, setIsSyncing] = useState(false)
+  const [syncMessage, setSyncMessage] = useState<string | null>(null)
+
+  async function handleSyncToSheet() {
+    setIsSyncing(true)
+    setSyncMessage(null)
+    try {
+      const res = await fetch('/api/admin/sync-sheets', { method: 'POST' })
+      const data = await res.json()
+      if (data.success) {
+        setSyncMessage(data.message || 'Synced successfully!')
+        setTimeout(() => setSyncMessage(null), 4000)
+      } else {
+        setSyncMessage(data.error || 'Sync failed')
+        setTimeout(() => setSyncMessage(null), 4000)
+      }
+    } catch (err: any) {
+      setSyncMessage(err.message || 'Sync failed')
+      setTimeout(() => setSyncMessage(null), 4000)
+    } finally {
+      setIsSyncing(false)
+    }
+  }
 
   // Handle escape key to close modal
   useEffect(() => {
@@ -83,6 +106,74 @@ export function OrderTable({
 
   return (
     <div className="flex flex-col gap-5">
+      {/* Google Sheets Designer Hub Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-white border border-[#E5E7EB] p-3.5 sm:px-4 shadow-2xs">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0F9D58]/10 text-[#0F9D58]">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect width="18" height="18" x="3" y="3" rx="2" />
+              <path d="M3 9h18" />
+              <path d="M3 15h18" />
+              <path d="M9 3v18" />
+              <path d="M15 3v18" />
+            </svg>
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h4 className="font-inter text-xs font-semibold text-[#191919]">Designer &amp; Editor Task Sheet</h4>
+              <span className="rounded-full bg-[#ECFDF5] px-2 py-0.5 font-inter text-[10px] font-medium text-[#059669]">
+                Live Sync
+              </span>
+            </div>
+            <p className="font-inter text-[11px] text-black/50">
+              Shared sheet where designers and video editors pick and update tasks
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2.5">
+          {syncMessage && (
+            <span className="font-inter text-xs font-medium text-[#059669]">
+              {syncMessage}
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={handleSyncToSheet}
+            disabled={isSyncing}
+            className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white px-3.5 py-1.5 font-inter text-xs font-medium text-[#1d2433] hover:bg-[#F9FAFB] active:scale-95 transition-all disabled:opacity-60 cursor-pointer"
+            title="Sync all database orders to Google Sheet"
+          >
+            <svg
+              className={`h-3.5 w-3.5 ${isSyncing ? 'animate-spin text-[#2952E1]' : 'text-black/60'}`}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+            </svg>
+            <span>{isSyncing ? 'Syncing…' : 'Sync All Orders'}</span>
+          </button>
+
+          <a
+            href="https://docs.google.com/spreadsheets/d/1XLxEPvN8Brfott3zdUz2JhEVPdZu0cGUfZMX9hQbQWU/edit#gid=180087391"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full bg-[#0F9D58] hover:bg-[#0b8043] px-3.5 py-1.5 font-inter text-xs font-medium text-white shadow-xs active:scale-95 transition-all cursor-pointer"
+          >
+            <span>Open Google Sheet</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
       {/* Search & Filter Bar */}
       <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
         <div className="flex flex-wrap gap-2 flex-1">
