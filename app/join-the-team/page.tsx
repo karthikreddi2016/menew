@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Footer } from '@/components/layout/Footer'
+import { TopAnnouncementBar } from '@/components/layout/TopAnnouncementBar'
 
 const showcaseImages = [
   { id: 1, src: '/images/inspiration_sample_art.png', alt: 'Creative Work 1' },
@@ -102,8 +103,10 @@ export default function JoinTheTeamPage() {
   return (
     <div className="min-h-screen bg-white flex flex-col justify-between">
       {/* ── Top Navbar matching Figma Header ── */}
-      <header className="border-b border-[#EDEDED] py-3.5 bg-white sticky top-0 z-40">
-        <div className="max-w-[1340px] mx-auto px-4 sm:px-8 xl:px-10 flex items-center justify-between">
+      <header className="sticky top-0 z-40 bg-white">
+        <TopAnnouncementBar />
+        <div className="border-b border-[#EDEDED] py-3.5">
+          <div className="max-w-[1340px] mx-auto px-4 sm:px-8 xl:px-10 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="inline-block shrink-0">
             <div className="h-[39px] w-[150px] overflow-hidden relative" aria-label="Menew">
@@ -169,6 +172,7 @@ export default function JoinTheTeamPage() {
               Get Started
             </Link>
           </div>
+        </div>
         </div>
       </header>
 

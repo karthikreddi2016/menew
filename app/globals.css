@@ -557,3 +557,32 @@
     overflow-y: auto;
   }
 }
+
+/* ── Top Announcement Marquee Strip (comicsense-style) ── */
+@keyframes topMarquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-top-strip {
+  display: flex;
+  width: max-content;
+  animation: topMarquee 26s linear infinite;
+  will-change: transform;
+}
+
+@media (hover: hover) {
+  .animate-top-strip:hover {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-top-strip {
+    animation: none;
+  }
+}

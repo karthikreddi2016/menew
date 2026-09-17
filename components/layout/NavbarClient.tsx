@@ -3,13 +3,16 @@
 import { useState } from "react";
 import Link from "next/link";
 import { logoutAction } from "@/app/auth/actions";
+import { TopAnnouncementBar } from "./TopAnnouncementBar";
 
 export function NavbarClient({ isLoggedIn, isAdmin = false }: { isLoggedIn: boolean; isAdmin?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-[#dadada]">
-      <div className="flex items-center justify-between px-4 sm:px-8 xl:px-10 py-2 sm:py-3 max-w-[1340px] mx-auto w-full">
+    <header className="sticky top-0 z-50 bg-white">
+      <TopAnnouncementBar />
+      <div className="border-b border-[#dadada]">
+        <div className="flex items-center justify-between px-4 sm:px-8 xl:px-10 py-2 sm:py-3 max-w-[1340px] mx-auto w-full">
         {/* Logo */}
         <Link href="/" className="shrink-0">
           <div
@@ -127,6 +130,7 @@ export function NavbarClient({ isLoggedIn, isAdmin = false }: { isLoggedIn: bool
             </svg>
           )}
         </button>
+      </div>
       </div>
 
       {/* Mobile menu drawer */}
