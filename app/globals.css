@@ -571,7 +571,7 @@
 .animate-top-strip {
   display: flex;
   width: max-content;
-  animation: topMarquee 26s linear infinite;
+  animation: topMarquee 42s linear infinite;
   will-change: transform;
 }
 
