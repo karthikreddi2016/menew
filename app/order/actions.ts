@@ -38,6 +38,18 @@ export async function createOrderAction(
     return { error: 'Please fill in all required fields.' }
   }
 
+  // Enforce mandatory reference video for video editing requests
+  if (service_type === 'video_editing') {
+    const refFiles = formData.getAll('ref_files') as File[]
+    const hasValidRefFile = refFiles.some((f) => f && f.size > 0)
+    const refLink = reference_link?.trim()
+    if (!hasValidRefFile && !refLink) {
+      return {
+        error: 'Please upload a reference video or provide a reference video link to proceed with your video editing request.',
+      }
+    }
+  }
+
   // Insert order row with all fields, with fallback if migration not yet applied
   let order: any = null
   let orderError: any = null

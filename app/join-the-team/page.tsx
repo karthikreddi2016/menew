@@ -1,17 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Footer } from '@/components/layout/Footer'
 import { TopAnnouncementBar } from '@/components/layout/TopAnnouncementBar'
-
-const showcaseImages = [
-  { id: 1, src: '/images/inspiration_sample_art.png', alt: 'Creative Work 1' },
-  { id: 2, src: '/images/inspiration_sample_art.png', alt: 'Creative Work 2' },
-  { id: 3, src: '/images/inspiration_sample_art.png', alt: 'Creative Work 3' },
-  { id: 4, src: '/images/inspiration_sample_art.png', alt: 'Creative Work 4' },
-]
 
 interface JobPosition {
   id: string
@@ -127,6 +119,13 @@ export default function JoinTheTeamPage() {
           {/* Center Nav Links */}
           <nav className="hidden md:flex items-center gap-8">
             <Link
+              href="/about"
+              className="font-inter text-[15px] text-[#191919] hover:text-[#2952E1] transition-colors"
+            >
+              About
+            </Link>
+
+            <Link
               href="/services"
               className="font-inter text-[15px] text-[#191919] hover:text-[#2952E1] transition-colors"
             >
@@ -204,36 +203,7 @@ export default function JoinTheTeamPage() {
           </div>
         </section>
 
-        {/* ── Section 2: Horizontal 3D Artwork Showcase (Screenshot 1) ── */}
-        <section className="py-6 overflow-hidden max-w-[1340px] mx-auto px-4 sm:px-8 xl:px-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {showcaseImages.slice(0, 3).map((item) => (
-              <div
-                key={item.id}
-                className="relative h-[240px] sm:h-[280px] md:h-[300px] rounded-[20px] overflow-hidden group shadow-sm bg-[#001E1D]"
-              >
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  priority
-                />
-
-                {/* Floating Play Button in Bottom Left matching Screenshot 1 */}
-                <div className="absolute bottom-4 left-4 z-10">
-                  <div className="w-10 h-10 rounded-full bg-white/95 backdrop-blur-xs flex items-center justify-center text-[#191919] shadow-md transition-transform group-hover:scale-110">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                      <polygon points="6 3 20 12 6 21 6 3" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ── Section 3: "Join Our Team" Open Positions (Screenshot 2) ── */}
+        {/* ── Open Positions ── */}
         <section id="open-positions" className="pt-16 sm:pt-20 max-w-[1340px] mx-auto px-4 sm:px-8 xl:px-10">
           {/* Section Header */}
           <div className="mb-8 sm:mb-10">

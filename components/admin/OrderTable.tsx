@@ -723,10 +723,12 @@ export function OrderTable({
                 <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 shadow-xs space-y-4">
                   <div>
                     <h3 className="font-inter text-[15px] font-semibold text-[#111827]">
-                      Upload references (optional)
+                      {selectedOrder.service_type === 'video_editing' ? 'Reference video' : 'Upload references (optional)'}
                     </h3>
                     <p className="font-inter text-[12px] text-[#6f6f6f] mt-0.5">
-                      Images, links, or files that inspire the user
+                      {selectedOrder.service_type === 'video_editing'
+                        ? 'Reference video or sample footage provided by customer'
+                        : 'Images, links, or files that inspire the user'}
                     </p>
                   </div>
 

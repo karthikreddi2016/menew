@@ -118,6 +118,13 @@ export default function ContactPage() {
               Home
             </Link>
             <Link
+              href="/about"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-4 py-2.5 rounded-[8px] font-inter text-[14px] text-[#191919] hover:bg-[#F3F4F6] transition-colors"
+            >
+              About
+            </Link>
+            <Link
               href="/services"
               onClick={() => setMobileMenuOpen(false)}
               className="block px-4 py-2.5 rounded-[8px] font-inter text-[14px] text-[#191919] hover:bg-[#F3F4F6] transition-colors"

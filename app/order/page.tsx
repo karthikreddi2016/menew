@@ -72,11 +72,76 @@ function OrderFormContent() {
 
   const [assetFiles, setAssetFiles] = useState<File[]>([])
   const [refFiles, setRefFiles] = useState<File[]>([])
+  const [clientError, setClientError] = useState<string | null>(null)
+  const [isDraggingRef, setIsDraggingRef] = useState(false)
 
   const assetInputRef = useRef<HTMLInputElement | null>(null)
   const refInputRef = useRef<HTMLInputElement | null>(null)
 
   const [state, formAction, isPending] = useActionState(createOrderAction, null)
+
+  function syncRefFiles(newFiles: File[]) {
+    setRefFiles(newFiles)
+    if (clientError) setClientError(null)
+    if (refInputRef.current) {
+      try {
+        const dt = new DataTransfer()
+        newFiles.forEach((f) => dt.items.add(f))
+        refInputRef.current.files = dt.files
+      } catch {
+        // Fallback if DataTransfer is not supported
+      }
+    }
+  }
+
+  function handleRemoveRefFile(indexToRemove: number) {
+    const updated = refFiles.filter((_, idx) => idx !== indexToRemove)
+    syncRefFiles(updated)
+  }
+
+  function handleRefDragOver(e: React.DragEvent) {
+    e.preventDefault()
+    setIsDraggingRef(true)
+  }
+
+  function handleRefDragLeave(e: React.DragEvent) {
+    e.preventDefault()
+    setIsDraggingRef(false)
+  }
+
+  function handleRefDrop(e: React.DragEvent) {
+    e.preventDefault()
+    setIsDraggingRef(false)
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const droppedFiles = Array.from(e.dataTransfer.files)
+      syncRefFiles([...refFiles, ...droppedFiles])
+    }
+  }
+
+  function formatFileSize(bytes: number) {
+    if (!bytes || bytes === 0) return '0 B'
+    if (bytes < 1024) return bytes + ' B'
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB'
+  }
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    if (isVideo) {
+      const hasRefFile = refFiles.some((f) => f && f.size > 0)
+      const hasRefLink = referenceLink.trim().length > 0
+      if (!hasRefFile && !hasRefLink) {
+        e.preventDefault()
+        const msg = 'Please upload a reference video or provide a reference video link to proceed.'
+        setClientError(msg)
+        const section = document.getElementById('reference-video-section')
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+        return
+      }
+    }
+    setClientError(null)
+  }
 
   const router = useRouter()
   function handleBack() {
@@ -125,13 +190,18 @@ function OrderFormContent() {
         </div>
 
         {/* Error message */}
-        {state?.error && (
-          <div className="mb-6 rounded-[12px] bg-red-50 border border-red-200 p-4 font-inter text-sm text-red-700">
-            {state.error}
+        {(clientError || state?.error) && (
+          <div className="mb-6 rounded-[12px] bg-red-50 border border-red-200 p-4 font-inter text-sm text-red-700 flex items-center gap-2.5 shadow-xs">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-red-600">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span>{clientError || state?.error}</span>
           </div>
         )}
 
-        <form action={formAction} className="space-y-6">
+        <form onSubmit={handleSubmit} action={formAction} className="space-y-6">
           <input type="hidden" name="service_type" value={currentService} />
           <input type="hidden" name="title" value={constructedTitle} />
           <input type="hidden" name="brief" value={brief || 'Design request'} />
@@ -491,51 +561,155 @@ function OrderFormContent() {
             />
           </div>
 
-          {/* ── Card 4: Upload references (optional) ── */}
-          <div className="rounded-[16px] border border-[#EDEDED] bg-white p-6 sm:p-8 shadow-xs">
-            <h3 className="font-inter text-[15px] font-semibold text-[#111827]">
-              Upload references (optional)
-            </h3>
+          {/* ── Card 4: Upload references (mandatory for video editing) ── */}
+          <div
+            id="reference-video-section"
+            className={`rounded-[16px] border bg-white p-6 sm:p-8 shadow-xs transition-all ${
+              isVideo && clientError && refFiles.length === 0 && !referenceLink.trim()
+                ? 'border-[#DC2626] ring-2 ring-[#DC2626]/20'
+                : 'border-[#EDEDED]'
+            }`}
+          >
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+              <h3 className="font-inter text-[15px] font-semibold text-[#111827] flex items-center gap-1.5">
+                {isVideo ? (
+                  <>
+                    Upload reference video
+                    <span className="text-[#DC2626] text-base font-bold" title="Required">*</span>
+                  </>
+                ) : (
+                  'Upload references (optional)'
+                )}
+              </h3>
+              {isVideo && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#FEF2F2] border border-[#FCA5A5] px-2.5 py-0.5 font-inter text-[11px] font-semibold text-[#DC2626] uppercase tracking-wider">
+                  Required
+                </span>
+              )}
+            </div>
+
             <p className="font-inter text-[12px] text-[#6f6f6f] mt-0.5 mb-4">
-              Images, links, or files that inspire you
+              {isVideo
+                ? 'Upload a reference video or sample footage that illustrates your desired editing style, pacing, tone, or format.'
+                : 'Images, links, or files that inspire you'}
             </p>
+
+            {isVideo && clientError && refFiles.length === 0 && !referenceLink.trim() && (
+              <div className="mb-4 rounded-[10px] bg-[#FEF2F2] border border-[#FCA5A5] p-3 font-inter text-[13px] text-[#B91C1C] flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-[#DC2626]">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                <span>Reference video is required. Please upload a reference video file or provide a video link below.</span>
+              </div>
+            )}
 
             <div
               onClick={() => refInputRef.current?.click()}
-              className="border-2 border-dashed border-[#D1D5DB] hover:border-[#2952E1] bg-[#FAFBFD] rounded-[12px] p-8 text-center cursor-pointer transition-colors"
+              onDragOver={handleRefDragOver}
+              onDragLeave={handleRefDragLeave}
+              onDrop={handleRefDrop}
+              className={`border-2 border-dashed rounded-[12px] p-8 text-center cursor-pointer transition-all ${
+                isDraggingRef
+                  ? 'border-[#2952E1] bg-[#EEF2FF]'
+                  : 'border-[#D1D5DB] hover:border-[#2952E1] bg-[#FAFBFD]'
+              }`}
             >
               <input
                 ref={refInputRef}
                 name="ref_files"
                 type="file"
                 multiple
+                accept={isVideo ? 'video/*, .mp4, .mov, .avi, .mkv, .webm, .wmv, .flv, .m4v, .3gp, .ts' : undefined}
                 className="hidden"
                 onChange={(e) => {
-                  if (e.target.files) {
-                    setRefFiles(Array.from(e.target.files))
+                  if (e.target.files && e.target.files.length > 0) {
+                    const selected = Array.from(e.target.files)
+                    syncRefFiles([...refFiles, ...selected])
                   }
                 }}
               />
-              <div className="mx-auto w-10 h-10 rounded-full bg-[#EAEFFF] text-[#2952E1] flex items-center justify-center mb-2">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                  <polyline points="17 8 12 3 7 8" />
-                  <line x1="12" y1="3" x2="12" y2="15" />
-                </svg>
+              <div className="mx-auto w-12 h-12 rounded-full bg-[#EAEFFF] text-[#2952E1] flex items-center justify-center mb-2">
+                {isVideo ? (
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="23 7 16 12 23 17 23 7" />
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+                  </svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                )}
               </div>
               <p className="font-inter text-[14px] font-medium text-[#111827]">
-                Click to upload or drag and drop
+                {isVideo
+                  ? 'Click to upload or drag and drop reference video'
+                  : 'Click to upload or drag and drop'}
               </p>
               <p className="font-inter text-[12px] text-[#6f6f6f] mt-1">
-                PNG, JPG, PDF up to 10MB
+                {isVideo
+                  ? 'Any video format is acceptable (MP4, MOV, AVI, WebM, MKV, etc.)'
+                  : 'PNG, JPG, PDF up to 10MB'}
               </p>
-
-              {refFiles.length > 0 && (
-                <div className="mt-3 text-xs text-[#2952E1] font-medium">
-                  {refFiles.length} file(s) selected: {refFiles.map(f => f.name).join(', ')}
-                </div>
-              )}
             </div>
+
+            {/* Selected files list */}
+            {refFiles.length > 0 && (
+              <div className="mt-4 space-y-2">
+                <p className="font-inter text-[12px] font-semibold text-[#374151]">
+                  Selected {isVideo ? 'video' : 'reference'} file{refFiles.length > 1 ? 's' : ''} ({refFiles.length}):
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {refFiles.map((file, idx) => (
+                    <div
+                      key={`${file.name}-${idx}`}
+                      className="flex items-center justify-between gap-2 p-2.5 rounded-[8px] border border-[#E5E7EB] bg-[#F9FAFB] text-left"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="shrink-0 w-8 h-8 rounded-md bg-[#EEF2FF] text-[#2952E1] flex items-center justify-center">
+                          {isVideo ? (
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polygon points="23 7 16 12 23 17 23 7" />
+                              <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+                            </svg>
+                          ) : (
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                              <polyline points="14 2 14 8 20 8" />
+                            </svg>
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-inter text-[13px] font-medium text-[#111827] truncate">
+                            {file.name}
+                          </p>
+                          <p className="font-inter text-[11px] text-[#6B7280]">
+                            {formatFileSize(file.size)}
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleRemoveRefFile(idx)
+                        }}
+                        className="shrink-0 w-6 h-6 rounded-full hover:bg-red-50 text-[#9CA3AF] hover:text-[#DC2626] flex items-center justify-center transition-colors cursor-pointer"
+                        title="Remove file"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <line x1="18" y1="6" x2="6" y2="18" />
+                          <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="relative flex items-center justify-center my-4">
               <div className="w-full border-t border-[#EDEDED]" />
@@ -547,8 +721,15 @@ function OrderFormContent() {
             <input
               type="text"
               value={referenceLink}
-              onChange={(e) => setReferenceLink(e.target.value)}
-              placeholder="Describe in text or Share links from Canva, Pinterest, Instagram, YouTube etc."
+              onChange={(e) => {
+                setReferenceLink(e.target.value)
+                if (clientError) setClientError(null)
+              }}
+              placeholder={
+                isVideo
+                  ? 'Or paste link to reference video (Google Drive, YouTube, Vimeo, Loom, Dropbox, etc.)'
+                  : 'Describe in text or Share links from Canva, Pinterest, Instagram, YouTube etc.'
+              }
               className="w-full rounded-[10px] border border-[#EDEDED] bg-white px-4 py-3 font-inter text-[14px] text-[#111827] placeholder:text-[#9CA3AF] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all"
             />
           </div>
@@ -699,6 +880,29 @@ function OrderFormContent() {
             <p className="font-inter text-[13px] sm:text-[14px] leading-snug">
               <strong className="font-semibold">Payment:</strong> After submitting, you&apos;ll receive a payment link via email. Once paid, your designer will start working on your project!
             </p>
+          </div>
+
+          {/* ── Satisfaction & Refund Guarantee Note ── */}
+          <div className="rounded-[12px] bg-[#F0F5FF] border border-[#BFDBFE] p-4 flex items-start gap-3 text-[#1E40AF] mt-3">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#DBEAFE] text-[#2563EB] mt-0.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <div className="flex flex-col gap-0.5">
+              <p className="font-inter text-[13px] sm:text-[13.5px] font-semibold text-[#1E3A8A]">
+                Not happy with the final output?
+              </p>
+              <p className="font-inter text-[12px] sm:text-[12.5px] text-[#1E40AF] leading-relaxed">
+                We’ll give you the applicable revision rounds to get it right. If you&apos;re still not satisfied after all revisions, Menew will refund 50% of your order amount.
+              </p>
+              <p className="font-inter text-[11px] sm:text-[11.5px] text-[#3B82F6] mt-0.5">
+                The refund applies when the request is within the original brief and scope and is made before the order is approved or closed.{" "}
+                <Link href="/refund-policy" target="_blank" className="underline font-medium hover:text-[#1D4ED8]">
+                  Read full policy
+                </Link>
+              </p>
+            </div>
           </div>
         </form>
       </div>

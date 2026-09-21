@@ -259,7 +259,7 @@ function OrderSummaryContent() {
         </div>
 
         {/* ── Pink Pilot Payment Info Box ── */}
-        <div className="rounded-[12px] bg-[#FFF1F5] border border-[#FBCFE8] p-4 flex items-start gap-3 text-[#BE185D] mb-8">
+        <div className="rounded-[12px] bg-[#FFF1F5] border border-[#FBCFE8] p-4 flex items-start gap-3 text-[#BE185D] mb-4">
           <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#FCE7F3] text-[#DB2777] mt-0.5">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
@@ -269,6 +269,29 @@ function OrderSummaryContent() {
           <p className="font-inter text-[13px] leading-relaxed">
             <strong className="font-semibold">Payment:</strong> After submitting, you&apos;ll receive a payment link via email. Once paid, your designer will start working on your project!
           </p>
+        </div>
+
+        {/* ── Satisfaction & Refund Guarantee Note ── */}
+        <div className="rounded-[12px] bg-[#F0F5FF] border border-[#BFDBFE] p-4 flex items-start gap-3 text-[#1E40AF] mb-8">
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#DBEAFE] text-[#2563EB] mt-0.5">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div className="flex flex-col gap-1">
+            <p className="font-inter text-[13.5px] font-semibold text-[#1E3A8A]">
+              Not happy with the final output?
+            </p>
+            <p className="font-inter text-[12.5px] text-[#1E40AF] leading-relaxed">
+              We’ll give you the applicable revision rounds to get it right. If you&apos;re still not satisfied after all revisions, Menew will refund 50% of your order amount.
+            </p>
+            <p className="font-inter text-[11.5px] text-[#3B82F6] mt-0.5">
+              The refund applies when the request is within the original brief and scope and is made before the order is approved or closed.{" "}
+              <Link href="/refund-policy" target="_blank" className="underline font-medium hover:text-[#1D4ED8]">
+                Read full policy
+              </Link>
+            </p>
+          </div>
         </div>
 
         {/* ── Bottom SubTotal & Action Buttons Bar ── */}

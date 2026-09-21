@@ -36,6 +36,13 @@ export function NavbarClient({ isLoggedIn, isAdmin = false }: { isLoggedIn: bool
         {/* Nav links — desktop */}
         <nav className="hidden md:flex items-center gap-8">
           <Link
+            href="/about"
+            className="font-inter text-[16px] leading-normal tracking-[-0.25px] text-black hover:text-black/70 transition-colors"
+          >
+            About
+          </Link>
+
+          <Link
             href="/services"
             className="font-inter text-[16px] leading-normal tracking-[-0.25px] text-black hover:text-black/70 transition-colors"
           >
@@ -137,9 +144,21 @@ export function NavbarClient({ isLoggedIn, isAdmin = false }: { isLoggedIn: bool
       {menuOpen && (
         <div className="md:hidden border-t border-[#dadada] bg-white px-4 pb-6 pt-4">
           <nav className="flex flex-col gap-4">
-            <button className="font-inter text-[16px] leading-normal tracking-[-0.25px] text-black text-left hover:text-black/70 transition-colors">
+            <Link
+              href="/about"
+              onClick={() => setMenuOpen(false)}
+              className="font-inter text-[16px] leading-normal tracking-[-0.25px] text-black hover:text-black/70 transition-colors text-left"
+            >
+              About
+            </Link>
+
+            <Link
+              href="/services"
+              onClick={() => setMenuOpen(false)}
+              className="font-inter text-[16px] leading-normal tracking-[-0.25px] text-black hover:text-black/70 transition-colors text-left"
+            >
               Services
-            </button>
+            </Link>
 
             <div className="flex items-center gap-1">
               <span className="font-inter text-[16px] leading-normal tracking-[-0.25px] text-black">
@@ -159,7 +178,7 @@ export function NavbarClient({ isLoggedIn, isAdmin = false }: { isLoggedIn: bool
             </Link>
 
             <Link
-              href="#join"
+              href="/join-the-team"
               onClick={() => setMenuOpen(false)}
               className="font-inter text-[16px] leading-normal tracking-[-0.25px] text-black hover:text-black/70 transition-colors"
             >

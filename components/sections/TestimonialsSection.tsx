@@ -18,16 +18,8 @@ export interface TestimonialItem {
   quote?: string;
 }
 
-// Sample initial testimonials & work showcases (ready to be hooked to Admin / Supabase)
+// Sample initial testimonials (ready to be hooked to Admin / Supabase)
 export const DEFAULT_TESTIMONIALS_ROW_1: TestimonialItem[] = [
-  {
-    id: "work-1",
-    type: "work",
-    mediaType: "video",
-    imageUrl: "/images/figma_testimonial_sample_art.png",
-    hasPlayButton: true,
-    workTitle: "3D Motion Design Showcase",
-  },
   {
     id: "review-1",
     type: "review",
@@ -36,14 +28,6 @@ export const DEFAULT_TESTIMONIALS_ROW_1: TestimonialItem[] = [
     userAvatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&crop=faces",
     quote:
       "The adoption of Menew has been a transformative move for our growth team, addressing critical turnaround bottlenecks and enhancing our overall creative output.",
-  },
-  {
-    id: "work-2",
-    type: "work",
-    mediaType: "design",
-    imageUrl: "/images/figma_testimonial_sample_art.png",
-    hasPlayButton: false,
-    workTitle: "Brand Identity & Guidelines",
   },
   {
     id: "review-2",
@@ -55,58 +39,43 @@ export const DEFAULT_TESTIMONIALS_ROW_1: TestimonialItem[] = [
       "I used to spend hours explaining my vision to freelancers. With Menew, they just get it. Turnaround time is incredible and the quality speaks for itself.",
   },
   {
-    id: "work-3",
-    type: "work",
-    mediaType: "video",
-    imageUrl: "/images/figma_testimonial_sample_art.png",
-    hasPlayButton: true,
-    workTitle: "Product Launch Reel",
+    id: "review-3",
+    type: "review",
+    userName: "Elena Rostova",
+    userRole: "Brand Director at Horizon Media",
+    userAvatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&h=120&fit=crop&crop=faces",
+    quote:
+      "From high-stakes pitch decks to daily social campaigns, Menew delivers high polish consistently. Having on-demand artists without hiring overhead is unmatched.",
   },
 ];
 
 export const DEFAULT_TESTIMONIALS_ROW_2: TestimonialItem[] = [
   {
-    id: "review-3",
+    id: "review-4",
     type: "review",
     userName: "Emily Rodriguez",
     userRole: "Product Lead at FlowTech",
     userAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&h=120&fit=crop&crop=faces",
     quote:
-      "From high-stakes pitch decks to daily social campaigns, Menew delivers high polish consistently. Having on-demand artists without hiring overhead is unmatched.",
+      "Top-tier design quality with zero management friction. Our team requests creatives in minutes and receives final deliverables ready for production.",
   },
   {
-    id: "work-4",
-    type: "work",
-    mediaType: "design",
-    imageUrl: "/images/figma_testimonial_sample_art.png",
-    hasPlayButton: false,
-    workTitle: "Investor Pitch Deck Visuals",
-  },
-  {
-    id: "review-4",
+    id: "review-5",
     type: "review",
     userName: "David Kim",
     userRole: "CEO at InnovateCo",
     userAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&h=120&fit=crop&crop=faces",
     quote:
-      "Top-tier design quality with zero management friction. Our team requests creatives in minutes and receives final deliverables ready for production.",
+      "Menew gives us a predictable, ultra-fast pipeline. No bidding wars or endless revisions—just sharp, on-brief creative execution.",
   },
   {
-    id: "work-5",
-    type: "work",
-    mediaType: "video",
-    imageUrl: "/images/figma_testimonial_sample_art.png",
-    hasPlayButton: true,
-    workTitle: "Social Ads & Motion Graphics",
-  },
-  {
-    id: "review-5",
+    id: "review-6",
     type: "review",
     userName: "Aarav Patel",
     userRole: "Creative Producer",
     userAvatar: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=120&h=120&fit=crop&crop=faces",
     quote:
-      "Menew gives us a predictable, ultra-fast pipeline. No bidding wars or endless revisions—just sharp, on-brief creative execution.",
+      "The speed and consistency are phenomenal. We can scale our creative production without bloating headcount.",
   },
 ];
 
