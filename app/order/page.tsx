@@ -48,7 +48,7 @@ function OrderFormContent() {
   const [creativeType, setCreativeType] = useState('Digital')
   const [whatYouWant, setWhatYouWant] = useState(selectedType || defaultWhatYouWant)
   const [numberOfSlides, setNumberOfSlides] = useState('')
-  const [quantity, setQuantity] = useState('')
+  const [quantity, setQuantity] = useState('1')
 
   // Branding-Specific Fields
   const [brandName, setBrandName] = useState('')
@@ -366,13 +366,17 @@ function OrderFormContent() {
                   <p className="font-inter text-[12px] text-[#6f6f6f] mb-2">
                     Pages, Sides are considered as unique quantity.
                   </p>
-                  <input
-                    type="text"
-                    value={quantity}
+                  <select
+                    value={quantity || '1'}
                     onChange={(e) => setQuantity(e.target.value)}
-                    placeholder="e.g. 2 pages, 1 side"
-                    className="w-full rounded-[10px] border border-[#EDEDED] bg-white px-4 py-3 font-inter text-[14px] text-[#111827] placeholder:text-[#9CA3AF] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all"
-                  />
+                    className="w-full rounded-[10px] border border-[#EDEDED] bg-white px-4 py-3 font-inter text-[14px] text-[#111827] outline-none focus:border-[#2952E1] focus:ring-1 focus:ring-[#2952E1] transition-all cursor-pointer"
+                  >
+                    {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
+                      <option key={num} value={num.toString()}>
+                        {num}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </>
             )}

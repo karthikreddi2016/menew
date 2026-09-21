@@ -20,7 +20,7 @@ const contactCards = [
         <path d="M10 16.5c1 .5 3 .5 4 0" />
       </svg>
     ),
-    action: "https://wa.me/919999999999?text=Hi%20Menew%20Team%2C%20I%20need%20product%20support",
+    action: "https://wa.me/919521794784?text=Hi%20Menew%20Team%2C%20I%20need%20product%20support",
   },
   {
     title: "Billing support",
@@ -34,7 +34,7 @@ const contactCards = [
         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
       </svg>
     ),
-    action: "https://wa.me/919999999999?text=Hi%20Menew%20Team%2C%20I%20have%20a%20billing%20question",
+    action: "https://wa.me/919521794784?text=Hi%20Menew%20Team%2C%20I%20have%20a%20billing%20question",
   },
   {
     title: "Emergency support",
@@ -48,7 +48,7 @@ const contactCards = [
         <path d="M19.07 4.93L4.93 19.07" />
       </svg>
     ),
-    action: "https://wa.me/919999999999?text=Hi%20Menew%20Team%2C%20I%20need%20urgent%20emergency%20support",
+    action: "https://wa.me/919521794784?text=Hi%20Menew%20Team%2C%20I%20need%20urgent%20emergency%20support",
   },
   {
     title: "Talk to sales.",
@@ -60,7 +60,7 @@ const contactCards = [
         <circle cx="18" cy="8" r="1.5" fill="currentColor" />
       </svg>
     ),
-    action: "https://wa.me/919999999999?text=Hi%20Menew%20Sales%20Team%2C%20I%20would%20like%20to%20discuss%20enterprise%20solutions",
+    action: "https://wa.me/919521794784?text=Hi%20Menew%20Sales%20Team%2C%20I%20would%20like%20to%20discuss%20enterprise%20solutions",
   },
 ];
 
