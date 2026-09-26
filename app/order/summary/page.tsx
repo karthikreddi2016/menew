@@ -13,6 +13,7 @@ import {
   COUPON_DISCOUNTS,
   type CartItem,
 } from '@/lib/cart/cart-store'
+import { loadRazorpayScript } from '@/lib/payments/load-razorpay'
 
 function OrderSummaryContent() {
   const router = useRouter()
@@ -21,6 +22,7 @@ function OrderSummaryContent() {
   const [couponCode, setCouponCode] = useState('')
   const [appliedCoupon, setApplied] = useState<string | null>(null)
   const [couponError, setCouponError] = useState('')
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
@@ -75,11 +77,111 @@ function OrderSummaryContent() {
     setItems(updated)
   }
 
-  function handleCheckout() {
+  async function handleCheckout() {
+    if (items.length === 0) return
     setIsSubmitting(true)
-    setTimeout(() => {
-      router.push('/dashboard')
-    }, 400)
+    setCheckoutError(null)
+
+    try {
+      // 1. Ensure Razorpay checkout script is loaded
+      const isScriptLoaded = await loadRazorpayScript()
+      if (!isScriptLoaded) {
+        throw new Error('Could not load payment gateway script. Please check your internet connection.')
+      }
+
+      // 2. Call server API to create Razorpay Order
+      const res = await fetch('/api/payments/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items,
+          couponCode: appliedCoupon,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (res.status === 401) {
+        // User not logged in: redirect to login
+        router.push(`/login?redirectTo=${encodeURIComponent('/order/summary')}`)
+        return
+      }
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Failed to initialize payment.')
+      }
+
+      // 3. Launch Razorpay modal
+      const options = {
+        key: data.keyId,
+        amount: data.amount,
+        currency: data.currency || 'INR',
+        name: 'Menew Design',
+        description: data.title || 'Creative Design Service Order',
+        order_id: data.razorpayOrderId,
+        prefill: {
+          name: data.customer?.name || '',
+          email: data.customer?.email || '',
+          contact: data.customer?.phone || '',
+        },
+        theme: {
+          color: '#2952E1',
+        },
+        modal: {
+          ondismiss: function () {
+            setIsSubmitting(false)
+          },
+        },
+        handler: async function (response: any) {
+          setIsSubmitting(true)
+          try {
+            // 4. Verify HMAC SHA256 signature on backend
+            const verifyRes = await fetch('/api/payments/verify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                orderId: data.orderId,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            })
+
+            const verifyData = await verifyRes.json()
+
+            if (verifyRes.ok && verifyData.success) {
+              // Clear cart in local storage
+              saveCartItems([])
+              // Redirect to dashboard with payment_success flag to trigger celebration modal
+              router.push('/dashboard?payment_success=true')
+            } else {
+              setCheckoutError(verifyData.error || 'Payment verification could not be confirmed.')
+              setIsSubmitting(false)
+            }
+          } catch (verifyErr: any) {
+            console.error('Verification error:', verifyErr)
+            setCheckoutError(verifyErr.message || 'Error communicating with verification server.')
+            setIsSubmitting(false)
+          }
+        },
+      }
+
+      const rzpInstance = new (window as any).Razorpay(options)
+
+      rzpInstance.on('payment.failed', function (failureRes: any) {
+        console.error('Payment failure:', failureRes.error)
+        setCheckoutError(
+          failureRes.error?.description || 'Payment was cancelled or failed. Please try again.'
+        )
+        setIsSubmitting(false)
+      })
+
+      rzpInstance.open()
+    } catch (err: any) {
+      console.error('Checkout error:', err)
+      setCheckoutError(err.message || 'Something went wrong starting checkout.')
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -258,16 +360,28 @@ function OrderSummaryContent() {
           )}
         </div>
 
-        {/* ── Pink Pilot Payment Info Box ── */}
-        <div className="rounded-[12px] bg-[#FFF1F5] border border-[#FBCFE8] p-4 flex items-start gap-3 text-[#BE185D] mb-4">
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#FCE7F3] text-[#DB2777] mt-0.5">
+        {/* ── Error Banner if any ── */}
+        {checkoutError && (
+          <div className="rounded-[12px] bg-[#FEF2F2] border border-[#FCA5A5] p-3.5 text-xs font-inter text-[#991B1B] flex items-center gap-2 mb-4">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span>{checkoutError}</span>
+          </div>
+        )}
+
+        {/* ── Real-Time Secure Payment Info Box ── */}
+        <div className="rounded-[12px] bg-[#F0FDF4] border border-[#BBF7D0] p-4 flex items-start gap-3 text-[#166534] mb-4">
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#DCFCE7] text-[#15803D] mt-0.5">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              <rect x="2" y="5" width="20" height="14" rx="2" />
+              <line x1="2" y1="10" x2="22" y2="10" />
             </svg>
           </div>
           <p className="font-inter text-[13px] leading-relaxed">
-            <strong className="font-semibold">Payment:</strong> After submitting, you&apos;ll receive a payment link via email. Once paid, your designer will start working on your project!
+            <strong className="font-semibold">Instant Real-Time Payment:</strong> Pay securely using <strong>UPI (GPay, PhonePe, Paytm, QR)</strong>, Cards, or NetBanking. Once paid, your designer will start working on your project immediately!
           </p>
         </div>
 
@@ -313,9 +427,19 @@ function OrderSummaryContent() {
               type="button"
               onClick={handleCheckout}
               disabled={isSubmitting || items.length === 0}
-              className="inline-flex items-center justify-center rounded-full bg-[#2952E1] px-10 py-3.5 font-inter font-medium text-[15px] text-white shadow-[0_4px_14px_0_rgba(41,82,225,0.35)] hover:bg-[#1e42c7] active:scale-95 transition-all flex-1 text-center disabled:opacity-60"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#2952E1] px-10 py-3.5 font-inter font-medium text-[15px] text-white shadow-[0_4px_14px_0_rgba(41,82,225,0.35)] hover:bg-[#1e42c7] active:scale-95 transition-all flex-1 text-center disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed"
             >
-              {isSubmitting ? 'Processing…' : 'Checkout'}
+              {isSubmitting ? (
+                <>
+                  <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  <span>Processing…</span>
+                </>
+              ) : (
+                <span>Pay ₹{finalTotal.toLocaleString('en-IN')} Now</span>
+              )}
             </button>
           </div>
         </div>

@@ -24,6 +24,9 @@ export type Order = {
   assigned_admin: string | null
   amount: number | null
   payment_status: PaymentStatus | null
+  payment_id?: string | null
+  gateway_order_id?: string | null
+  paid_at?: string | null
   creative_showcase: boolean | null
   copy_content: string | null
   need_content_help: string | null
@@ -98,6 +101,9 @@ export type Database = {
           assigned_admin?: string | null
           amount?: number | null
           payment_status?: PaymentStatus | null
+          payment_id?: string | null
+          gateway_order_id?: string | null
+          paid_at?: string | null
           creative_showcase?: boolean | null
           copy_content?: string | null
           need_content_help?: string | null
@@ -124,6 +130,9 @@ export type Database = {
           assigned_admin?: string | null
           amount?: number | null
           payment_status?: PaymentStatus | null
+          payment_id?: string | null
+          gateway_order_id?: string | null
+          paid_at?: string | null
           creative_showcase?: boolean | null
           copy_content?: string | null
           need_content_help?: string | null
